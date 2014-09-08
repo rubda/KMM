@@ -19,9 +19,6 @@ git commit -m “Changes” (notera engelskan)
 git push
 ```
 
-
-för att sedan göra commit och push igen
-
 Om ni vill ha den senaste versionen av projektmappen så skriver ni:
 
 ```
