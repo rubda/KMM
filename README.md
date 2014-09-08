@@ -1,8 +1,6 @@
 KMM
 ===
-
 Sexbent robot
-
 ==============
 
 När ni ska ladda ner allt från projektmappen använder ni er av clone. Se hemsidan.
