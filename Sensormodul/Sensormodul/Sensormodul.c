@@ -15,6 +15,6 @@ int main(void)
 {
     while(1)
     {
-        ss_low();
+        ss_high();
     }
 }
