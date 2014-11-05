@@ -7,7 +7,7 @@
 
 #include "gyro.h"
 #include "SPI.h"
-#include <util/delay.h>
+//#include <util/delay.h>
 
 int getAngularRate(uint8_t adcValue)
 {
@@ -18,7 +18,7 @@ int getAngularRate(uint8_t adcValue)
 	send_spi(ACTIVATE_ADC);
 	ss_high();
 	/* Kolla om den femtonde biten är 0 */
-	_delay_us(120);
+	//_delay_us(120);
 
 	//Steg 2 conversion
 	send_spi(START_CONVERSION);
@@ -27,11 +27,7 @@ int getAngularRate(uint8_t adcValue)
 	//Steg 3 poll
 	send_spi(POLL);
 	/* Kolla om den femtonde biten är 0 */
-	_delay_us(120);
-	
-	
-		
-	
+	//_delay_us(120);	
 	
 	
 }	

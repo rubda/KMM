@@ -7,12 +7,14 @@
 
 
 #include <avr/io.h>
+#include "SPI.h"
+#include "gyro.h"
 
 
 int main(void)
 {
     while(1)
     {
-        //TODO:: Please write your application code 
+        ss_low();
     }
 }
