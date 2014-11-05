@@ -9,7 +9,7 @@
 
 int main(void)
 {	
-	suart_init();
+	suart_init(1000000);
 	
 	//www.wormfood.net/avrbaudcalc.php
 	//extremeelectronics.co.in/avr-tutorials/using-the-usart-of-avr-microcontrollers/
@@ -22,14 +22,11 @@ int main(void)
 	
 	servo_response res;
 	//if(res == (servo_response)SERVO_ERROR);
-	
+	res = suart_command_ping(1);
 	
 	while(1)
-	{
-		PORTD &= ~(1 << PORTD5);
-		PORTD |= (1 << PORTD5);
-		suart_send_string(send, 5);
-		//res = suart_command_ping(1);
-		//PORTB = res.error;*/
+	{	
+		
+		PORTB = res.error;
     }
 }

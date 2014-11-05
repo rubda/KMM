@@ -1,4 +1,7 @@
+#define F_CPU 7372800UL
+
 #include <avr/io.h>
+#include <util/delay.h>
 
 /************************************************************************/
 /* Baudrate: 19200                                                      */
@@ -7,11 +10,12 @@
 
 #define SUART_RX PORTD2
 #define SUART_TX PORTD3
-#define SUART_MODE PORTD4
-#define SUART_TX_ACTIVE PORTD |= (1 << PORTD4)
-#define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD4)
+#define SUART_MODE PORTD5
+#define SUART_TX_ACTIVE PORTD |= (1 << PORTD5)
+#define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD5)
 
 #define SERVO_ERROR 0
+
 
 struct suart_response
 {
@@ -23,7 +27,7 @@ struct suart_response
 
 typedef struct suart_response servo_response;
 
-void suart_init();
+void suart_init(long baud);
 
 void suart_send_char(uint8_t data);
 char suart_read_char();
