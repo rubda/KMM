@@ -8,8 +8,8 @@
 #define SUART_RX PORTD2
 #define SUART_TX PORTD3
 #define SUART_MODE PORTD4
-#define SUART_RX_ACTIVE PORTD |= (1 << PORTD4)
-#define SUART_TX_ACTIVE PORTD &= ~(1 << PORTD4)
+#define SUART_TX_ACTIVE PORTD |= (1 << PORTD4)
+#define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD4)
 
 #define SERVO_ERROR 0
 
