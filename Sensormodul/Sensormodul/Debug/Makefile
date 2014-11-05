@@ -37,7 +37,6 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../gyro.c \
 ../Sensormodul.c \
 ../SPI.c
 
@@ -49,22 +48,18 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-gyro.o \
 Sensormodul.o \
 SPI.o
 
 OBJS_AS_ARGS +=  \
-gyro.o \
 Sensormodul.o \
 SPI.o
 
 C_DEPS +=  \
-gyro.d \
 Sensormodul.d \
 SPI.d
 
 C_DEPS_AS_ARGS +=  \
-gyro.d \
 Sensormodul.d \
 SPI.d
 
@@ -82,8 +77,6 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-
-
 
 
 

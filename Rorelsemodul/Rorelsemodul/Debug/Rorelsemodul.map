@@ -15,6 +15,15 @@ Discarded input sections
  .text          0x00000000        0x0 servo_uart.o
  .data          0x00000000        0x0 servo_uart.o
  .bss           0x00000000        0x0 servo_uart.o
+ .text.suart_read_char
+                0x00000000       0x12 servo_uart.o
+ .text.suart_read_string
+                0x00000000       0x66 servo_uart.o
+ .text.suart_command
+                0x00000000       0xba servo_uart.o
+ .rodata        0x00000000        0x5 servo_uart.o
+ .text.suart_command_ping
+                0x00000000       0x4a servo_uart.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
@@ -165,7 +174,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x2c2
+.text           0x00000000      0x178
  *(.vectors)
  .vectors       0x00000000       0x8c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1284p.o
                 0x00000000                __vector_default
@@ -257,34 +266,22 @@ END GROUP
                 0x000000b6                __vector_20
                 0x000000b8                . = ALIGN (0x2)
  *(.text.*)
- .text.main     0x000000b8       0x1c Rorelsemodul.o
+ .text.main     0x000000b8       0x44 Rorelsemodul.o
                 0x000000b8                main
  .text.suart_init
-                0x000000d4       0x20 servo_uart.o
-                0x000000d4                suart_init
- .text.suart_read_char
-                0x000000f4       0x12 servo_uart.o
-                0x000000f4                suart_read_char
+                0x000000fc       0x22 servo_uart.o
+                0x000000fc                suart_init
  .text.suart_send_char
-                0x00000106       0x12 servo_uart.o
-                0x00000106                suart_send_char
- .text.suart_read_string
-                0x00000118       0x64 servo_uart.o
-                0x00000118                suart_read_string
+                0x0000011e       0x12 servo_uart.o
+                0x0000011e                suart_send_char
  .text.suart_send_string
-                0x0000017c       0x44 servo_uart.o
-                0x0000017c                suart_send_string
- .text.suart_command
-                0x000001c0       0xb6 servo_uart.o
-                0x000001c0                suart_command
- .text.suart_command_ping
-                0x00000276       0x48 servo_uart.o
-                0x00000276                suart_command_ping
-                0x000002be                . = ALIGN (0x2)
+                0x00000130       0x44 servo_uart.o
+                0x00000130                suart_send_string
+                0x00000174                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000002be        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                0x000002be                _exit
-                0x000002be                exit
+ .fini9         0x00000174        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000174                _exit
+                0x00000174                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -303,38 +300,36 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000002be        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000174        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x000002c2                _etext = .
+                0x00000178                _etext = .
 
-.data           0x00800100        0x6 load address 0x000002c2
+.data           0x00800100        0x0 load address 0x00000178
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
  *(.rodata)
- .rodata        0x00800100        0x5 servo_uart.o
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800106                . = ALIGN (0x2)
- *fill*         0x00800105        0x1 
-                0x00800106                _edata = .
-                0x00800106                PROVIDE (__data_end, .)
+                0x00800100                . = ALIGN (0x2)
+                0x00800100                _edata = .
+                0x00800100                PROVIDE (__data_end, .)
 
-.bss            0x00800106        0x0
-                0x00800106                PROVIDE (__bss_start, .)
+.bss            0x00800100        0x0
+                0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
-                0x00800106                PROVIDE (__bss_end, .)
-                0x000002c2                __data_load_start = LOADADDR (.data)
-                0x000002c8                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800100                PROVIDE (__bss_end, .)
+                0x00000178                __data_load_start = LOADADDR (.data)
+                0x00000178                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800106        0x0
-                0x00800106                PROVIDE (__noinit_start, .)
+.noinit         0x00800100        0x0
+                0x00800100                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800106                PROVIDE (__noinit_end, .)
-                0x00800106                _end = .
-                0x00800106                PROVIDE (__heap_start, .)
+                0x00800100                PROVIDE (__noinit_end, .)
+                0x00800100                _end = .
+                0x00800100                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -404,37 +399,37 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x4d0
+.debug_info     0x00000000      0x4cd
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x16c Rorelsemodul.o
- .debug_info    0x0000016c      0x364 servo_uart.o
+ .debug_info    0x00000000      0x169 Rorelsemodul.o
+ .debug_info    0x00000169      0x364 servo_uart.o
 
-.debug_abbrev   0x00000000      0x2a5
+.debug_abbrev   0x00000000      0x2a3
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x10d Rorelsemodul.o
- .debug_abbrev  0x0000010d      0x198 servo_uart.o
+ .debug_abbrev  0x00000000      0x10b Rorelsemodul.o
+ .debug_abbrev  0x0000010b      0x198 servo_uart.o
 
-.debug_line     0x00000000      0x347
+.debug_line     0x00000000      0x357
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000       0xe2 Rorelsemodul.o
- .debug_line    0x000000e2      0x265 servo_uart.o
+ .debug_line    0x00000000       0xf2 Rorelsemodul.o
+ .debug_line    0x000000f2      0x265 servo_uart.o
 
 .debug_frame    0x00000000      0x134
  *(.debug_frame)
  .debug_frame   0x00000000       0x34 Rorelsemodul.o
  .debug_frame   0x00000034      0x100 servo_uart.o
 
-.debug_str      0x00000000      0x247
+.debug_str      0x00000000      0x21f
  *(.debug_str)
- .debug_str     0x00000000      0x1ab Rorelsemodul.o
-                                0x1e4 (size before relaxing)
- .debug_str     0x000001ab       0x9c servo_uart.o
-                                0x278 (size before relaxing)
+ .debug_str     0x00000000      0x182 Rorelsemodul.o
+                                0x1bb (size before relaxing)
+ .debug_str     0x00000182       0x9d servo_uart.o
+                                0x250 (size before relaxing)
 
-.debug_loc      0x00000000      0x517
+.debug_loc      0x00000000      0x516
  *(.debug_loc)
- .debug_loc     0x00000000       0x48 Rorelsemodul.o
- .debug_loc     0x00000048      0x4cf servo_uart.o
+ .debug_loc     0x00000000       0x47 Rorelsemodul.o
+ .debug_loc     0x00000047      0x4cf servo_uart.o
 
 .debug_macinfo
  *(.debug_macinfo)

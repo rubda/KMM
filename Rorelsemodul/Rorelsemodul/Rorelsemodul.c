@@ -5,8 +5,6 @@
  *  Author: Carl Arvidsson
  */ 
 
-
-#include <avr/io.h>
 #include "servo_uart.h"
 
 int main(void)
@@ -28,7 +26,10 @@ int main(void)
 	
 	while(1)
 	{
-		res = suart_command_ping(1);
-		PORTB = res.error;
+		PORTD &= ~(1 << PORTD5);
+		PORTD |= (1 << PORTD5);
+		suart_send_string(send, 5);
+		//res = suart_command_ping(1);
+		//PORTB = res.error;*/
     }
 }

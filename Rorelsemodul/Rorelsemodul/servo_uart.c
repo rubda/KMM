@@ -2,7 +2,7 @@
 
 void suart_init()
 {
-	DDRD |= (1 << SUART_MODE);
+	DDRD = 0x20;
 	UBRR1 = UART_SETTINGS;
 	
 	UCSR1C = (3 << UCSZ10);
