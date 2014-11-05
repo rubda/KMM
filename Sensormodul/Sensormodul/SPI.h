@@ -1,3 +1,5 @@
+#include <avr/io.h>
+
 /*
  * SPI.h
  *
@@ -10,16 +12,16 @@
 #define SPI_H_
 
 // Alla modes beroende på klocka och polaritet 
-#define SPI_MODE_0 0b00; /* Sample (Rising) Setup (Falling) CPOL=0, CPHA=0 */
-#define SPI_MODE_1 0b01; /* Sample (Rising) Setup (Falling) CPOL=0, CPHA=1 */
-#define SPI_MODE_2 0b10; /* Sample (Rising) Setup (Falling) CPOL=1, CPHA=0 */
-#define SPI_MODE_3 0b11; /* Sample (Rising) Setup (Falling) CPOL=1, CPHA=1 */
+#define SPI_MODE_0 0b00 /* Sample (Rising) Setup (Falling) CPOL=0, CPHA=0 */
+#define SPI_MODE_1 0b01 /* Sample (Rising) Setup (Falling) CPOL=0, CPHA=1 */
+#define SPI_MODE_2 0b10 /* Sample (Rising) Setup (Falling) CPOL=1, CPHA=0 */
+#define SPI_MODE_3 0b11 /* Sample (Rising) Setup (Falling) CPOL=1, CPHA=1 */
 
 // Definierar alla pins
-#define SPI_SS_PIN PORTB4;
-#define SPI_MOSI_PIN PORTB5;
-#define SPI_MISO_PIN PORTB6;
-#define SPI_SCLK_PIN PORTB7;
+#define SPI_SS_PIN PORTB4
+#define SPI_MOSI_PIN PORTB5
+#define SPI_MISO_PIN PORTB6
+#define SPI_SCLK_PIN PORTB7
 
 // Data directions
 #define SPI_LSB 1 // Skickar minst signifikant bit först (bör nog aldrig göras)

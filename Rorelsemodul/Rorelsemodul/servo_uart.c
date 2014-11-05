@@ -3,12 +3,10 @@
 void suart_init(long baud)
 {
 	DDRD = 0x20;
-<<<<<<< HEAD
-	UBRR1 = UART_SETTINGS;
-=======
+
 	UBRR1H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
 	UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
->>>>>>> 8780d3e853488ce3e828b6cb6a7f5960643bd646
+
 	
 	UCSR1C = (3 << UCSZ10);
 	UCSR1B |= ((1 << RXEN1) | (1 << TXEN1));

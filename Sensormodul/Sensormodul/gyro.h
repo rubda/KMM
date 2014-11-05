@@ -1,3 +1,5 @@
+#include <avr/io.h>
+
 /*
  * gyro.h
  *
@@ -9,10 +11,10 @@
 #define GYRO_H_
 
 //Tveksamt om detta ska vara kvar
-#define ACTIVATE_ADC 0b10010100;
-#define START_CONVERSION 0b10010100;
-#define POLL 0b10000000;
-#define DEACTIVATE_ADC 0b10010000;
+#define ACTIVATE_ADC 0b10010100
+#define START_CONVERSION 0b10010100
+#define POLL 0b10000000
+#define DEACTIVATE_ADC 0b10010000
 
 int getAngularRate(uint8_t adcValue);
 

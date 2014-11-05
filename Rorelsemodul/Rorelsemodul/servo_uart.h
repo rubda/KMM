@@ -10,15 +10,10 @@
 
 #define SUART_RX PORTD2
 #define SUART_TX PORTD3
-<<<<<<< HEAD
-#define SUART_MODE PORTD4
-#define SUART_TX_ACTIVE PORTD |= (1 << PORTD4)
-#define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD4)
-=======
 #define SUART_MODE PORTD5
+
 #define SUART_TX_ACTIVE PORTD |= (1 << PORTD5)
 #define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD5)
->>>>>>> 8780d3e853488ce3e828b6cb6a7f5960643bd646
 
 #define SERVO_ERROR 0
 

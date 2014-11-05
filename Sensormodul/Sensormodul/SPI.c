@@ -18,10 +18,10 @@ void setup_spi()
 	SPCR &= ~(1 << SPR0); // SPR0 = 1
 	SPCR &= ~(1 << SPR1); // SPR1 = 1
 	
-	DDRB |= (1 << SPI_MOSI_PIN) // output
-	DDRB &= ~(1 << SPI_MISO_PIN) // input
-	DDRB |= (1 << SPI_SS_PIN) // output
-	DDRB |= (1 << SPI_SS_PIN) // output
+	DDRB |= (1 << SPI_MOSI_PIN); // output
+	DDRB &= ~(1 << SPI_MISO_PIN); // input
+	DDRB |= (1 << SPI_SS_PIN); // output
+	DDRB |= (1 << SPI_SS_PIN); // output
 }
 
 void disable_spi()
