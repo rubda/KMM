@@ -1,9 +1,14 @@
 #include "servo_uart.h"
 
-void suart_init()
+void suart_init(long baud)
 {
 	DDRD = 0x20;
+<<<<<<< HEAD
 	UBRR1 = UART_SETTINGS;
+=======
+	UBRR1H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
+	UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
+>>>>>>> 8780d3e853488ce3e828b6cb6a7f5960643bd646
 	
 	UCSR1C = (3 << UCSZ10);
 	UCSR1B |= ((1 << RXEN1) | (1 << TXEN1));
@@ -11,7 +16,6 @@ void suart_init()
 
 char suart_read_char()
 {
-	SUART_RX_ACTIVE;
 	while(!(UCSR1A & (1 << RXC1)));
 	
 	return UDR1;
@@ -19,10 +23,10 @@ char suart_read_char()
 
 void suart_send_char(uint8_t data)
 {
-	SUART_TX_ACTIVE;
 	while(!(UCSR1A & (1 << UDRE1)));
 	
 	UDR1 = data;
+	
 }
 
 int suart_read_string(char *s, int size)
@@ -56,6 +60,7 @@ void suart_send_string(char *s, uint8_t size)
 		suart_send_char(s[i]);
 	}
 	suart_send_char(~checksum);
+	while(!(UCSR1A & (1 << TXC1)));
 }
 
 servo_response suart_command(uint8_t id, char* command, uint8_t size){
@@ -84,6 +89,6 @@ servo_response suart_command(uint8_t id, char* command, uint8_t size){
 }
 
 servo_response suart_command_ping(uint8_t id){
-	char command[] = {0xFF, 0xFF, 0x01, 0x02, 0x01};
-	return suart_command(id, command, sizeof(command)/sizeof(command[0]));
+	char command[] = {0xFF, 0xFF, 0xFE, 0x02, 0x01};
+	return suart_command(id, command, 5);
 }
