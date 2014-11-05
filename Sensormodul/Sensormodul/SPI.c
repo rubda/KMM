@@ -5,13 +5,18 @@
  *  Author: RubenDas
  */ 
 
-#include "SPI.h"'
+#include "SPI.h"
 
 void setup_spi()
 {
 	SPCR |= (1 << MSTR); // AVR blir master
 	SPCR |= (1 << SPE); // Enable SPI?
 	SPCR |= (SPI_MSB << DORD); // MSB först
+	
+	SPCR |= (1 << CPOL); // CPOL = 1
+	SPCR |= (1 << CPHA); // CPHA = 1
+	SPCR &= ~(1 << SPR0); // SPR0 = 1
+	SPCR &= ~(1 << SPR1); // SPR1 = 1
 	
 	DDRB |= (1 << SPI_MOSI_PIN) // output
 	DDRB &= ~(1 << SPI_MISO_PIN) // input
@@ -31,7 +36,7 @@ uint8_t send_spi(uint8_t out)
 	return SPDR;
 }
 
-uint8_t get_from_spi(uint8_t data)
+uint8_t get_spi(uint8_t data)
 {
 	SPDR = data;
 	return SPDR;
