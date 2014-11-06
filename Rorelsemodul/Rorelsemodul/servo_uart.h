@@ -1,4 +1,4 @@
-#define F_CPU 7372800UL
+#define F_CPU 16000000UL
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -6,7 +6,7 @@
 /************************************************************************/
 /* Baudrate: 19200                                                      */
 /************************************************************************/
-#define UART_SETTINGS 0x0001
+#define UART_SETTINGS 0x0000
 
 #define SUART_RX PORTD2
 #define SUART_TX PORTD3

@@ -12,6 +12,7 @@ Common symbol       size              file
 
 _t0_func            0x2               atmega-timers.o
 buffer              0x100             UART.o
+data                0x1               Rorelsemodul.o
 _t2_func            0x2               atmega-timers.o
 _t1_func            0x2               atmega-timers.o
 
@@ -40,6 +41,14 @@ Discarded input sections
  .text          0x00000000        0x0 servo_uart.o
  .data          0x00000000        0x0 servo_uart.o
  .bss           0x00000000        0x0 servo_uart.o
+ .text.suart_read_char
+                0x00000000       0x10 servo_uart.o
+ .text.suart_read_string
+                0x00000000       0x66 servo_uart.o
+ .text.suart_command
+                0x00000000       0xba servo_uart.o
+ .text.suart_command_ping
+                0x00000000       0x48 servo_uart.o
  .text.suart_command_read_data
                 0x00000000       0x4c servo_uart.o
  .text.suart_command_action
@@ -78,7 +87,7 @@ Discarded input sections
                 0x00000000       0x68 UART.o
  .debug_ranges  0x00000000       0x58 UART.o
  .debug_line    0x00000000      0x2ed UART.o
- .debug_str     0x00000000      0x251 UART.o
+ .debug_str     0x00000000      0x23f UART.o
  .comment       0x00000000       0x31 UART.o
  .debug_frame   0x00000000      0x148 UART.o
  COMMON         0x00000000      0x100 UART.o
@@ -248,7 +257,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x440
+.text           0x00000000      0x326
  *(.vectors)
  .vectors       0x00000000       0x8c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1284p.o
                 0x00000000                __vector_default
@@ -304,7 +313,6 @@ END GROUP
  *(.text)
  .text          0x000000ac        0x2 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1284p.o
                 0x000000ac                __vector_22
-                0x000000ac                __vector_28
                 0x000000ac                __vector_1
                 0x000000ac                __vector_32
                 0x000000ac                __vector_34
@@ -315,7 +323,6 @@ END GROUP
                 0x000000ac                __vector_31
                 0x000000ac                __vector_3
                 0x000000ac                __vector_23
-                0x000000ac                __vector_30
                 0x000000ac                __vector_25
                 0x000000ac                __vector_11
                 0x000000ac                __vector_17
@@ -346,37 +353,31 @@ END GROUP
  .text.__vector_9
                 0x0000015a       0x56 atmega-timers.o
                 0x0000015a                __vector_9
- .text.main     0x000001b0       0x22 Rorelsemodul.o
+ .text.main     0x000001b0       0x4a Rorelsemodul.o
                 0x000001b0                main
+ .text.__vector_30
+                0x000001fa       0x16 Rorelsemodul.o
+                0x000001fa                __vector_30
+ .text.__vector_28
+                0x00000210       0x20 Rorelsemodul.o
+                0x00000210                __vector_28
  .text.suart_init
-                0x000001d2       0x58 servo_uart.o
-                0x000001d2                suart_init
- .text.suart_read_char
-                0x0000022a       0x10 servo_uart.o
-                0x0000022a                suart_read_char
+                0x00000230       0x5a servo_uart.o
+                0x00000230                suart_init
  .text.suart_send_char
-                0x0000023a       0x10 servo_uart.o
-                0x0000023a                suart_send_char
- .text.suart_read_string
-                0x0000024a       0x64 servo_uart.o
-                0x0000024a                suart_read_string
+                0x0000028a       0x10 servo_uart.o
+                0x0000028a                suart_send_char
  .text.suart_send_string
-                0x000002ae       0x4e servo_uart.o
-                0x000002ae                suart_send_string
- .text.suart_command
-                0x000002fc       0xb6 servo_uart.o
-                0x000002fc                suart_command
- .text.suart_command_ping
-                0x000003b2       0x46 servo_uart.o
-                0x000003b2                suart_command_ping
+                0x0000029a       0x44 servo_uart.o
+                0x0000029a                suart_send_string
  .text.libgcc.div
-                0x000003f8       0x44 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_udivmodsi4.o)
-                0x000003f8                __udivmodsi4
-                0x0000043c                . = ALIGN (0x2)
+                0x000002de       0x44 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_udivmodsi4.o)
+                0x000002de                __udivmodsi4
+                0x00000322                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000043c        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                0x0000043c                _exit
-                0x0000043c                exit
+ .fini9         0x00000322        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000322                _exit
+                0x00000322                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -395,11 +396,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000043c        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000322        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000440                _etext = .
+                0x00000326                _etext = .
 
-.data           0x00800100        0x0 load address 0x00000440
+.data           0x00800100        0x0 load address 0x00000326
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -410,7 +411,7 @@ END GROUP
                 0x00800100                _edata = .
                 0x00800100                PROVIDE (__data_end, .)
 
-.bss            0x00800100        0x6
+.bss            0x00800100        0x7
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -419,16 +420,18 @@ END GROUP
                 0x00800100                _t0_func
                 0x00800102                _t2_func
                 0x00800104                _t1_func
-                0x00800106                PROVIDE (__bss_end, .)
-                0x00000440                __data_load_start = LOADADDR (.data)
-                0x00000440                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800106        0x1 Rorelsemodul.o
+                0x00800106                data
+                0x00800107                PROVIDE (__bss_end, .)
+                0x00000326                __data_load_start = LOADADDR (.data)
+                0x00000326                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800106        0x0
-                0x00800106                PROVIDE (__noinit_start, .)
+.noinit         0x00800107        0x0
+                0x00800107                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800106                PROVIDE (__noinit_end, .)
-                0x00800106                _end = .
-                0x00800106                PROVIDE (__heap_start, .)
+                0x00800107                PROVIDE (__noinit_end, .)
+                0x00800107                _end = .
+                0x00800107                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -489,56 +492,56 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x100
+.debug_aranges  0x00000000      0x110
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x78 atmega-timers.o
  .debug_aranges
-                0x00000078       0x20 Rorelsemodul.o
+                0x00000078       0x30 Rorelsemodul.o
  .debug_aranges
-                0x00000098       0x68 servo_uart.o
+                0x000000a8       0x68 servo_uart.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x900
+.debug_info     0x00000000      0x8d6
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x2bc atmega-timers.o
- .debug_info    0x000002bc      0x194 Rorelsemodul.o
- .debug_info    0x00000450      0x4b0 servo_uart.o
+ .debug_info    0x000002bc      0x16a Rorelsemodul.o
+ .debug_info    0x00000426      0x4b0 servo_uart.o
 
-.debug_abbrev   0x00000000      0x384
+.debug_abbrev   0x00000000      0x356
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0xd4 atmega-timers.o
- .debug_abbrev  0x000000d4      0x11b Rorelsemodul.o
- .debug_abbrev  0x000001ef      0x195 servo_uart.o
+ .debug_abbrev  0x000000d4       0xed Rorelsemodul.o
+ .debug_abbrev  0x000001c1      0x195 servo_uart.o
 
-.debug_line     0x00000000      0x689
+.debug_line     0x00000000      0x6bc
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x2d7 atmega-timers.o
- .debug_line    0x000002d7       0xd8 Rorelsemodul.o
- .debug_line    0x000003af      0x2da servo_uart.o
+ .debug_line    0x000002d7      0x11c Rorelsemodul.o
+ .debug_line    0x000003f3      0x2c9 servo_uart.o
 
-.debug_frame    0x00000000      0x340
+.debug_frame    0x00000000      0x37c
  *(.debug_frame)
  .debug_frame   0x00000000      0x1ac atmega-timers.o
- .debug_frame   0x000001ac       0x34 Rorelsemodul.o
- .debug_frame   0x000001e0      0x160 servo_uart.o
+ .debug_frame   0x000001ac       0x70 Rorelsemodul.o
+ .debug_frame   0x0000021c      0x160 servo_uart.o
 
-.debug_str      0x00000000      0x333
+.debug_str      0x00000000      0x339
  *(.debug_str)
- .debug_str     0x00000000      0x1c9 atmega-timers.o
-                                0x1fd (size before relaxing)
- .debug_str     0x000001c9       0x83 Rorelsemodul.o
-                                0x1ce (size before relaxing)
- .debug_str     0x0000024c       0xe7 servo_uart.o
-                                0x2b2 (size before relaxing)
+ .debug_str     0x00000000      0x1b7 atmega-timers.o
+                                0x1eb (size before relaxing)
+ .debug_str     0x000001b7       0x5c Rorelsemodul.o
+                                0x19a (size before relaxing)
+ .debug_str     0x00000213      0x126 servo_uart.o
+                                0x2a0 (size before relaxing)
 
-.debug_loc      0x00000000      0x9d0
+.debug_loc      0x00000000      0xa3a
  *(.debug_loc)
  .debug_loc     0x00000000      0x2e5 atmega-timers.o
- .debug_loc     0x000002e5       0x48 Rorelsemodul.o
- .debug_loc     0x0000032d      0x6a3 servo_uart.o
+ .debug_loc     0x000002e5       0xb2 Rorelsemodul.o
+ .debug_loc     0x00000397      0x6a3 servo_uart.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -558,11 +561,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xd0
+.debug_ranges   0x00000000       0xe0
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x68 atmega-timers.o
- .debug_ranges  0x00000068       0x10 Rorelsemodul.o
- .debug_ranges  0x00000078       0x58 servo_uart.o
+ .debug_ranges  0x00000068       0x20 Rorelsemodul.o
+ .debug_ranges  0x00000088       0x58 servo_uart.o
 
 .debug_macro
  *(.debug_macro)
