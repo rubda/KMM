@@ -5,8 +5,9 @@
  *  Author: RubenDas
  */ 
 
-
+#define F_CPU 7372800UL
 #include <avr/io.h>
+#include <util/delay.h>
 
 #ifndef ULTRALJUD_H_
 #define ULTRALJUD_H_
