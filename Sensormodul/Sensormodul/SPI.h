@@ -20,7 +20,7 @@
 // Definierar alla pins
 #define SPI_SS_PIN PORTB4
 #define SPI_MOSI_PIN PORTB5
-#define SPI_MISO_PIN PORTB6
+#define SPI_MISO_PIN PINB6
 #define SPI_SCLK_PIN PORTB7
 
 // Data directions
