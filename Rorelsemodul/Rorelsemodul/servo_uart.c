@@ -87,6 +87,43 @@ servo_response suart_command(uint8_t id, char* command, uint8_t size){
 }
 
 servo_response suart_command_ping(uint8_t id){
-	char command[] = {0xFF, 0xFF, 0xFE, 0x02, 0x01};
+	char command[] = {0xFF, 0xFF, id, 0x02, 0x01};
+	return suart_command(id, command, 5);
+}
+
+servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t data_len){
+	char command[] = {OxFF, 0xFF, id, 0x04, 0x02, data_addr, data_len};
+	return suart_command(id, command, 7);
+}
+
+servo_response suart_command_write_data(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len){
+	char command[6+list_len] = {0xFF, 0xFF, id, 3+len_list, 0x03};
+	int i;
+	
+	for(i = 0; i < list_len; ++i){
+		command[5+i] = data_list[i];
+	}
+	
+	return suart_command(id, command, 5+list_len);
+}
+
+servo_response suart_command_reg_write(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len){
+	char command[6+list_len] = {0xFF, 0xFF, id, 3+len_list, 0x04};
+	int i;
+	
+	for(i = 0; i < list_len; ++i){
+		command[5+i] = data_list[i];
+	}
+	
+	return suart_command(id, command, 5+list_len);
+}
+
+servo_response suart_command_action(uint8_t id){
+	char command[] =  {0xFF, 0xFF, id, 0x02, 0x05};
+	return suart_command(id, command, 5);
+}
+
+servo_response suart_command_reset(uint8_t id){
+	char command[] = {0xFF, 0xFF, id, 0x02, 0x06};
 	return suart_command(id, command, 5);
 }

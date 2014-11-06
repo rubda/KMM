@@ -21,7 +21,7 @@ void setup_spi()
 	DDRB |= (1 << SPI_MOSI_PIN); // output
 	DDRB &= ~(1 << SPI_MISO_PIN); // input
 	DDRB |= (1 << SPI_SS_PIN); // output
-	DDRB |= (1 << SPI_SS_PIN); // output
+	DDRB |= (1 << SPI_SCLK_PIN); // output
 }
 
 void disable_spi()
@@ -34,6 +34,7 @@ uint8_t send_spi(uint8_t out)
 	SPDR = out;
 	while (!(SPSR & (1<<SPIF))); //Loopar sålänge vi inte har skickat klart
 	return SPDR;
+	
 }
 
 uint8_t get_spi(uint8_t data)

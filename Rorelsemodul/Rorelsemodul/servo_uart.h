@@ -15,7 +15,14 @@
 #define SUART_TX_ACTIVE PORTD |= (1 << PORTD5)
 #define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD5)
 
-#define SERVO_ERROR 0
+#define BROADCAST_ID 0xFE
+#define GOAL_POSITION_L 0x1E
+#define GOAL_POSITION_H 0x1F
+#define MOVING_SPEED_L 0x20
+#define MOVING_SPEED_H 0x21
+#define PRESENT_POSITION_L 0x24
+#define PRESENT_POSITION_H 0x25
+#define PRESENT_SPEED_L 
 
 
 struct suart_response
@@ -37,4 +44,10 @@ int suart_read_string(char *s, int size);
 void suart_send_string(char *s, uint8_t size);
 
 servo_response suart_command(uint8_t id, char* command, uint8_t size);
+
 servo_response suart_command_ping(uint8_t id);
+servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t data_len);
+servo_response suart_command_write_data(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len);
+servo_response suart_command_reg_write(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len);
+servo_response suart_command_action(uint8_t id);
+servo_response suart_command_reset(uint8_t id);
