@@ -15,15 +15,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   5 .debug_abbrev 000002c5  00000000  00000000  000006b5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000431  00000000  00000000  0000097a  2**0
+  6 .debug_line   00000419  00000000  00000000  0000097a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000134  00000000  00000000  00000dac  2**2
+  7 .debug_frame  00000134  00000000  00000000  00000d94  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00000221  00000000  00000000  00000ee0  2**0
+  8 .debug_str    0000023a  00000000  00000000  00000ec8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000014b  00000000  00000000  00001101  2**0
+  9 .debug_loc    0000014b  00000000  00000000  00001102  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000070  00000000  00000000  0000124c  2**0
+ 10 .debug_ranges 00000070  00000000  00000000  0000124d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -181,10 +181,10 @@ void disable_spi()
   e0:	84 60       	ori	r24, 0x04	; 4
   e2:	8c bd       	out	0x2c, r24	; 44
   e4:	8c b5       	in	r24, 0x2c	; 44
-  e6:	8e 7f       	andi	r24, 0xFE	; 254
+  e6:	81 60       	ori	r24, 0x01	; 1
   e8:	8c bd       	out	0x2c, r24	; 44
   ea:	8c b5       	in	r24, 0x2c	; 44
-  ec:	8d 7f       	andi	r24, 0xFD	; 253
+  ec:	82 60       	ori	r24, 0x02	; 2
   ee:	8c bd       	out	0x2c, r24	; 44
   f0:	25 9a       	sbi	0x04, 5	; 4
   f2:	26 98       	cbi	0x04, 6	; 4
