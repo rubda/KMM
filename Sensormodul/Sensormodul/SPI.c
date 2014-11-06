@@ -15,8 +15,8 @@ void setup_spi()
 	
 	SPCR |= (1 << CPOL); // CPOL = 1
 	SPCR |= (1 << CPHA); // CPHA = 1
-	SPCR &= ~(1 << SPR0); // SPR0 = 1
-	SPCR &= ~(1 << SPR1); // SPR1 = 1
+	SPCR |= (1 << SPR0); // SPR0 = 1
+	SPCR |= (1 << SPR1); // SPR1 = 1
 	
 	DDRB |= (1 << SPI_MOSI); // output
 	DDRB &= ~(1 << SPI_MISO); // input

@@ -16,14 +16,16 @@
 
 int main(void)
 {
-
+	uint8_t data;
 	setup_spi();
 	
 	while(1)
     {
-        ss_low();
-		send_spi(ACTIVATE_ADC);
-		ss_high();
+        //ss_low();
+		send_spi(POLL);
+		_delay_ms(1000);
+		//get_spi(data);
+		//ss_high();
     }
 }
 
