@@ -8,5 +8,7 @@ Sensormodul.c
 
 SPI.c
 
+timer.c
+
 ultraljud.c
 

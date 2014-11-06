@@ -3,25 +3,27 @@ Sensormodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000000de  00000000  00000000  00000054  2**1
+  0 .text         000001be  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .comment      00000030  00000000  00000000  00000132  2**0
+  1 .bss          0000000e  00800100  00800100  00000232  2**0
+                  ALLOC
+  2 .comment      00000030  00000000  00000000  00000232  2**0
                   CONTENTS, READONLY
-  2 .debug_aranges 00000068  00000000  00000000  00000162  2**0
+  3 .debug_aranges 00000088  00000000  00000000  00000262  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   000001ca  00000000  00000000  000001ca  2**0
+  4 .debug_info   000003e1  00000000  00000000  000002ea  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 00000101  00000000  00000000  00000394  2**0
+  5 .debug_abbrev 000002ec  00000000  00000000  000006cb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   000001d8  00000000  00000000  00000495  2**0
+  6 .debug_line   0000036b  00000000  00000000  000009b7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  00000098  00000000  00000000  00000670  2**2
+  7 .debug_frame  0000010c  00000000  00000000  00000d24  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    00000175  00000000  00000000  00000708  2**0
+  8 .debug_str    000001e6  00000000  00000000  00000e30  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    0000003e  00000000  00000000  0000087d  2**0
+  9 .debug_loc    00000173  00000000  00000000  00001016  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000048  00000000  00000000  000008bb  2**0
+ 10 .debug_ranges 00000058  00000000  00000000  00001189  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -29,73 +31,73 @@ Disassembly of section .text:
 00000000 <__vectors>:
    0:	45 c0       	rjmp	.+138    	; 0x8c <__ctors_end>
    2:	00 00       	nop
-   4:	4b c0       	rjmp	.+150    	; 0x9c <__bad_interrupt>
+   4:	53 c0       	rjmp	.+166    	; 0xac <__bad_interrupt>
    6:	00 00       	nop
-   8:	49 c0       	rjmp	.+146    	; 0x9c <__bad_interrupt>
+   8:	51 c0       	rjmp	.+162    	; 0xac <__bad_interrupt>
    a:	00 00       	nop
-   c:	47 c0       	rjmp	.+142    	; 0x9c <__bad_interrupt>
+   c:	4f c0       	rjmp	.+158    	; 0xac <__bad_interrupt>
    e:	00 00       	nop
-  10:	45 c0       	rjmp	.+138    	; 0x9c <__bad_interrupt>
+  10:	4d c0       	rjmp	.+154    	; 0xac <__bad_interrupt>
   12:	00 00       	nop
-  14:	43 c0       	rjmp	.+134    	; 0x9c <__bad_interrupt>
+  14:	4b c0       	rjmp	.+150    	; 0xac <__bad_interrupt>
   16:	00 00       	nop
-  18:	41 c0       	rjmp	.+130    	; 0x9c <__bad_interrupt>
+  18:	49 c0       	rjmp	.+146    	; 0xac <__bad_interrupt>
   1a:	00 00       	nop
-  1c:	3f c0       	rjmp	.+126    	; 0x9c <__bad_interrupt>
+  1c:	47 c0       	rjmp	.+142    	; 0xac <__bad_interrupt>
   1e:	00 00       	nop
-  20:	3d c0       	rjmp	.+122    	; 0x9c <__bad_interrupt>
+  20:	45 c0       	rjmp	.+138    	; 0xac <__bad_interrupt>
   22:	00 00       	nop
-  24:	3b c0       	rjmp	.+118    	; 0x9c <__bad_interrupt>
+  24:	43 c0       	rjmp	.+134    	; 0xac <__bad_interrupt>
   26:	00 00       	nop
-  28:	39 c0       	rjmp	.+114    	; 0x9c <__bad_interrupt>
+  28:	41 c0       	rjmp	.+130    	; 0xac <__bad_interrupt>
   2a:	00 00       	nop
-  2c:	37 c0       	rjmp	.+110    	; 0x9c <__bad_interrupt>
+  2c:	3f c0       	rjmp	.+126    	; 0xac <__bad_interrupt>
   2e:	00 00       	nop
-  30:	35 c0       	rjmp	.+106    	; 0x9c <__bad_interrupt>
+  30:	3d c0       	rjmp	.+122    	; 0xac <__bad_interrupt>
   32:	00 00       	nop
-  34:	33 c0       	rjmp	.+102    	; 0x9c <__bad_interrupt>
+  34:	43 c0       	rjmp	.+134    	; 0xbc <__vector_13>
   36:	00 00       	nop
-  38:	31 c0       	rjmp	.+98     	; 0x9c <__bad_interrupt>
+  38:	39 c0       	rjmp	.+114    	; 0xac <__bad_interrupt>
   3a:	00 00       	nop
-  3c:	2f c0       	rjmp	.+94     	; 0x9c <__bad_interrupt>
+  3c:	37 c0       	rjmp	.+110    	; 0xac <__bad_interrupt>
   3e:	00 00       	nop
-  40:	2d c0       	rjmp	.+90     	; 0x9c <__bad_interrupt>
+  40:	35 c0       	rjmp	.+106    	; 0xac <__bad_interrupt>
   42:	00 00       	nop
-  44:	2b c0       	rjmp	.+86     	; 0x9c <__bad_interrupt>
+  44:	33 c0       	rjmp	.+102    	; 0xac <__bad_interrupt>
   46:	00 00       	nop
-  48:	29 c0       	rjmp	.+82     	; 0x9c <__bad_interrupt>
+  48:	31 c0       	rjmp	.+98     	; 0xac <__bad_interrupt>
   4a:	00 00       	nop
-  4c:	27 c0       	rjmp	.+78     	; 0x9c <__bad_interrupt>
+  4c:	2f c0       	rjmp	.+94     	; 0xac <__bad_interrupt>
   4e:	00 00       	nop
-  50:	25 c0       	rjmp	.+74     	; 0x9c <__bad_interrupt>
+  50:	2d c0       	rjmp	.+90     	; 0xac <__bad_interrupt>
   52:	00 00       	nop
-  54:	23 c0       	rjmp	.+70     	; 0x9c <__bad_interrupt>
+  54:	2b c0       	rjmp	.+86     	; 0xac <__bad_interrupt>
   56:	00 00       	nop
-  58:	21 c0       	rjmp	.+66     	; 0x9c <__bad_interrupt>
+  58:	29 c0       	rjmp	.+82     	; 0xac <__bad_interrupt>
   5a:	00 00       	nop
-  5c:	1f c0       	rjmp	.+62     	; 0x9c <__bad_interrupt>
+  5c:	27 c0       	rjmp	.+78     	; 0xac <__bad_interrupt>
   5e:	00 00       	nop
-  60:	1d c0       	rjmp	.+58     	; 0x9c <__bad_interrupt>
+  60:	25 c0       	rjmp	.+74     	; 0xac <__bad_interrupt>
   62:	00 00       	nop
-  64:	1b c0       	rjmp	.+54     	; 0x9c <__bad_interrupt>
+  64:	23 c0       	rjmp	.+70     	; 0xac <__bad_interrupt>
   66:	00 00       	nop
-  68:	19 c0       	rjmp	.+50     	; 0x9c <__bad_interrupt>
+  68:	21 c0       	rjmp	.+66     	; 0xac <__bad_interrupt>
   6a:	00 00       	nop
-  6c:	17 c0       	rjmp	.+46     	; 0x9c <__bad_interrupt>
+  6c:	1f c0       	rjmp	.+62     	; 0xac <__bad_interrupt>
   6e:	00 00       	nop
-  70:	15 c0       	rjmp	.+42     	; 0x9c <__bad_interrupt>
+  70:	1d c0       	rjmp	.+58     	; 0xac <__bad_interrupt>
   72:	00 00       	nop
-  74:	13 c0       	rjmp	.+38     	; 0x9c <__bad_interrupt>
+  74:	1b c0       	rjmp	.+54     	; 0xac <__bad_interrupt>
   76:	00 00       	nop
-  78:	11 c0       	rjmp	.+34     	; 0x9c <__bad_interrupt>
+  78:	19 c0       	rjmp	.+50     	; 0xac <__bad_interrupt>
   7a:	00 00       	nop
-  7c:	0f c0       	rjmp	.+30     	; 0x9c <__bad_interrupt>
+  7c:	17 c0       	rjmp	.+46     	; 0xac <__bad_interrupt>
   7e:	00 00       	nop
-  80:	0d c0       	rjmp	.+26     	; 0x9c <__bad_interrupt>
+  80:	15 c0       	rjmp	.+42     	; 0xac <__bad_interrupt>
   82:	00 00       	nop
-  84:	0b c0       	rjmp	.+22     	; 0x9c <__bad_interrupt>
+  84:	13 c0       	rjmp	.+38     	; 0xac <__bad_interrupt>
   86:	00 00       	nop
-  88:	09 c0       	rjmp	.+18     	; 0x9c <__bad_interrupt>
+  88:	11 c0       	rjmp	.+34     	; 0xac <__bad_interrupt>
 	...
 
 0000008c <__ctors_end>:
@@ -105,70 +107,236 @@ Disassembly of section .text:
   92:	d0 e4       	ldi	r29, 0x40	; 64
   94:	de bf       	out	0x3e, r29	; 62
   96:	cd bf       	out	0x3d, r28	; 61
-  98:	02 d0       	rcall	.+4      	; 0x9e <main>
-  9a:	1f c0       	rjmp	.+62     	; 0xda <_exit>
 
-0000009c <__bad_interrupt>:
-  9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
+00000098 <__do_clear_bss>:
+  98:	21 e0       	ldi	r18, 0x01	; 1
+  9a:	a0 e0       	ldi	r26, 0x00	; 0
+  9c:	b1 e0       	ldi	r27, 0x01	; 1
+  9e:	01 c0       	rjmp	.+2      	; 0xa2 <.do_clear_bss_start>
 
-0000009e <main>:
+000000a0 <.do_clear_bss_loop>:
+  a0:	1d 92       	st	X+, r1
+
+000000a2 <.do_clear_bss_start>:
+  a2:	ae 30       	cpi	r26, 0x0E	; 14
+  a4:	b2 07       	cpc	r27, r18
+  a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
+  a8:	02 d0       	rcall	.+4      	; 0xae <main>
+  aa:	87 c0       	rjmp	.+270    	; 0x1ba <_exit>
+
+000000ac <__bad_interrupt>:
+  ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
+
+000000ae <main>:
 
 
 int main(void)
 {
 
-	setup_spi();
-  9e:	02 d0       	rcall	.+4      	; 0xa4 <setup_spi>
+	initSensors();
+  ae:	4c d0       	rcall	.+152    	; 0x148 <initSensors>
 	
 	while(1)
     {
-        ss_low();
-  a0:	1a d0       	rcall	.+52     	; 0xd6 <ss_low>
-  a2:	fe cf       	rjmp	.-4      	; 0xa0 <main+0x2>
+        getData(sensor_list[0]);
+  b0:	c0 e0       	ldi	r28, 0x00	; 0
+  b2:	d1 e0       	ldi	r29, 0x01	; 1
+  b4:	88 81       	ld	r24, Y
+  b6:	99 81       	ldd	r25, Y+1	; 0x01
+  b8:	7e d0       	rcall	.+252    	; 0x1b6 <getData>
+  ba:	fc cf       	rjmp	.-8      	; 0xb4 <main+0x6>
 
-000000a4 <setup_spi>:
-uint8_t get_spi(uint8_t data)
-{
-	SPDR = data;
-	while(!(SPSR & (1<<SPIF)));
-	return SPDR;
+000000bc <__vector_13>:
+void timer_stop() {
+	TCCR1B = 0;
 }
-  a4:	8c b5       	in	r24, 0x2c	; 44
-  a6:	80 61       	ori	r24, 0x10	; 16
-  a8:	8c bd       	out	0x2c, r24	; 44
-  aa:	8c b5       	in	r24, 0x2c	; 44
-  ac:	80 64       	ori	r24, 0x40	; 64
-  ae:	8c bd       	out	0x2c, r24	; 44
-  b0:	8c b5       	in	r24, 0x2c	; 44
-  b2:	8c bd       	out	0x2c, r24	; 44
-  b4:	8c b5       	in	r24, 0x2c	; 44
-  b6:	88 60       	ori	r24, 0x08	; 8
-  b8:	8c bd       	out	0x2c, r24	; 44
-  ba:	8c b5       	in	r24, 0x2c	; 44
-  bc:	84 60       	ori	r24, 0x04	; 4
-  be:	8c bd       	out	0x2c, r24	; 44
-  c0:	8c b5       	in	r24, 0x2c	; 44
-  c2:	8e 7f       	andi	r24, 0xFE	; 254
-  c4:	8c bd       	out	0x2c, r24	; 44
-  c6:	8c b5       	in	r24, 0x2c	; 44
-  c8:	8d 7f       	andi	r24, 0xFD	; 253
-  ca:	8c bd       	out	0x2c, r24	; 44
-  cc:	25 9a       	sbi	0x04, 5	; 4
-  ce:	26 98       	cbi	0x04, 6	; 4
-  d0:	24 9a       	sbi	0x04, 4	; 4
-  d2:	27 9a       	sbi	0x04, 7	; 4
-  d4:	08 95       	ret
 
-000000d6 <ss_low>:
+#ifdef ENABLE_TIMER
+ISR(TIMER1_COMPA_vect) {
+  bc:	1f 92       	push	r1
+  be:	0f 92       	push	r0
+  c0:	0f b6       	in	r0, 0x3f	; 63
+  c2:	0f 92       	push	r0
+  c4:	11 24       	eor	r1, r1
+  c6:	0b b6       	in	r0, 0x3b	; 59
+  c8:	0f 92       	push	r0
+  ca:	2f 93       	push	r18
+  cc:	3f 93       	push	r19
+  ce:	4f 93       	push	r20
+  d0:	5f 93       	push	r21
+  d2:	6f 93       	push	r22
+  d4:	7f 93       	push	r23
+  d6:	8f 93       	push	r24
+  d8:	9f 93       	push	r25
+  da:	af 93       	push	r26
+  dc:	bf 93       	push	r27
+  de:	ef 93       	push	r30
+  e0:	ff 93       	push	r31
+	_t_func();
+  e2:	e0 91 0c 01 	lds	r30, 0x010C
+  e6:	f0 91 0d 01 	lds	r31, 0x010D
+  ea:	09 95       	icall
+}
+  ec:	ff 91       	pop	r31
+  ee:	ef 91       	pop	r30
+  f0:	bf 91       	pop	r27
+  f2:	af 91       	pop	r26
+  f4:	9f 91       	pop	r25
+  f6:	8f 91       	pop	r24
+  f8:	7f 91       	pop	r23
+  fa:	6f 91       	pop	r22
+  fc:	5f 91       	pop	r21
+  fe:	4f 91       	pop	r20
+ 100:	3f 91       	pop	r19
+ 102:	2f 91       	pop	r18
+ 104:	0f 90       	pop	r0
+ 106:	0b be       	out	0x3b, r0	; 59
+ 108:	0f 90       	pop	r0
+ 10a:	0f be       	out	0x3f, r0	; 63
+ 10c:	0f 90       	pop	r0
+ 10e:	1f 90       	pop	r1
+ 110:	18 95       	reti
 
-void ss_low()
+00000112 <wait>:
+#endif
+
+void wait(uint8_t prescaler, uint16_t ticks) {
+	if (ticks == 0)
+ 112:	61 15       	cp	r22, r1
+ 114:	71 05       	cpc	r23, r1
+ 116:	b9 f0       	breq	.+46     	; 0x146 <wait+0x34>
+	return;
+	TIMSK1 &= ~(_BV(OCIE1A));
+ 118:	ef e6       	ldi	r30, 0x6F	; 111
+ 11a:	f0 e0       	ldi	r31, 0x00	; 0
+ 11c:	90 81       	ld	r25, Z
+ 11e:	9d 7f       	andi	r25, 0xFD	; 253
+ 120:	90 83       	st	Z, r25
+	OCR1A = ticks;
+ 122:	70 93 89 00 	sts	0x0089, r23
+ 126:	60 93 88 00 	sts	0x0088, r22
+	TCCR1A = 0;
+ 12a:	10 92 80 00 	sts	0x0080, r1
+	TCCR1B = prescaler | _BV(WGM12);
+ 12e:	88 60       	ori	r24, 0x08	; 8
+ 130:	80 93 81 00 	sts	0x0081, r24
+	TCNT1 = 0;
+ 134:	10 92 85 00 	sts	0x0085, r1
+ 138:	10 92 84 00 	sts	0x0084, r1
+	TIFR1 |= _BV(OCF1A);
+ 13c:	b1 9a       	sbi	0x16, 1	; 22
+	while(!(TIFR1 & _BV(OCF1A)));
+ 13e:	b1 9b       	sbis	0x16, 1	; 22
+ 140:	fe cf       	rjmp	.-4      	; 0x13e <wait+0x2c>
+	TCCR1B = 0;
+ 142:	10 92 81 00 	sts	0x0081, r1
+ 146:	08 95       	ret
+
+00000148 <initSensors>:
+
+void initSensors()
 {
-	PORTB &= ~(1 << SPI_SS_PIN);
-  d6:	2c 98       	cbi	0x05, 4	; 5
-  d8:	08 95       	ret
+	
+	//Sätt PA0, A2, A3, A4 till ut
+	DDRA |= (1 << PORTA4);
+ 148:	0c 9a       	sbi	0x01, 4	; 1
+	DDRA |= (1 << PORTA3);
+ 14a:	0b 9a       	sbi	0x01, 3	; 1
+	DDRA |= (1 << PORTA2);
+ 14c:	0a 9a       	sbi	0x01, 2	; 1
+	DDRA |= (1 << PORTA0);
+ 14e:	08 9a       	sbi	0x01, 0	; 1
 
-000000da <_exit>:
-  da:	f8 94       	cli
+	//Sätt PA1 till in	
+	DDRA &= ~(1 << PORTA1);
+ 150:	09 98       	cbi	0x01, 1	; 1
+	
+	sensor_list[0] = (struct soundSensor) {0b11100011, 0};
+ 152:	83 ee       	ldi	r24, 0xE3	; 227
+ 154:	80 93 00 01 	sts	0x0100, r24
+ 158:	10 92 01 01 	sts	0x0101, r1
+	sensor_list[1] = (struct soundSensor) {0b11100111, 0};
+ 15c:	87 ee       	ldi	r24, 0xE7	; 231
+ 15e:	80 93 02 01 	sts	0x0102, r24
+ 162:	10 92 03 01 	sts	0x0103, r1
+	sensor_list[2] = (struct soundSensor) {0b11101011, 0};
+ 166:	8b ee       	ldi	r24, 0xEB	; 235
+ 168:	80 93 04 01 	sts	0x0104, r24
+ 16c:	10 92 05 01 	sts	0x0105, r1
+	sensor_list[3] = (struct soundSensor) {0b11101111, 0};
+ 170:	8f ee       	ldi	r24, 0xEF	; 239
+ 172:	80 93 06 01 	sts	0x0106, r24
+ 176:	10 92 07 01 	sts	0x0107, r1
+	sensor_list[4] = (struct soundSensor) {0b11110011, 0};
+ 17a:	83 ef       	ldi	r24, 0xF3	; 243
+ 17c:	80 93 08 01 	sts	0x0108, r24
+ 180:	10 92 09 01 	sts	0x0109, r1
+	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
+ 184:	87 ef       	ldi	r24, 0xF7	; 247
+ 186:	80 93 0a 01 	sts	0x010A, r24
+ 18a:	10 92 0b 01 	sts	0x010B, r1
+ 18e:	08 95       	ret
 
-000000dc <__stop_program>:
-  dc:	ff cf       	rjmp	.-2      	; 0xdc <__stop_program>
+00000190 <getDistance>:
+{
+	sensor.Distance = getDistance(sensor);
+}
+
+uint8_t getDistance(struct soundSensor sensor)
+{
+ 190:	cf 93       	push	r28
+	uint8_t DISTANCE;
+	uint8_t TIME = 0; 
+		
+	PORTA = sensor.id & PORTA;
+ 192:	92 b1       	in	r25, 0x02	; 2
+ 194:	89 23       	and	r24, r25
+ 196:	82 b9       	out	0x02, r24	; 2
+	
+	//Sätt räknaren till noll
+	while ((PORTA & (1 << PORTA1)))
+ 198:	11 9b       	sbis	0x02, 1	; 2
+ 19a:	0a c0       	rjmp	.+20     	; 0x1b0 <getDistance+0x20>
+		{	
+			(PORTB ^= 1 << PORTB0);
+ 19c:	c1 e0       	ldi	r28, 0x01	; 1
+ 19e:	85 b1       	in	r24, 0x05	; 5
+ 1a0:	8c 27       	eor	r24, r28
+ 1a2:	85 b9       	out	0x05, r24	; 5
+			wait(TIMER_PRESCALER_8, 9216U);
+ 1a4:	60 e0       	ldi	r22, 0x00	; 0
+ 1a6:	74 e2       	ldi	r23, 0x24	; 36
+ 1a8:	82 e0       	ldi	r24, 0x02	; 2
+ 1aa:	b3 df       	rcall	.-154    	; 0x112 <wait>
+	uint8_t TIME = 0; 
+		
+	PORTA = sensor.id & PORTA;
+	
+	//Sätt räknaren till noll
+	while ((PORTA & (1 << PORTA1)))
+ 1ac:	11 99       	sbic	0x02, 1	; 2
+ 1ae:	f7 cf       	rjmp	.-18     	; 0x19e <getDistance+0xe>
+		}
+		
+	DISTANCE = (TIME/100)/58;
+	return DISTANCE;
+		
+ 1b0:	80 e0       	ldi	r24, 0x00	; 0
+ 1b2:	cf 91       	pop	r28
+ 1b4:	08 95       	ret
+
+000001b6 <getData>:
+	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
+}
+
+void getData(struct soundSensor sensor) 
+{
+	sensor.Distance = getDistance(sensor);
+ 1b6:	ec cf       	rjmp	.-40     	; 0x190 <getDistance>
+ 1b8:	08 95       	ret
+
+000001ba <_exit>:
+ 1ba:	f8 94       	cli
+
+000001bc <__stop_program>:
+ 1bc:	ff cf       	rjmp	.-2      	; 0x1bc <__stop_program>

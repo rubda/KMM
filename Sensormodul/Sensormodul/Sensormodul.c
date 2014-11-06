@@ -11,16 +11,17 @@
 #include "SPI.h"
 #include "gyro.h"
 #include <util/delay.h>
+#include "ultraljud.h"
 
 
 int main(void)
 {
 
-	setup_spi();
+	initSensors();
 	
 	while(1)
     {
-        ss_low();
+        getData(sensor_list[0]);
     }
 }
 

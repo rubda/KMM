@@ -7,15 +7,26 @@
 
 #include "ultraljud.h"
 #include <avr/io.h>
+#include "timer.h"
 
 void initSensors()
 {
-	struct soundSensor sensor0 = {0b11100011, 0};
-	struct soundSensor sensor1 = {0b11100111, 0};
-	struct soundSensor sensor2 = {0b11101011, 0};
-	struct soundSensor sensor3 = {0b11101111, 0};
-	struct soundSensor sensor4 = {0b11110011, 0};
-	struct soundSensor sensor5 = {0b11110111, 0};
+	
+	//Sätt PA0, A2, A3, A4 till ut
+	DDRA |= (1 << PORTA4);
+	DDRA |= (1 << PORTA3);
+	DDRA |= (1 << PORTA2);
+	DDRA |= (1 << PORTA0);
+
+	//Sätt PA1 till in	
+	DDRA &= ~(1 << PORTA1);
+	
+	sensor_list[0] = (struct soundSensor) {0b11100011, 0};
+	sensor_list[1] = (struct soundSensor) {0b11100111, 0};
+	sensor_list[2] = (struct soundSensor) {0b11101011, 0};
+	sensor_list[3] = (struct soundSensor) {0b11101111, 0};
+	sensor_list[4] = (struct soundSensor) {0b11110011, 0};
+	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
 }
 
 void getData(struct soundSensor sensor) 
@@ -25,19 +36,20 @@ void getData(struct soundSensor sensor)
 
 uint8_t getDistance(struct soundSensor sensor)
 {
-	uint8_t SPEED_OF_SOUND;
 	uint8_t DISTANCE;
-	uint8_t TIME;
-	
+	uint8_t TIME = 0; 
+		
 	PORTA = sensor.id & PORTA;
 	
 	//Sätt räknaren till noll
-	while (!(PORTA & (1 << PORTA1)))
-		{
-			//Räkna upp	
+	while ((PORTA & (1 << PORTA1)))
+		{	
+			(PORTB ^= 1 << PORTB0);
+			wait(TIMER_PRESCALER_8, 9216U);
+			TIME++;
 		}
 		
-	DISTANCE = SPEED_OF_SOUND*TIME;
+	DISTANCE = (TIME/100)/58;
 	return DISTANCE;
 		
 }

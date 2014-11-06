@@ -17,6 +17,8 @@ struct soundSensor
 	uint8_t Distance;
 };
 
+struct soundSensor sensor_list[6];
+
 void initSensors();
 void getData(struct soundSensor);
 uint8_t getDistance(struct soundSensor);
