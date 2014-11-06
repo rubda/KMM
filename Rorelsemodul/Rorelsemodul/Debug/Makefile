@@ -37,8 +37,10 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../atmega-timers.c \
 ../Rorelsemodul.c \
-../servo_uart.c
+../servo_uart.c \
+../UART.c
 
 
 PREPROCESSING_SRCS += 
@@ -48,20 +50,28 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+atmega-timers.o \
 Rorelsemodul.o \
-servo_uart.o
+servo_uart.o \
+UART.o
 
 OBJS_AS_ARGS +=  \
+atmega-timers.o \
 Rorelsemodul.o \
-servo_uart.o
+servo_uart.o \
+UART.o
 
 C_DEPS +=  \
+atmega-timers.d \
 Rorelsemodul.d \
-servo_uart.d
+servo_uart.d \
+UART.d
 
 C_DEPS_AS_ARGS +=  \
+atmega-timers.d \
 Rorelsemodul.d \
-servo_uart.d
+servo_uart.d \
+UART.d
 
 OUTPUT_FILE_PATH +=Rorelsemodul.elf
 
@@ -77,6 +87,10 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
+
+
 
 
 
