@@ -16,16 +16,29 @@
 
 int main(void)
 {
-	uint8_t data;
 	setup_spi();
+	
+	
+	send_spi(ACTIVATE_ADC);
+	send_spi(0xFF);
+	send_spi(0xFF);
+	send_spi(START_CONVERSION);
+	send_spi(0xFF);
+	send_spi(0xFF);		
+	send_spi(POLL);
+	send_spi(0xFF);
+	send_spi(0xFF);
+	_delay_ms(1000);
+	
 	
 	while(1)
     {
         //ss_low();
-		send_spi(POLL);
-		_delay_ms(1000);
 		//get_spi(data);
 		//ss_high();
+	
+		
+		
     }
 }
 

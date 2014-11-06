@@ -42,7 +42,7 @@ uint8_t send_spi(uint8_t out)
 uint8_t get_spi(uint8_t data)
 {
 	SPDR = data;
-	while(!(SPSR & (1<<SPIF)));
+	//while(!(SPSR & (1<<SPIF)));
 	return SPDR;
 }
 
