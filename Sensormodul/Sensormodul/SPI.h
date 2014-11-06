@@ -18,10 +18,10 @@
 #define SPI_MODE_3 0b11 /* Sample (Rising) Setup (Falling) CPOL=1, CPHA=1 */
 
 // Definierar alla pins
-#define SPI_SS_PIN PORTB4
-#define SPI_MOSI_PIN PORTB5
-#define SPI_MISO_PIN PINB6
-#define SPI_SCLK_PIN PORTB7
+#define SPI_SS PORTB4
+#define SPI_MOSI PORTB5
+#define SPI_MISO PINB6
+#define SPI_SCLK PORTB7
 
 // Data directions
 #define SPI_LSB 1 // Skickar minst signifikant bit först (bör nog aldrig göras)

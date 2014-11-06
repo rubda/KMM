@@ -18,10 +18,10 @@ void setup_spi()
 	SPCR &= ~(1 << SPR0); // SPR0 = 1
 	SPCR &= ~(1 << SPR1); // SPR1 = 1
 	
-	DDRB |= (1 << SPI_MOSI_PIN); // output
-	DDRB &= ~(1 << SPI_MISO_PIN); // input
-	DDRB |= (1 << SPI_SS_PIN); // output
-	DDRB |= (1 << SPI_SCLK_PIN); // output
+	DDRB |= (1 << SPI_MOSI); // output
+	DDRB &= ~(1 << SPI_MISO); // input
+	DDRB |= (1 << SPI_SS); // output
+	DDRB |= (1 << SPI_SCLK); // output
 }
 
 void disable_spi()
@@ -48,10 +48,10 @@ uint8_t get_spi(uint8_t data)
 
 void ss_low()
 {
-	PORTB &= ~(1 << SPI_SS_PIN);
+	PORTB &= ~(1 << SPI_SS);
 }	
 
 void ss_high()
 {
-	PORTB |= (1 << SPI_SS_PIN);
+	PORTB |= (1 << SPI_SS);
 }

@@ -17,11 +17,13 @@
 int main(void)
 {
 
-	initSensors();
+	setup_spi();
 	
 	while(1)
     {
-        getData(sensor_list[0]);
+        ss_low();
+		send_spi(ACTIVATE_ADC);
+		ss_high();
     }
 }
 
