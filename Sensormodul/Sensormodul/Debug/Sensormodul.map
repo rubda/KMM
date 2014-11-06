@@ -33,28 +33,15 @@ Discarded input sections
  .text          0x00000000        0x0 Sensormodul.o
  .data          0x00000000        0x0 Sensormodul.o
  .bss           0x00000000        0x0 Sensormodul.o
+ COMMON         0x00000000        0xc Sensormodul.o
  .text          0x00000000        0x0 SPI.o
  .data          0x00000000        0x0 SPI.o
  .bss           0x00000000        0x0 SPI.o
- .text.setup_spi
-                0x00000000       0x32 SPI.o
  .text.disable_spi
                 0x00000000        0x4 SPI.o
- .text.send_spi
-                0x00000000        0xc SPI.o
  .text.get_spi  0x00000000        0xc SPI.o
  .text.ss_low   0x00000000        0x4 SPI.o
  .text.ss_high  0x00000000        0x4 SPI.o
- .debug_info    0x00000000      0x11d SPI.o
- .debug_abbrev  0x00000000       0x89 SPI.o
- .debug_loc     0x00000000       0x3e SPI.o
- .debug_aranges
-                0x00000000       0x48 SPI.o
- .debug_ranges  0x00000000       0x38 SPI.o
- .debug_line    0x00000000      0x185 SPI.o
- .debug_str     0x00000000      0x178 SPI.o
- .comment       0x00000000       0x31 SPI.o
- .debug_frame   0x00000000       0x74 SPI.o
  .text          0x00000000        0x0 timer.o
  .data          0x00000000        0x0 timer.o
  .bss           0x00000000        0x0 timer.o
@@ -65,6 +52,21 @@ Discarded input sections
  .text          0x00000000        0x0 ultraljud.o
  .data          0x00000000        0x0 ultraljud.o
  .bss           0x00000000        0x0 ultraljud.o
+ .text.initSensors
+                0x00000000       0x48 ultraljud.o
+ .text.getDistance
+                0x00000000       0x36 ultraljud.o
+ .text.getData  0x00000000        0x6 ultraljud.o
+ .debug_info    0x00000000      0x27b ultraljud.o
+ .debug_abbrev  0x00000000      0x199 ultraljud.o
+ .debug_loc     0x00000000       0x88 ultraljud.o
+ .debug_aranges
+                0x00000000       0x30 ultraljud.o
+ .debug_ranges  0x00000000       0x20 ultraljud.o
+ .debug_line    0x00000000      0x1f7 ultraljud.o
+ .debug_str     0x00000000      0x1fc ultraljud.o
+ .comment       0x00000000       0x31 ultraljud.o
+ .debug_frame   0x00000000       0x44 ultraljud.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
@@ -218,7 +220,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x1a0
+.text           0x00000000      0x160
  *(.vectors)
  .vectors       0x00000000       0x8c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1284p.o
                 0x00000000                __vector_default
@@ -309,24 +311,22 @@ END GROUP
                 0x000000ac                __vector_20
                 0x000000ae                . = ALIGN (0x2)
  *(.text.*)
- .text.main     0x000000ae        0xe Sensormodul.o
+ .text.main     0x000000ae       0x1a Sensormodul.o
                 0x000000ae                main
+ .text.setup_spi
+                0x000000c8       0x32 SPI.o
+                0x000000c8                setup_spi
+ .text.send_spi
+                0x000000fa        0xc SPI.o
+                0x000000fa                send_spi
  .text.__vector_13
-                0x000000bc       0x56 timer.o
-                0x000000bc                __vector_13
- .text.initSensors
-                0x00000112       0x48 ultraljud.o
-                0x00000112                initSensors
- .text.getDistance
-                0x0000015a       0x3e ultraljud.o
-                0x0000015a                getDistance
- .text.getData  0x00000198        0x4 ultraljud.o
-                0x00000198                getData
-                0x0000019c                . = ALIGN (0x2)
+                0x00000106       0x56 timer.o
+                0x00000106                __vector_13
+                0x0000015c                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000019c        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                0x0000019c                _exit
-                0x0000019c                exit
+ .fini9         0x0000015c        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x0000015c                _exit
+                0x0000015c                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -345,11 +345,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000019c        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .fini0         0x0000015c        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x000001a0                _etext = .
+                0x00000160                _etext = .
 
-.data           0x00800100        0x0 load address 0x000001a0
+.data           0x00800100        0x0 load address 0x00000160
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -360,25 +360,23 @@ END GROUP
                 0x00800100                _edata = .
                 0x00800100                PROVIDE (__data_end, .)
 
-.bss            0x00800100        0xe
+.bss            0x00800100        0x2
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800100        0xc Sensormodul.o
-                0x00800100                sensor_list
- COMMON         0x0080010c        0x2 timer.o
-                0x0080010c                _t_func
-                0x0080010e                PROVIDE (__bss_end, .)
-                0x000001a0                __data_load_start = LOADADDR (.data)
-                0x000001a0                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800100        0x2 timer.o
+                0x00800100                _t_func
+                0x00800102                PROVIDE (__bss_end, .)
+                0x00000160                __data_load_start = LOADADDR (.data)
+                0x00000160                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080010e        0x0
-                0x0080010e                PROVIDE (__noinit_start, .)
+.noinit         0x00800102        0x0
+                0x00800102                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x0080010e                PROVIDE (__noinit_end, .)
-                0x0080010e                _end = .
-                0x0080010e                PROVIDE (__heap_start, .)
+                0x00800102                PROVIDE (__noinit_end, .)
+                0x00800102                _end = .
+                0x00800102                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -421,8 +419,8 @@ END GROUP
  *(.comment)
  .comment       0x00000000       0x30 Sensormodul.o
                                  0x31 (size before relaxing)
+ .comment       0x00000000       0x31 SPI.o
  .comment       0x00000000       0x31 timer.o
- .comment       0x00000000       0x31 ultraljud.o
 
 .note.gnu.build-id
  *(.note.gnu.build-id)
@@ -439,55 +437,55 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x88
+.debug_aranges  0x00000000       0xa0
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 Sensormodul.o
  .debug_aranges
-                0x00000020       0x38 timer.o
+                0x00000020       0x48 SPI.o
  .debug_aranges
-                0x00000058       0x30 ultraljud.o
+                0x00000068       0x38 timer.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x4d3
+.debug_info     0x00000000      0x411
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x10e Sensormodul.o
- .debug_info    0x0000010e      0x14a timer.o
- .debug_info    0x00000258      0x27b ultraljud.o
+ .debug_info    0x00000000      0x1aa Sensormodul.o
+ .debug_info    0x000001aa      0x11d SPI.o
+ .debug_info    0x000002c7      0x14a timer.o
 
-.debug_abbrev   0x00000000      0x34b
+.debug_abbrev   0x00000000      0x2c5
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0xde Sensormodul.o
- .debug_abbrev  0x000000de       0xd4 timer.o
- .debug_abbrev  0x000001b2      0x199 ultraljud.o
+ .debug_abbrev  0x00000000      0x168 Sensormodul.o
+ .debug_abbrev  0x00000168       0x89 SPI.o
+ .debug_abbrev  0x000001f1       0xd4 timer.o
 
-.debug_line     0x00000000      0x425
+.debug_line     0x00000000      0x431
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000       0xd7 Sensormodul.o
- .debug_line    0x000000d7      0x151 timer.o
- .debug_line    0x00000228      0x1fd ultraljud.o
+ .debug_line    0x00000000      0x15b Sensormodul.o
+ .debug_line    0x0000015b      0x185 SPI.o
+ .debug_line    0x000002e0      0x151 timer.o
 
-.debug_frame    0x00000000      0x104
+.debug_frame    0x00000000      0x134
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 Sensormodul.o
- .debug_frame   0x00000024       0x9c timer.o
- .debug_frame   0x000000c0       0x44 ultraljud.o
+ .debug_frame   0x00000024       0x74 SPI.o
+ .debug_frame   0x00000098       0x9c timer.o
 
-.debug_str      0x00000000      0x227
+.debug_str      0x00000000      0x221
  *(.debug_str)
- .debug_str     0x00000000      0x14b Sensormodul.o
-                                0x188 (size before relaxing)
- .debug_str     0x0000014b       0x50 timer.o
+ .debug_str     0x00000000      0x1a3 Sensormodul.o
+                                0x1d7 (size before relaxing)
+ .debug_str     0x000001a3       0x2e SPI.o
+                                0x178 (size before relaxing)
+ .debug_str     0x000001d1       0x50 timer.o
                                 0x182 (size before relaxing)
- .debug_str     0x0000019b       0x8c ultraljud.o
-                                0x1fc (size before relaxing)
 
-.debug_loc      0x00000000      0x195
+.debug_loc      0x00000000      0x14b
  *(.debug_loc)
- .debug_loc     0x00000000      0x10d timer.o
- .debug_loc     0x0000010d       0x88 ultraljud.o
+ .debug_loc     0x00000000       0x3e SPI.o
+ .debug_loc     0x0000003e      0x10d timer.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -507,11 +505,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x58
+.debug_ranges   0x00000000       0x70
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x10 Sensormodul.o
- .debug_ranges  0x00000010       0x28 timer.o
- .debug_ranges  0x00000038       0x20 ultraljud.o
+ .debug_ranges  0x00000010       0x38 SPI.o
+ .debug_ranges  0x00000048       0x28 timer.o
 
 .debug_macro
  *(.debug_macro)
