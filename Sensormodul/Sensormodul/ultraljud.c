@@ -22,7 +22,7 @@ void initSensors()
 	DDRA &= ~(1 << PORTA1);
 	DDRB |= (1 << PORTB0);
 	
-	sensor_list[0] = (struct soundSensor) {0b11100011, 0};
+	sensor_list[0] = (struct soundSensor) {0b00000000, 0};
 	sensor_list[1] = (struct soundSensor) {0b11100111, 0};
 	sensor_list[2] = (struct soundSensor) {0b11101011, 0};
 	sensor_list[3] = (struct soundSensor) {0b11101111, 0};
@@ -46,14 +46,15 @@ uint8_t getDistance(struct soundSensor sensor)
 	_delay_us(90);
 	PORTA &= ~(1 << PORTA0);
 	//Sätt räknaren till noll
-	while ((PORTA & (1 << PORTA1)))
+	while (!(PINA & (1 << PINA1)));
+	while ((PINA & (1 << PINA1)))
 		{	
 			(PORTB ^= 1 << PORTB0);
 			//wait(TIMER_PRESCALER_8, 9216U);
 			_delay_us(1);
 			TIME++;
 		}
-	
+	_delay_ms(20);
 		
 	DISTANCE = (TIME/100)/58;
 	return DISTANCE;
