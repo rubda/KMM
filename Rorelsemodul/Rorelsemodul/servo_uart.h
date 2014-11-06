@@ -6,7 +6,7 @@
 /************************************************************************/
 /* Baudrate: 19200                                                      */
 /************************************************************************/
-#define UART_SETTINGS 0x0017
+#define UART_SETTINGS 0x0001
 
 #define SUART_RX PORTD2
 #define SUART_TX PORTD3
@@ -22,8 +22,11 @@
 #define MOVING_SPEED_H 0x21
 #define PRESENT_POSITION_L 0x24
 #define PRESENT_POSITION_H 0x25
-#define PRESENT_SPEED_L 
-
+#define PRESENT_SPEED_L 0x26
+#define PRESENT_SPEED_H 0x27
+#define PRESENT_LOAD_L 0x28
+#define PRESENT_LOAD_H 0x29
+#define ID_ADDR 0x03
 
 struct suart_response
 {

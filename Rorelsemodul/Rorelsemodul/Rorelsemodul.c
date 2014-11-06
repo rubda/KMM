@@ -23,10 +23,13 @@ int main(void)
 	servo_response res;
 	//if(res == (servo_response)SERVO_ERROR);
 	
-	
+	int i = 0;
 	while(1)
 	{	
-		res = suart_command_ping(1);
-		PORTB = res.error;
+		//for(i = 0; i < 254; ++i){
+		res = suart_command_ping(i);
+		//}
+		//PORTB = res.error;
+		//suart_send_string(send, 5);
     }
 }
