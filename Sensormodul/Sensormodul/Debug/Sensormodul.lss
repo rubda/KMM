@@ -15,15 +15,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   5 .debug_abbrev 00000350  00000000  00000000  0000075b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   000003f8  00000000  00000000  00000aab  2**0
+  6 .debug_line   0000040a  00000000  00000000  00000aab  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  0000010c  00000000  00000000  00000ea4  2**2
+  7 .debug_frame  0000010c  00000000  00000000  00000eb8  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00000231  00000000  00000000  00000fb0  2**0
+  8 .debug_str    00000256  00000000  00000000  00000fc4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    00000173  00000000  00000000  000011e1  2**0
+  9 .debug_loc    00000173  00000000  00000000  0000121a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000058  00000000  00000000  00001354  2**0
+ 10 .debug_ranges 00000058  00000000  00000000  0000138d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -128,17 +128,7 @@ Disassembly of section .text:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
 
 000000ae <main>:
-
-
-int main(void)
-{
-
-	initSensors();
   ae:	4c d0       	rcall	.+152    	; 0x148 <initSensors>
-	
-	while(1)
-    {
-        getData(sensor_list[0]);
   b0:	c0 e0       	ldi	r28, 0x00	; 0
   b2:	d1 e0       	ldi	r29, 0x01	; 1
   b4:	88 81       	ld	r24, Y
