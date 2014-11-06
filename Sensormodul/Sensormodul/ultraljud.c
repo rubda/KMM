@@ -20,6 +20,7 @@ void initSensors()
 
 	//Sätt PA1 till in	
 	DDRA &= ~(1 << PORTA1);
+	DDRB |= (1 << PORTB0);
 	
 	sensor_list[0] = (struct soundSensor) {0b11100011, 0};
 	sensor_list[1] = (struct soundSensor) {0b11100111, 0};
