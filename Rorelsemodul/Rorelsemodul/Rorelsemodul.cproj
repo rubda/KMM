@@ -121,6 +121,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="atmega-timers.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="atmega-timers.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Rorelsemodul.c">
       <SubType>compile</SubType>
     </Compile>
@@ -128,6 +134,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="servo_uart.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UART.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UART.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
