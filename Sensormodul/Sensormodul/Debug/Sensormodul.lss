@@ -3,27 +3,6 @@ Sensormodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-<<<<<<< HEAD
-  0 .text         00000106  00000000  00000000  00000054  2**1
-                  CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .comment      00000030  00000000  00000000  0000015a  2**0
-                  CONTENTS, READONLY
-  2 .debug_aranges 00000068  00000000  00000000  0000018a  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   000002d0  00000000  00000000  000001f2  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000001b4  00000000  00000000  000004c2  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   000002f2  00000000  00000000  00000676  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  00000098  00000000  00000000  00000968  2**2
-                  CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    000001a7  00000000  00000000  00000a00  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    0000003e  00000000  00000000  00000ba7  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000048  00000000  00000000  00000be5  2**0
-=======
   0 .text         000000de  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   1 .comment      00000030  00000000  00000000  00000132  2**0
@@ -34,16 +13,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   4 .debug_abbrev 00000101  00000000  00000000  00000394  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   000001ce  00000000  00000000  00000495  2**0
+  5 .debug_line   000001d8  00000000  00000000  00000495  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  00000098  00000000  00000000  00000664  2**2
+  6 .debug_frame  00000098  00000000  00000000  00000670  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    00000175  00000000  00000000  000006fc  2**0
+  7 .debug_str    00000175  00000000  00000000  00000708  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    0000003e  00000000  00000000  00000871  2**0
+  8 .debug_loc    0000003e  00000000  00000000  0000087d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000048  00000000  00000000  000008af  2**0
->>>>>>> df85c5717b1029083b513e6142062a42380832ee
+  9 .debug_ranges 00000048  00000000  00000000  000008bb  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -128,65 +106,17 @@ Disassembly of section .text:
   94:	de bf       	out	0x3e, r29	; 62
   96:	cd bf       	out	0x3d, r28	; 61
   98:	02 d0       	rcall	.+4      	; 0x9e <main>
-<<<<<<< HEAD
-  9a:	33 c0       	rjmp	.+102    	; 0x102 <_exit>
-=======
   9a:	1f c0       	rjmp	.+62     	; 0xda <_exit>
->>>>>>> df85c5717b1029083b513e6142062a42380832ee
 
 0000009c <__bad_interrupt>:
   9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
 
 0000009e <main>:
-#include <util/delay.h>
-
 
 
 int main(void)
 {
-<<<<<<< HEAD
-	setup_spi();
-  9e:	0e d0       	rcall	.+28     	; 0xbc <setup_spi>
 
-
-    while(1)
-    {	
-		
-		ss_low();
-  a0:	2c d0       	rcall	.+88     	; 0xfa <ss_low>
-		
-		send_spi(ACTIVATE_ADC);	
-  a2:	84 e9       	ldi	r24, 0x94	; 148
-  a4:	24 d0       	rcall	.+72     	; 0xee <send_spi>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
-  a6:	84 e1       	ldi	r24, 0x14	; 20
-  a8:	91 e0       	ldi	r25, 0x01	; 1
-  aa:	01 97       	sbiw	r24, 0x01	; 1
-  ac:	f1 f7       	brne	.-4      	; 0xaa <main+0xc>
-  ae:	00 00       	nop
-		
-		_delay_us(150);
-		
-		send_spi(START_CONVERSION);
-  b0:	84 e9       	ldi	r24, 0x94	; 148
-  b2:	1d d0       	rcall	.+58     	; 0xee <send_spi>
-		
-		send_spi(POLL);
-  b4:	80 e8       	ldi	r24, 0x80	; 128
-  b6:	1b d0       	rcall	.+54     	; 0xee <send_spi>
-		
-		ss_high();
-  b8:	22 d0       	rcall	.+68     	; 0xfe <ss_high>
-  ba:	f2 cf       	rjmp	.-28     	; 0xa0 <main+0x2>
-
-000000bc <setup_spi>:
-=======
-    
 	setup_spi();
   9e:	02 d0       	rcall	.+4      	; 0xa4 <setup_spi>
 	
@@ -197,59 +127,12 @@ int main(void)
   a2:	fe cf       	rjmp	.-4      	; 0xa0 <main+0x2>
 
 000000a4 <setup_spi>:
->>>>>>> df85c5717b1029083b513e6142062a42380832ee
-
 uint8_t get_spi(uint8_t data)
 {
 	SPDR = data;
+	while(!(SPSR & (1<<SPIF)));
 	return SPDR;
 }
-<<<<<<< HEAD
-  bc:	8c b5       	in	r24, 0x2c	; 44
-  be:	80 61       	ori	r24, 0x10	; 16
-  c0:	8c bd       	out	0x2c, r24	; 44
-  c2:	8c b5       	in	r24, 0x2c	; 44
-  c4:	80 64       	ori	r24, 0x40	; 64
-  c6:	8c bd       	out	0x2c, r24	; 44
-  c8:	8c b5       	in	r24, 0x2c	; 44
-  ca:	8c bd       	out	0x2c, r24	; 44
-  cc:	8c b5       	in	r24, 0x2c	; 44
-  ce:	88 60       	ori	r24, 0x08	; 8
-  d0:	8c bd       	out	0x2c, r24	; 44
-  d2:	8c b5       	in	r24, 0x2c	; 44
-  d4:	84 60       	ori	r24, 0x04	; 4
-  d6:	8c bd       	out	0x2c, r24	; 44
-  d8:	8c b5       	in	r24, 0x2c	; 44
-  da:	8e 7f       	andi	r24, 0xFE	; 254
-  dc:	8c bd       	out	0x2c, r24	; 44
-  de:	8c b5       	in	r24, 0x2c	; 44
-  e0:	8d 7f       	andi	r24, 0xFD	; 253
-  e2:	8c bd       	out	0x2c, r24	; 44
-  e4:	25 9a       	sbi	0x04, 5	; 4
-  e6:	26 98       	cbi	0x04, 6	; 4
-  e8:	24 9a       	sbi	0x04, 4	; 4
-  ea:	27 9a       	sbi	0x04, 7	; 4
-  ec:	08 95       	ret
-
-000000ee <send_spi>:
-  ee:	8e bd       	out	0x2e, r24	; 46
-  f0:	0d b4       	in	r0, 0x2d	; 45
-  f2:	07 fe       	sbrs	r0, 7
-  f4:	fd cf       	rjmp	.-6      	; 0xf0 <send_spi+0x2>
-  f6:	8e b5       	in	r24, 0x2e	; 46
-  f8:	08 95       	ret
-
-000000fa <ss_low>:
-
-void ss_low()
-{
-	PORTB &= ~(1 << SPI_SS_PIN);
-  fa:	2c 98       	cbi	0x05, 4	; 5
-  fc:	08 95       	ret
-
-000000fe <ss_high>:
-}	
-=======
   a4:	8c b5       	in	r24, 0x2c	; 44
   a6:	80 61       	ori	r24, 0x10	; 16
   a8:	8c bd       	out	0x2c, r24	; 44
@@ -277,21 +160,9 @@ void ss_low()
   d4:	08 95       	ret
 
 000000d6 <ss_low>:
->>>>>>> df85c5717b1029083b513e6142062a42380832ee
 
 void ss_low()
 {
-<<<<<<< HEAD
-	PORTB |= (1 << SPI_SS_PIN);
-  fe:	2c 9a       	sbi	0x05, 4	; 5
- 100:	08 95       	ret
-
-00000102 <_exit>:
- 102:	f8 94       	cli
-
-00000104 <__stop_program>:
- 104:	ff cf       	rjmp	.-2      	; 0x104 <__stop_program>
-=======
 	PORTB &= ~(1 << SPI_SS_PIN);
   d6:	2c 98       	cbi	0x05, 4	; 5
   d8:	08 95       	ret
@@ -301,4 +172,3 @@ void ss_low()
 
 000000dc <__stop_program>:
   dc:	ff cf       	rjmp	.-2      	; 0xdc <__stop_program>
->>>>>>> df85c5717b1029083b513e6142062a42380832ee
