@@ -3,27 +3,27 @@ Sensormodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000001be  00000000  00000000  00000074  2**1
+  0 .text         000001c2  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          0000000e  00800100  00800100  00000232  2**0
+  1 .bss          0000000e  00800100  00800100  00000236  2**0
                   ALLOC
-  2 .comment      00000030  00000000  00000000  00000232  2**0
+  2 .comment      00000030  00000000  00000000  00000236  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000088  00000000  00000000  00000262  2**0
+  3 .debug_aranges 00000088  00000000  00000000  00000266  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   000003e1  00000000  00000000  000002ea  2**0
+  4 .debug_info   000003e1  00000000  00000000  000002ee  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 000002ec  00000000  00000000  000006cb  2**0
+  5 .debug_abbrev 000002ec  00000000  00000000  000006cf  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   0000036b  00000000  00000000  000009b7  2**0
+  6 .debug_line   00000377  00000000  00000000  000009bb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  0000010c  00000000  00000000  00000d24  2**2
+  7 .debug_frame  0000010c  00000000  00000000  00000d34  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000001e6  00000000  00000000  00000e30  2**0
+  8 .debug_str    000001e6  00000000  00000000  00000e40  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    00000173  00000000  00000000  00001016  2**0
+  9 .debug_loc    00000173  00000000  00000000  00001026  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000058  00000000  00000000  00001189  2**0
+ 10 .debug_ranges 00000058  00000000  00000000  00001199  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -122,7 +122,7 @@ Disassembly of section .text:
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
   a8:	02 d0       	rcall	.+4      	; 0xae <main>
-  aa:	87 c0       	rjmp	.+270    	; 0x1ba <_exit>
+  aa:	89 c0       	rjmp	.+274    	; 0x1be <_exit>
 
 000000ac <__bad_interrupt>:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
@@ -143,7 +143,7 @@ int main(void)
   b2:	d1 e0       	ldi	r29, 0x01	; 1
   b4:	88 81       	ld	r24, Y
   b6:	99 81       	ldd	r25, Y+1	; 0x01
-  b8:	7e d0       	rcall	.+252    	; 0x1b6 <getData>
+  b8:	80 d0       	rcall	.+256    	; 0x1ba <getData>
   ba:	fc cf       	rjmp	.-8      	; 0xb4 <main+0x6>
 
 000000bc <__vector_13>:
@@ -250,93 +250,97 @@ void initSensors()
 	//Sätt PA1 till in	
 	DDRA &= ~(1 << PORTA1);
  150:	09 98       	cbi	0x01, 1	; 1
+	DDRB |= (1 << PORTB0);
+ 152:	20 9a       	sbi	0x04, 0	; 4
 	
 	sensor_list[0] = (struct soundSensor) {0b11100011, 0};
- 152:	83 ee       	ldi	r24, 0xE3	; 227
- 154:	80 93 00 01 	sts	0x0100, r24
- 158:	10 92 01 01 	sts	0x0101, r1
+ 154:	83 ee       	ldi	r24, 0xE3	; 227
+ 156:	80 93 00 01 	sts	0x0100, r24
+ 15a:	10 92 01 01 	sts	0x0101, r1
 	sensor_list[1] = (struct soundSensor) {0b11100111, 0};
- 15c:	87 ee       	ldi	r24, 0xE7	; 231
- 15e:	80 93 02 01 	sts	0x0102, r24
- 162:	10 92 03 01 	sts	0x0103, r1
+ 15e:	87 ee       	ldi	r24, 0xE7	; 231
+ 160:	80 93 02 01 	sts	0x0102, r24
+ 164:	10 92 03 01 	sts	0x0103, r1
 	sensor_list[2] = (struct soundSensor) {0b11101011, 0};
- 166:	8b ee       	ldi	r24, 0xEB	; 235
- 168:	80 93 04 01 	sts	0x0104, r24
- 16c:	10 92 05 01 	sts	0x0105, r1
+ 168:	8b ee       	ldi	r24, 0xEB	; 235
+ 16a:	80 93 04 01 	sts	0x0104, r24
+ 16e:	10 92 05 01 	sts	0x0105, r1
 	sensor_list[3] = (struct soundSensor) {0b11101111, 0};
- 170:	8f ee       	ldi	r24, 0xEF	; 239
- 172:	80 93 06 01 	sts	0x0106, r24
- 176:	10 92 07 01 	sts	0x0107, r1
+ 172:	8f ee       	ldi	r24, 0xEF	; 239
+ 174:	80 93 06 01 	sts	0x0106, r24
+ 178:	10 92 07 01 	sts	0x0107, r1
 	sensor_list[4] = (struct soundSensor) {0b11110011, 0};
- 17a:	83 ef       	ldi	r24, 0xF3	; 243
- 17c:	80 93 08 01 	sts	0x0108, r24
- 180:	10 92 09 01 	sts	0x0109, r1
+ 17c:	83 ef       	ldi	r24, 0xF3	; 243
+ 17e:	80 93 08 01 	sts	0x0108, r24
+ 182:	10 92 09 01 	sts	0x0109, r1
 	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
- 184:	87 ef       	ldi	r24, 0xF7	; 247
- 186:	80 93 0a 01 	sts	0x010A, r24
- 18a:	10 92 0b 01 	sts	0x010B, r1
- 18e:	08 95       	ret
+ 186:	87 ef       	ldi	r24, 0xF7	; 247
+ 188:	80 93 0a 01 	sts	0x010A, r24
+ 18c:	10 92 0b 01 	sts	0x010B, r1
+ 190:	08 95       	ret
 
-00000190 <getDistance>:
+00000192 <getDistance>:
 {
 	sensor.Distance = getDistance(sensor);
 }
 
 uint8_t getDistance(struct soundSensor sensor)
 {
- 190:	cf 93       	push	r28
+ 192:	cf 93       	push	r28
 	uint8_t DISTANCE;
 	uint8_t TIME = 0; 
 		
 	PORTA = sensor.id & PORTA;
- 192:	92 b1       	in	r25, 0x02	; 2
- 194:	89 23       	and	r24, r25
- 196:	82 b9       	out	0x02, r24	; 2
+ 194:	92 b1       	in	r25, 0x02	; 2
+ 196:	89 23       	and	r24, r25
+ 198:	82 b9       	out	0x02, r24	; 2
 	
+	PORTA |= (1 << PORTA0);
+ 19a:	10 9a       	sbi	0x02, 0	; 2
 	//Sätt räknaren till noll
 	while ((PORTA & (1 << PORTA1)))
- 198:	11 9b       	sbis	0x02, 1	; 2
- 19a:	0a c0       	rjmp	.+20     	; 0x1b0 <getDistance+0x20>
+ 19c:	11 9b       	sbis	0x02, 1	; 2
+ 19e:	0a c0       	rjmp	.+20     	; 0x1b4 <getDistance+0x22>
 		{	
 			(PORTB ^= 1 << PORTB0);
- 19c:	c1 e0       	ldi	r28, 0x01	; 1
- 19e:	85 b1       	in	r24, 0x05	; 5
- 1a0:	8c 27       	eor	r24, r28
- 1a2:	85 b9       	out	0x05, r24	; 5
+ 1a0:	c1 e0       	ldi	r28, 0x01	; 1
+ 1a2:	85 b1       	in	r24, 0x05	; 5
+ 1a4:	8c 27       	eor	r24, r28
+ 1a6:	85 b9       	out	0x05, r24	; 5
 			wait(TIMER_PRESCALER_8, 9216U);
- 1a4:	60 e0       	ldi	r22, 0x00	; 0
- 1a6:	74 e2       	ldi	r23, 0x24	; 36
- 1a8:	82 e0       	ldi	r24, 0x02	; 2
- 1aa:	b3 df       	rcall	.-154    	; 0x112 <wait>
-	uint8_t TIME = 0; 
+ 1a8:	60 e0       	ldi	r22, 0x00	; 0
+ 1aa:	74 e2       	ldi	r23, 0x24	; 36
+ 1ac:	82 e0       	ldi	r24, 0x02	; 2
+ 1ae:	b1 df       	rcall	.-158    	; 0x112 <wait>
 		
 	PORTA = sensor.id & PORTA;
 	
+	PORTA |= (1 << PORTA0);
 	//Sätt räknaren till noll
 	while ((PORTA & (1 << PORTA1)))
- 1ac:	11 99       	sbic	0x02, 1	; 2
- 1ae:	f7 cf       	rjmp	.-18     	; 0x19e <getDistance+0xe>
+ 1b0:	11 99       	sbic	0x02, 1	; 2
+ 1b2:	f7 cf       	rjmp	.-18     	; 0x1a2 <getDistance+0x10>
 		}
 		
 	DISTANCE = (TIME/100)/58;
 	return DISTANCE;
 		
- 1b0:	80 e0       	ldi	r24, 0x00	; 0
- 1b2:	cf 91       	pop	r28
- 1b4:	08 95       	ret
+ 1b4:	80 e0       	ldi	r24, 0x00	; 0
+ 1b6:	cf 91       	pop	r28
+ 1b8:	08 95       	ret
 
-000001b6 <getData>:
+000001ba <getData>:
 	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
 }
 
 void getData(struct soundSensor sensor) 
 {
 	sensor.Distance = getDistance(sensor);
- 1b6:	ec cf       	rjmp	.-40     	; 0x190 <getDistance>
- 1b8:	08 95       	ret
+ 1ba:	eb cf       	rjmp	.-42     	; 0x192 <getDistance>
+ 1bc:	08 95       	ret
 
-000001ba <_exit>:
- 1ba:	f8 94       	cli
+000001be <_exit>:
+ 1be:	f8 94       	cli
 
-000001bc <__stop_program>:
- 1bc:	ff cf       	rjmp	.-2      	; 0x1bc <__stop_program>
+000001c0 <__stop_program>:
+ 1c0:	ff cf       	rjmp	.-2      	; 0x1c0 <__stop_program>

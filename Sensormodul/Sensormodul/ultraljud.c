@@ -42,6 +42,7 @@ uint8_t getDistance(struct soundSensor sensor)
 		
 	PORTA = sensor.id & PORTA;
 	
+	PORTA |= (1 << PORTA0);
 	//Sätt räknaren till noll
 	while ((PORTA & (1 << PORTA1)))
 		{	
