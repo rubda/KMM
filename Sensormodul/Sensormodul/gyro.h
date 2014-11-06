@@ -1,11 +1,11 @@
-#include <avr/io.h>
-
 /*
  * gyro.h
  *
  * Created: 2014-11-05 10:54:43
  *  Author: RubenDas
  */ 
+
+#include <avr/io.h>
 
 #ifndef GYRO_H_
 #define GYRO_H_

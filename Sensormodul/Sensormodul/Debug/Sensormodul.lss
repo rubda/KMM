@@ -3,25 +3,25 @@ Sensormodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000000aa  00000000  00000000  00000054  2**1
+  0 .text         000000de  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .comment      00000030  00000000  00000000  000000fe  2**0
+  1 .comment      00000030  00000000  00000000  00000132  2**0
                   CONTENTS, READONLY
-  2 .debug_aranges 00000068  00000000  00000000  0000012e  2**0
+  2 .debug_aranges 00000068  00000000  00000000  00000162  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   000001b2  00000000  00000000  00000196  2**0
+  3 .debug_info   000001ca  00000000  00000000  000001ca  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000000f0  00000000  00000000  00000348  2**0
+  4 .debug_abbrev 00000101  00000000  00000000  00000394  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   000001c8  00000000  00000000  00000438  2**0
+  5 .debug_line   000001ce  00000000  00000000  00000495  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  00000098  00000000  00000000  00000600  2**2
+  6 .debug_frame  00000098  00000000  00000000  00000664  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    00000175  00000000  00000000  00000698  2**0
+  7 .debug_str    00000175  00000000  00000000  000006fc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    0000003e  00000000  00000000  0000080d  2**0
+  8 .debug_loc    0000003e  00000000  00000000  00000871  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000048  00000000  00000000  0000084b  2**0
+  9 .debug_ranges 00000048  00000000  00000000  000008af  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -106,33 +106,69 @@ Disassembly of section .text:
   94:	de bf       	out	0x3e, r29	; 62
   96:	cd bf       	out	0x3d, r28	; 61
   98:	02 d0       	rcall	.+4      	; 0x9e <main>
-  9a:	05 c0       	rjmp	.+10     	; 0xa6 <_exit>
+  9a:	1f c0       	rjmp	.+62     	; 0xda <_exit>
 
 0000009c <__bad_interrupt>:
   9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
 
 0000009e <main>:
 
+
 int main(void)
 {
-    while(1)
+    
+	setup_spi();
+  9e:	02 d0       	rcall	.+4      	; 0xa4 <setup_spi>
+	
+	while(1)
     {
-        ss_high();
-  9e:	01 d0       	rcall	.+2      	; 0xa2 <ss_high>
-  a0:	fe cf       	rjmp	.-4      	; 0x9e <main>
+        ss_low();
+  a0:	1a d0       	rcall	.+52     	; 0xd6 <ss_low>
+  a2:	fe cf       	rjmp	.-4      	; 0xa0 <main+0x2>
 
-000000a2 <ss_high>:
-	PORTB &= ~(1 << SPI_SS_PIN);
-}	
+000000a4 <setup_spi>:
 
-void ss_high()
+uint8_t get_spi(uint8_t data)
 {
-	PORTB |= (1 << SPI_SS_PIN);
-  a2:	2c 9a       	sbi	0x05, 4	; 5
-  a4:	08 95       	ret
+	SPDR = data;
+	return SPDR;
+}
+  a4:	8c b5       	in	r24, 0x2c	; 44
+  a6:	80 61       	ori	r24, 0x10	; 16
+  a8:	8c bd       	out	0x2c, r24	; 44
+  aa:	8c b5       	in	r24, 0x2c	; 44
+  ac:	80 64       	ori	r24, 0x40	; 64
+  ae:	8c bd       	out	0x2c, r24	; 44
+  b0:	8c b5       	in	r24, 0x2c	; 44
+  b2:	8c bd       	out	0x2c, r24	; 44
+  b4:	8c b5       	in	r24, 0x2c	; 44
+  b6:	88 60       	ori	r24, 0x08	; 8
+  b8:	8c bd       	out	0x2c, r24	; 44
+  ba:	8c b5       	in	r24, 0x2c	; 44
+  bc:	84 60       	ori	r24, 0x04	; 4
+  be:	8c bd       	out	0x2c, r24	; 44
+  c0:	8c b5       	in	r24, 0x2c	; 44
+  c2:	8e 7f       	andi	r24, 0xFE	; 254
+  c4:	8c bd       	out	0x2c, r24	; 44
+  c6:	8c b5       	in	r24, 0x2c	; 44
+  c8:	8d 7f       	andi	r24, 0xFD	; 253
+  ca:	8c bd       	out	0x2c, r24	; 44
+  cc:	25 9a       	sbi	0x04, 5	; 4
+  ce:	26 98       	cbi	0x04, 6	; 4
+  d0:	24 9a       	sbi	0x04, 4	; 4
+  d2:	27 9a       	sbi	0x04, 7	; 4
+  d4:	08 95       	ret
 
-000000a6 <_exit>:
-  a6:	f8 94       	cli
+000000d6 <ss_low>:
 
-000000a8 <__stop_program>:
-  a8:	ff cf       	rjmp	.-2      	; 0xa8 <__stop_program>
+void ss_low()
+{
+	PORTB &= ~(1 << SPI_SS_PIN);
+  d6:	2c 98       	cbi	0x05, 4	; 5
+  d8:	08 95       	ret
+
+000000da <_exit>:
+  da:	f8 94       	cli
+
+000000dc <__stop_program>:
+  dc:	ff cf       	rjmp	.-2      	; 0xdc <__stop_program>

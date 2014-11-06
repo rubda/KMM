@@ -13,8 +13,11 @@
 
 int main(void)
 {
-    while(1)
+    
+	setup_spi();
+	
+	while(1)
     {
-        ss_high();
+        ss_low();
     }
 }
