@@ -37,9 +37,12 @@ uint8_t send_spi(uint8_t out)
 	
 }
 
+
+//Onödig gör fan samma sak som send_spi, tror jag har fattat detta nu
 uint8_t get_spi(uint8_t data)
 {
 	SPDR = data;
+	while(!(SPSR & (1<<SPIF)));
 	return SPDR;
 }
 

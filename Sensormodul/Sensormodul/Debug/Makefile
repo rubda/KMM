@@ -39,7 +39,8 @@ SUBDIRS :=
 C_SRCS +=  \
 ../gyro.c \
 ../Sensormodul.c \
-../SPI.c
+../SPI.c \
+../ultraljud.c
 
 
 PREPROCESSING_SRCS += 
@@ -51,22 +52,26 @@ ASM_SRCS +=
 OBJS +=  \
 gyro.o \
 Sensormodul.o \
-SPI.o
+SPI.o \
+ultraljud.o
 
 OBJS_AS_ARGS +=  \
 gyro.o \
 Sensormodul.o \
-SPI.o
+SPI.o \
+ultraljud.o
 
 C_DEPS +=  \
 gyro.d \
 Sensormodul.d \
-SPI.d
+SPI.d \
+ultraljud.d
 
 C_DEPS_AS_ARGS +=  \
 gyro.d \
 Sensormodul.d \
-SPI.d
+SPI.d \
+ultraljud.d
 
 OUTPUT_FILE_PATH +=Sensormodul.elf
 
@@ -82,6 +87,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
