@@ -62,6 +62,6 @@ uint8_t get_distance(struct soundSensor sensor)
 		}
 	_delay_ms(20);
 		
-	DISTANCE = (TIME/100)/58;
+	DISTANCE = TIME/58;
 	return DISTANCE;	
 }

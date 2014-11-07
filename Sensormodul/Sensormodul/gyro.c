@@ -13,31 +13,54 @@
 
 #include <util/delay.h>
 
-int get_angularrate(uint8_t adcValue)
-
-	uint16_t outData;
-	uint8_t	tmpData;
-
+void activateADC()
 {
+	uint16_t REG = 0;
+	
 	//Steg 1 sätt ADC till aktiv mode
 	ss_low();
 	send_spi(ACTIVATE_ADC);
-	outData = send_spi(0xFF);
-	outData << 8; 
-	tmpData = send_spi(0xFF);
-	
+	REG = get_spi(0xFF);
 	ss_high();
-	/* Kolla om den femtonde biten är 0 */
-	_delay_us(120);
-
-	//Steg 2 conversion
-	send_spi(START_CONVERSION);
-	/* Kolla om den femtonde biten är 0 */
 	
+	//if (REG & (1 << 16)) NULL; //BAJS;
+	REG = 0;
+	_delay_us(150);
+}
+
+
+uint16_t getAngularRate(uint8_t adcValue)
+{
+	uint16_t REG = 0;
+	uint16_t DATA = 0;
+	
+	//Steg 2 conversion
+	ss_low();
+	send_spi(START_CONVERSION);
+	REG = get_spi(0xFF);
+	ss_high();
+	
+	//if (REG & (1 << 16)) NULL; //BAJS;
+	REG = 0;
 	
 	//Steg 3 poll
+	ss_low();
 	send_spi(POLL);
-	/* Kolla om den femtonde biten är 0 */
-	_delay_us(120);		
-}	
+	_delay_us(150);
 	
+	//if (REG & (1 << 16)) NULL; //BAJS;
+	REG = get_spi(0xFF);
+	ss_high();
+	
+	REG = REG >> 1;
+	DATA = REG & 0x07FF; 
+	
+	return DATA;		
+}	
+
+int adcToAngularRate(uint16_t data)
+	{
+		int vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
+		
+		return (vOutAngularRate - 2500)/6.67; // Uttryck i mV/grader
+	}

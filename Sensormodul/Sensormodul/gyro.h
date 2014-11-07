@@ -16,6 +16,6 @@
 #define POLL 0b10000000
 #define DEACTIVATE_ADC 0b10010000
 
-int get_angularrate(uint8_t adcValue);
+uint16_t getAngularRate(uint8_t adcValue);
 
 #endif /* GYRO_H_ */
