@@ -3,27 +3,27 @@ Rorelsemodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000440  00000000  00000000  00000074  2**1
+  0 .text         00000326  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          00000006  00800100  00800100  000004b4  2**0
+  1 .bss          00000007  00800100  00800100  0000039a  2**0
                   ALLOC
-  2 .comment      00000030  00000000  00000000  000004b4  2**0
+  2 .comment      00000030  00000000  00000000  0000039a  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000100  00000000  00000000  000004e4  2**0
+  3 .debug_aranges 00000110  00000000  00000000  000003ca  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000900  00000000  00000000  000005e4  2**0
+  4 .debug_info   000008d6  00000000  00000000  000004da  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000384  00000000  00000000  00000ee4  2**0
+  5 .debug_abbrev 00000356  00000000  00000000  00000db0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000689  00000000  00000000  00001268  2**0
+  6 .debug_line   000006bc  00000000  00000000  00001106  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000340  00000000  00000000  000018f4  2**2
+  7 .debug_frame  0000037c  00000000  00000000  000017c4  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00000333  00000000  00000000  00001c34  2**0
+  8 .debug_str    00000339  00000000  00000000  00001b40  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    000009d0  00000000  00000000  00001f67  2**0
+  9 .debug_loc    00000a3a  00000000  00000000  00001e79  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 000000d0  00000000  00000000  00002937  2**0
+ 10 .debug_ranges 000000e0  00000000  00000000  000028b3  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -85,11 +85,11 @@ Disassembly of section .text:
   6a:	00 00       	nop
   6c:	1f c0       	rjmp	.+62     	; 0xac <__bad_interrupt>
   6e:	00 00       	nop
-  70:	1d c0       	rjmp	.+58     	; 0xac <__bad_interrupt>
+  70:	cf c0       	rjmp	.+414    	; 0x210 <__vector_28>
   72:	00 00       	nop
   74:	1b c0       	rjmp	.+54     	; 0xac <__bad_interrupt>
   76:	00 00       	nop
-  78:	19 c0       	rjmp	.+50     	; 0xac <__bad_interrupt>
+  78:	c0 c0       	rjmp	.+384    	; 0x1fa <__vector_30>
   7a:	00 00       	nop
   7c:	17 c0       	rjmp	.+46     	; 0xac <__bad_interrupt>
   7e:	00 00       	nop
@@ -118,11 +118,11 @@ Disassembly of section .text:
   a0:	1d 92       	st	X+, r1
 
 000000a2 <.do_clear_bss_start>:
-  a2:	a6 30       	cpi	r26, 0x06	; 6
+  a2:	a7 30       	cpi	r26, 0x07	; 7
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
   a8:	83 d0       	rcall	.+262    	; 0x1b0 <main>
-  aa:	c8 c1       	rjmp	.+912    	; 0x43c <_exit>
+  aa:	3b c1       	rjmp	.+630    	; 0x322 <_exit>
 
 000000ac <__bad_interrupt>:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
@@ -269,526 +269,281 @@ ISR(TIMER2_COMPA_vect) {
  1ae:	18 95       	reti
 
 000001b0 <main>:
- */ 
+#include <avr/interrupt.h>
 
-#include "servo_uart.h"
+volatile unsigned char data;
 
 int main(void)
 {	
  1b0:	cf 93       	push	r28
  1b2:	df 93       	push	r29
- 1b4:	00 d0       	rcall	.+0      	; 0x1b6 <main+0x6>
- 1b6:	00 d0       	rcall	.+0      	; 0x1b8 <main+0x8>
- 1b8:	1f 92       	push	r1
- 1ba:	cd b7       	in	r28, 0x3d	; 61
- 1bc:	de b7       	in	r29, 0x3e	; 62
+ 1b4:	cd b7       	in	r28, 0x3d	; 61
+ 1b6:	de b7       	in	r29, 0x3e	; 62
+ 1b8:	64 97       	sbiw	r28, 0x14	; 20
+ 1ba:	0f b6       	in	r0, 0x3f	; 63
+ 1bc:	f8 94       	cli
+ 1be:	de bf       	out	0x3e, r29	; 62
+ 1c0:	0f be       	out	0x3f, r0	; 63
+ 1c2:	cd bf       	out	0x3d, r28	; 61
 	suart_init(1000000);
- 1be:	60 e4       	ldi	r22, 0x40	; 64
- 1c0:	72 e4       	ldi	r23, 0x42	; 66
- 1c2:	8f e0       	ldi	r24, 0x0F	; 15
- 1c4:	90 e0       	ldi	r25, 0x00	; 0
- 1c6:	05 d0       	rcall	.+10     	; 0x1d2 <suart_init>
+ 1c4:	60 e4       	ldi	r22, 0x40	; 64
+ 1c6:	72 e4       	ldi	r23, 0x42	; 66
+ 1c8:	8f e0       	ldi	r24, 0x0F	; 15
+ 1ca:	90 e0       	ldi	r25, 0x00	; 0
+ 1cc:	31 d0       	rcall	.+98     	; 0x230 <suart_init>
+	sei();
+ 1ce:	78 94       	sei
+	
+	//www.wormfood.net/avrbaudcalc.php
+	//extremeelectronics.co.in/avr-tutorials/using-the-usart-of-avr-microcontrollers/
 	//UBRR = 23, 0x0017
+	
 	char send[20] = {0xFF, 0xFF, 0x01, 0x02, 0x01};
-	//char recv[20];
-	//int i = 0;
+ 1d0:	fe 01       	movw	r30, r28
+ 1d2:	31 96       	adiw	r30, 0x01	; 1
+ 1d4:	84 e1       	ldi	r24, 0x14	; 20
+ 1d6:	df 01       	movw	r26, r30
+ 1d8:	1d 92       	st	X+, r1
+ 1da:	8a 95       	dec	r24
+ 1dc:	e9 f7       	brne	.-6      	; 0x1d8 <main+0x28>
+ 1de:	8f ef       	ldi	r24, 0xFF	; 255
+ 1e0:	89 83       	std	Y+1, r24	; 0x01
+ 1e2:	8a 83       	std	Y+2, r24	; 0x02
+ 1e4:	91 e0       	ldi	r25, 0x01	; 1
+ 1e6:	9b 83       	std	Y+3, r25	; 0x03
+ 1e8:	22 e0       	ldi	r18, 0x02	; 2
+ 1ea:	2c 83       	std	Y+4, r18	; 0x04
+ 1ec:	9d 83       	std	Y+5, r25	; 0x05
 	
 	DDRB = 0xFF;
- 1c8:	8f ef       	ldi	r24, 0xFF	; 255
- 1ca:	84 b9       	out	0x04, r24	; 4
+ 1ee:	84 b9       	out	0x04, r24	; 4
+	//if(res == (servo_response)SERVO_ERROR);
 	
-	int i = 0;
 	while(1)
 	{	
-		//for(i = 0; i < 254; ++i){
-		res = suart_command_ping(i);
- 1cc:	80 e0       	ldi	r24, 0x00	; 0
- 1ce:	f1 d0       	rcall	.+482    	; 0x3b2 <suart_command_ping>
- 1d0:	fd cf       	rjmp	.-6      	; 0x1cc <main+0x1c>
+		//suart_command_ping(1);
+		suart_send_string(send, 5);
+ 1f0:	65 e0       	ldi	r22, 0x05	; 5
+ 1f2:	ce 01       	movw	r24, r28
+ 1f4:	01 96       	adiw	r24, 0x01	; 1
+ 1f6:	51 d0       	rcall	.+162    	; 0x29a <suart_send_string>
+ 1f8:	fb cf       	rjmp	.-10     	; 0x1f0 <main+0x40>
 
-000001d2 <suart_init>:
-#include "servo_uart.h"
-
-void suart_init(long baud)
-{
- 1d2:	9b 01       	movw	r18, r22
- 1d4:	ac 01       	movw	r20, r24
-	DDRD = 0x20;
- 1d6:	80 e2       	ldi	r24, 0x20	; 32
- 1d8:	8a b9       	out	0x0a, r24	; 10
-
-	UBRR1H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
- 1da:	da 01       	movw	r26, r20
- 1dc:	c9 01       	movw	r24, r18
- 1de:	55 23       	and	r21, r21
- 1e0:	1c f4       	brge	.+6      	; 0x1e8 <suart_init+0x16>
- 1e2:	01 96       	adiw	r24, 0x01	; 1
- 1e4:	a1 1d       	adc	r26, r1
- 1e6:	b1 1d       	adc	r27, r1
- 1e8:	b5 95       	asr	r27
- 1ea:	a7 95       	ror	r26
- 1ec:	97 95       	ror	r25
- 1ee:	87 95       	ror	r24
- 1f0:	bc 01       	movw	r22, r24
- 1f2:	cd 01       	movw	r24, r26
- 1f4:	78 5f       	subi	r23, 0xF8	; 248
- 1f6:	88 4f       	sbci	r24, 0xF8	; 248
- 1f8:	9f 4f       	sbci	r25, 0xFF	; 255
- 1fa:	fe d0       	rcall	.+508    	; 0x3f8 <__udivmodsi4>
- 1fc:	da 01       	movw	r26, r20
- 1fe:	c9 01       	movw	r24, r18
- 200:	01 97       	sbiw	r24, 0x01	; 1
- 202:	a1 09       	sbc	r26, r1
- 204:	b1 09       	sbc	r27, r1
- 206:	89 2f       	mov	r24, r25
- 208:	9a 2f       	mov	r25, r26
- 20a:	ab 2f       	mov	r26, r27
- 20c:	bb 27       	eor	r27, r27
- 20e:	80 93 cd 00 	sts	0x00CD, r24
-	UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
- 212:	21 50       	subi	r18, 0x01	; 1
- 214:	20 93 cc 00 	sts	0x00CC, r18
-
-	
-	UCSR1C = (3 << UCSZ10);
- 218:	86 e0       	ldi	r24, 0x06	; 6
- 21a:	80 93 ca 00 	sts	0x00CA, r24
-	UCSR1B |= ((1 << RXEN1) | (1 << TXEN1));
- 21e:	e9 ec       	ldi	r30, 0xC9	; 201
- 220:	f0 e0       	ldi	r31, 0x00	; 0
- 222:	80 81       	ld	r24, Z
- 224:	88 61       	ori	r24, 0x18	; 24
- 226:	80 83       	st	Z, r24
- 228:	08 95       	ret
-
-0000022a <suart_read_char>:
+000001fa <__vector_30>:
+    }
 }
 
-char suart_read_char()
-{
-	while(!(UCSR1A & (1 << RXC1)));
- 22a:	e8 ec       	ldi	r30, 0xC8	; 200
- 22c:	f0 e0       	ldi	r31, 0x00	; 0
- 22e:	80 81       	ld	r24, Z
- 230:	88 23       	and	r24, r24
- 232:	ec f7       	brge	.-6      	; 0x22e <suart_read_char+0x4>
-	
-	return UDR1;
- 234:	80 91 ce 00 	lds	r24, 0x00CE
-}
- 238:	08 95       	ret
-
-0000023a <suart_send_char>:
-
-void suart_send_char(uint8_t data)
-{
-	while(!(UCSR1A & (1 << UDRE1)));
- 23a:	e8 ec       	ldi	r30, 0xC8	; 200
- 23c:	f0 e0       	ldi	r31, 0x00	; 0
- 23e:	90 81       	ld	r25, Z
- 240:	95 ff       	sbrs	r25, 5
- 242:	fd cf       	rjmp	.-6      	; 0x23e <suart_send_char+0x4>
-	
-	UDR1 = data;
- 244:	80 93 ce 00 	sts	0x00CE, r24
- 248:	08 95       	ret
-
-0000024a <suart_read_string>:
-	
-}
-
-int suart_read_string(char *s, int size)
-{
- 24a:	df 92       	push	r13
- 24c:	ef 92       	push	r14
- 24e:	ff 92       	push	r15
- 250:	0f 93       	push	r16
- 252:	1f 93       	push	r17
- 254:	cf 93       	push	r28
- 256:	df 93       	push	r29
- 258:	8c 01       	movw	r16, r24
-	uint8_t i = 0;
+ISR(USART1_TX_vect){
+ 1fa:	1f 92       	push	r1
+ 1fc:	0f 92       	push	r0
+ 1fe:	0f b6       	in	r0, 0x3f	; 63
+ 200:	0f 92       	push	r0
+ 202:	11 24       	eor	r1, r1
 	SUART_RX_ACTIVE;
- 25a:	5d 98       	cbi	0x0b, 5	; 11
-	char c;
-	
-	while(i < size - 1){
- 25c:	7b 01       	movw	r14, r22
- 25e:	81 e0       	ldi	r24, 0x01	; 1
- 260:	e8 1a       	sub	r14, r24
- 262:	f1 08       	sbc	r15, r1
- 264:	1e 14       	cp	r1, r14
- 266:	1f 04       	cpc	r1, r15
- 268:	8c f4       	brge	.+34     	; 0x28c <suart_read_string+0x42>
- 26a:	c0 e0       	ldi	r28, 0x00	; 0
- 26c:	d0 e0       	ldi	r29, 0x00	; 0
-	
+ 204:	5d 98       	cbi	0x0b, 5	; 11
 }
+ 206:	0f 90       	pop	r0
+ 208:	0f be       	out	0x3f, r0	; 63
+ 20a:	0f 90       	pop	r0
+ 20c:	1f 90       	pop	r1
+ 20e:	18 95       	reti
 
-int suart_read_string(char *s, int size)
-{
-	uint8_t i = 0;
- 26e:	d1 2c       	mov	r13, r1
-	SUART_RX_ACTIVE;
-	char c;
-	
-	while(i < size - 1){
-		c = suart_read_char();
- 270:	dc df       	rcall	.-72     	; 0x22a <suart_read_char>
-		if(c == '\0')
- 272:	88 23       	and	r24, r24
- 274:	71 f0       	breq	.+28     	; 0x292 <suart_read_string+0x48>
-			break;
-		s[i] = c;
- 276:	f8 01       	movw	r30, r16
- 278:	ed 0d       	add	r30, r13
- 27a:	f1 1d       	adc	r31, r1
- 27c:	80 83       	st	Z, r24
-		i++;
- 27e:	d3 94       	inc	r13
-{
-	uint8_t i = 0;
-	SUART_RX_ACTIVE;
-	char c;
-	
-	while(i < size - 1){
- 280:	cd 2d       	mov	r28, r13
- 282:	d0 e0       	ldi	r29, 0x00	; 0
- 284:	ce 15       	cp	r28, r14
- 286:	df 05       	cpc	r29, r15
- 288:	9c f3       	brlt	.-26     	; 0x270 <suart_read_string+0x26>
- 28a:	03 c0       	rjmp	.+6      	; 0x292 <suart_read_string+0x48>
- 28c:	c0 e0       	ldi	r28, 0x00	; 0
- 28e:	d0 e0       	ldi	r29, 0x00	; 0
-	
-}
+00000210 <__vector_28>:
 
-int suart_read_string(char *s, int size)
-{
-	uint8_t i = 0;
- 290:	d1 2c       	mov	r13, r1
-			break;
-		s[i] = c;
-		i++;
+ISR(USART1_RX_vect){
+ 210:	1f 92       	push	r1
+ 212:	0f 92       	push	r0
+ 214:	0f b6       	in	r0, 0x3f	; 63
+ 216:	0f 92       	push	r0
+ 218:	11 24       	eor	r1, r1
+ 21a:	8f 93       	push	r24
+	data = UDR0;
+ 21c:	80 91 c6 00 	lds	r24, 0x00C6
+ 220:	80 93 06 01 	sts	0x0106, r24
+ 224:	8f 91       	pop	r24
+ 226:	0f 90       	pop	r0
+ 228:	0f be       	out	0x3f, r0	; 63
+ 22a:	0f 90       	pop	r0
+ 22c:	1f 90       	pop	r1
+ 22e:	18 95       	reti
+
+00000230 <suart_init>:
 	}
 	
 	s[i] = 0;
- 292:	f8 01       	movw	r30, r16
- 294:	ed 0d       	add	r30, r13
- 296:	f1 1d       	adc	r31, r1
- 298:	10 82       	st	Z, r1
 	
 	return i + 1;
 }
- 29a:	ce 01       	movw	r24, r28
- 29c:	01 96       	adiw	r24, 0x01	; 1
- 29e:	df 91       	pop	r29
- 2a0:	cf 91       	pop	r28
- 2a2:	1f 91       	pop	r17
- 2a4:	0f 91       	pop	r16
- 2a6:	ff 90       	pop	r15
- 2a8:	ef 90       	pop	r14
- 2aa:	df 90       	pop	r13
- 2ac:	08 95       	ret
+ 230:	9b 01       	movw	r18, r22
+ 232:	ac 01       	movw	r20, r24
+ 234:	80 e2       	ldi	r24, 0x20	; 32
+ 236:	8a b9       	out	0x0a, r24	; 10
+ 238:	da 01       	movw	r26, r20
+ 23a:	c9 01       	movw	r24, r18
+ 23c:	55 23       	and	r21, r21
+ 23e:	1c f4       	brge	.+6      	; 0x246 <suart_init+0x16>
+ 240:	01 96       	adiw	r24, 0x01	; 1
+ 242:	a1 1d       	adc	r26, r1
+ 244:	b1 1d       	adc	r27, r1
+ 246:	b5 95       	asr	r27
+ 248:	a7 95       	ror	r26
+ 24a:	97 95       	ror	r25
+ 24c:	87 95       	ror	r24
+ 24e:	bc 01       	movw	r22, r24
+ 250:	cd 01       	movw	r24, r26
+ 252:	60 5c       	subi	r22, 0xC0	; 192
+ 254:	7d 4b       	sbci	r23, 0xBD	; 189
+ 256:	80 4f       	sbci	r24, 0xF0	; 240
+ 258:	9f 4f       	sbci	r25, 0xFF	; 255
+ 25a:	41 d0       	rcall	.+130    	; 0x2de <__udivmodsi4>
+ 25c:	da 01       	movw	r26, r20
+ 25e:	c9 01       	movw	r24, r18
+ 260:	01 97       	sbiw	r24, 0x01	; 1
+ 262:	a1 09       	sbc	r26, r1
+ 264:	b1 09       	sbc	r27, r1
+ 266:	89 2f       	mov	r24, r25
+ 268:	9a 2f       	mov	r25, r26
+ 26a:	ab 2f       	mov	r26, r27
+ 26c:	bb 27       	eor	r27, r27
+ 26e:	80 93 cd 00 	sts	0x00CD, r24
+ 272:	21 50       	subi	r18, 0x01	; 1
+ 274:	20 93 cc 00 	sts	0x00CC, r18
+ 278:	86 e0       	ldi	r24, 0x06	; 6
+ 27a:	80 93 ca 00 	sts	0x00CA, r24
+ 27e:	e9 ec       	ldi	r30, 0xC9	; 201
+ 280:	f0 e0       	ldi	r31, 0x00	; 0
+ 282:	80 81       	ld	r24, Z
+ 284:	88 6d       	ori	r24, 0xD8	; 216
+ 286:	80 83       	st	Z, r24
+ 288:	08 95       	ret
 
-000002ae <suart_send_string>:
+0000028a <suart_send_char>:
+ 28a:	e8 ec       	ldi	r30, 0xC8	; 200
+ 28c:	f0 e0       	ldi	r31, 0x00	; 0
+ 28e:	90 81       	ld	r25, Z
+ 290:	95 ff       	sbrs	r25, 5
+ 292:	fd cf       	rjmp	.-6      	; 0x28e <suart_send_char+0x4>
+ 294:	80 93 ce 00 	sts	0x00CE, r24
+ 298:	08 95       	ret
+
+0000029a <suart_send_string>:
 
 void suart_send_string(char *s, uint8_t size)
 {
- 2ae:	ff 92       	push	r15
- 2b0:	0f 93       	push	r16
- 2b2:	1f 93       	push	r17
- 2b4:	cf 93       	push	r28
- 2b6:	df 93       	push	r29
- 2b8:	f6 2e       	mov	r15, r22
+ 29a:	ff 92       	push	r15
+ 29c:	0f 93       	push	r16
+ 29e:	1f 93       	push	r17
+ 2a0:	cf 93       	push	r28
+ 2a2:	df 93       	push	r29
+ 2a4:	f6 2e       	mov	r15, r22
 	uint8_t i = 0;
 	SUART_TX_ACTIVE;
- 2ba:	5d 9a       	sbi	0x0b, 5	; 11
+ 2a6:	5d 9a       	sbi	0x0b, 5	; 11
 	
 	uint8_t checksum = 0;
 	
 	for(i = 0; i < size; ++i){
- 2bc:	66 23       	and	r22, r22
- 2be:	79 f0       	breq	.+30     	; 0x2de <suart_send_string+0x30>
- 2c0:	c8 2f       	mov	r28, r24
- 2c2:	d9 2f       	mov	r29, r25
- 2c4:	10 e0       	ldi	r17, 0x00	; 0
+ 2a8:	66 23       	and	r22, r22
+ 2aa:	79 f0       	breq	.+30     	; 0x2ca <suart_send_string+0x30>
+ 2ac:	c8 2f       	mov	r28, r24
+ 2ae:	d9 2f       	mov	r29, r25
+ 2b0:	10 e0       	ldi	r17, 0x00	; 0
 void suart_send_string(char *s, uint8_t size)
 {
 	uint8_t i = 0;
 	SUART_TX_ACTIVE;
 	
 	uint8_t checksum = 0;
- 2c6:	00 e0       	ldi	r16, 0x00	; 0
- 2c8:	04 c0       	rjmp	.+8      	; 0x2d2 <suart_send_string+0x24>
+ 2b2:	00 e0       	ldi	r16, 0x00	; 0
+ 2b4:	04 c0       	rjmp	.+8      	; 0x2be <suart_send_string+0x24>
 	
 	for(i = 0; i < size; ++i){
 		if(i >= 2) checksum += s[i];
- 2ca:	12 30       	cpi	r17, 0x02	; 2
- 2cc:	10 f0       	brcs	.+4      	; 0x2d2 <suart_send_string+0x24>
- 2ce:	88 81       	ld	r24, Y
- 2d0:	08 0f       	add	r16, r24
+ 2b6:	12 30       	cpi	r17, 0x02	; 2
+ 2b8:	10 f0       	brcs	.+4      	; 0x2be <suart_send_string+0x24>
+ 2ba:	88 81       	ld	r24, Y
+ 2bc:	08 0f       	add	r16, r24
 		suart_send_char(s[i]);
- 2d2:	89 91       	ld	r24, Y+
- 2d4:	b2 df       	rcall	.-156    	; 0x23a <suart_send_char>
+ 2be:	89 91       	ld	r24, Y+
+ 2c0:	e4 df       	rcall	.-56     	; 0x28a <suart_send_char>
 	uint8_t i = 0;
 	SUART_TX_ACTIVE;
 	
 	uint8_t checksum = 0;
 	
 	for(i = 0; i < size; ++i){
- 2d6:	1f 5f       	subi	r17, 0xFF	; 255
- 2d8:	1f 11       	cpse	r17, r15
- 2da:	f7 cf       	rjmp	.-18     	; 0x2ca <suart_send_string+0x1c>
- 2dc:	01 c0       	rjmp	.+2      	; 0x2e0 <suart_send_string+0x32>
+ 2c2:	1f 5f       	subi	r17, 0xFF	; 255
+ 2c4:	1f 11       	cpse	r17, r15
+ 2c6:	f7 cf       	rjmp	.-18     	; 0x2b6 <suart_send_string+0x1c>
+ 2c8:	01 c0       	rjmp	.+2      	; 0x2cc <suart_send_string+0x32>
 void suart_send_string(char *s, uint8_t size)
 {
 	uint8_t i = 0;
 	SUART_TX_ACTIVE;
 	
 	uint8_t checksum = 0;
- 2de:	00 e0       	ldi	r16, 0x00	; 0
-	
+ 2ca:	00 e0       	ldi	r16, 0x00	; 0
 	for(i = 0; i < size; ++i){
 		if(i >= 2) checksum += s[i];
 		suart_send_char(s[i]);
 	}
+	
 	suart_send_char(~checksum);
- 2e0:	80 2f       	mov	r24, r16
- 2e2:	80 95       	com	r24
- 2e4:	aa df       	rcall	.-172    	; 0x23a <suart_send_char>
-	while(!(UCSR1A & (1 << TXC1)));
- 2e6:	e8 ec       	ldi	r30, 0xC8	; 200
- 2e8:	f0 e0       	ldi	r31, 0x00	; 0
- 2ea:	80 81       	ld	r24, Z
- 2ec:	86 ff       	sbrs	r24, 6
- 2ee:	fd cf       	rjmp	.-6      	; 0x2ea <suart_send_string+0x3c>
+ 2cc:	80 2f       	mov	r24, r16
+ 2ce:	80 95       	com	r24
+ 2d0:	dc df       	rcall	.-72     	; 0x28a <suart_send_char>
+	//while((UCSR1A & (1 << TXC1)));
+	//while(!(UCSR1A & (1 << TXC1)));
 }
- 2f0:	df 91       	pop	r29
- 2f2:	cf 91       	pop	r28
- 2f4:	1f 91       	pop	r17
- 2f6:	0f 91       	pop	r16
- 2f8:	ff 90       	pop	r15
- 2fa:	08 95       	ret
+ 2d2:	df 91       	pop	r29
+ 2d4:	cf 91       	pop	r28
+ 2d6:	1f 91       	pop	r17
+ 2d8:	0f 91       	pop	r16
+ 2da:	ff 90       	pop	r15
+ 2dc:	08 95       	ret
 
-000002fc <suart_command>:
+000002de <__udivmodsi4>:
+ 2de:	a1 e2       	ldi	r26, 0x21	; 33
+ 2e0:	1a 2e       	mov	r1, r26
+ 2e2:	aa 1b       	sub	r26, r26
+ 2e4:	bb 1b       	sub	r27, r27
+ 2e6:	fd 01       	movw	r30, r26
+ 2e8:	0d c0       	rjmp	.+26     	; 0x304 <__udivmodsi4_ep>
 
-servo_response suart_command(uint8_t id, char* command, uint8_t size){
- 2fc:	df 92       	push	r13
- 2fe:	ef 92       	push	r14
- 300:	ff 92       	push	r15
- 302:	0f 93       	push	r16
- 304:	1f 93       	push	r17
- 306:	cf 93       	push	r28
- 308:	df 93       	push	r29
- 30a:	cd b7       	in	r28, 0x3d	; 61
- 30c:	de b7       	in	r29, 0x3e	; 62
- 30e:	65 97       	sbiw	r28, 0x15	; 21
- 310:	0f b6       	in	r0, 0x3f	; 63
- 312:	f8 94       	cli
- 314:	de bf       	out	0x3e, r29	; 62
- 316:	0f be       	out	0x3f, r0	; 63
- 318:	cd bf       	out	0x3d, r28	; 61
- 31a:	d8 2e       	mov	r13, r24
- 31c:	cb 01       	movw	r24, r22
-		parameter_list[i] = buffer[5+i];
-	}
-	response.parameters = parameter_list;
-	
-	return response;
-}
- 31e:	ed b6       	in	r14, 0x3d	; 61
- 320:	fe b6       	in	r15, 0x3e	; 62
-}
+000002ea <__udivmodsi4_loop>:
+ 2ea:	aa 1f       	adc	r26, r26
+ 2ec:	bb 1f       	adc	r27, r27
+ 2ee:	ee 1f       	adc	r30, r30
+ 2f0:	ff 1f       	adc	r31, r31
+ 2f2:	a2 17       	cp	r26, r18
+ 2f4:	b3 07       	cpc	r27, r19
+ 2f6:	e4 07       	cpc	r30, r20
+ 2f8:	f5 07       	cpc	r31, r21
+ 2fa:	20 f0       	brcs	.+8      	; 0x304 <__udivmodsi4_ep>
+ 2fc:	a2 1b       	sub	r26, r18
+ 2fe:	b3 0b       	sbc	r27, r19
+ 300:	e4 0b       	sbc	r30, r20
+ 302:	f5 0b       	sbc	r31, r21
 
-servo_response suart_command(uint8_t id, char* command, uint8_t size){
-	servo_response response;
-	
-	suart_send_string(command, size);
- 322:	64 2f       	mov	r22, r20
- 324:	c4 df       	rcall	.-120    	; 0x2ae <suart_send_string>
-	char buffer[16];
-	uint8_t bytes_read = suart_read_string(buffer, 16);
- 326:	60 e1       	ldi	r22, 0x10	; 16
- 328:	70 e0       	ldi	r23, 0x00	; 0
- 32a:	ce 01       	movw	r24, r28
- 32c:	06 96       	adiw	r24, 0x06	; 6
- 32e:	8d df       	rcall	.-230    	; 0x24a <suart_read_string>
-	
-	if(bytes_read > 5){
- 330:	86 30       	cpi	r24, 0x06	; 6
- 332:	10 f0       	brcs	.+4      	; 0x338 <suart_command+0x3c>
-		PORTB = 0x99;
- 334:	89 e9       	ldi	r24, 0x99	; 153
- 336:	85 b9       	out	0x05, r24	; 5
-	}
-	
-	response.id = id;
-	response.error = buffer[4];
- 338:	3a 85       	ldd	r19, Y+10	; 0x0a
-	response.parameter_size = buffer[3]-2;
- 33a:	49 85       	ldd	r20, Y+9	; 0x09
- 33c:	42 50       	subi	r20, 0x02	; 2
-	
-	uint8_t parameter_list[response.parameter_size];
- 33e:	64 2f       	mov	r22, r20
- 340:	70 e0       	ldi	r23, 0x00	; 0
- 342:	8d b7       	in	r24, 0x3d	; 61
- 344:	9e b7       	in	r25, 0x3e	; 62
- 346:	86 1b       	sub	r24, r22
- 348:	97 0b       	sbc	r25, r23
- 34a:	0f b6       	in	r0, 0x3f	; 63
- 34c:	f8 94       	cli
- 34e:	9e bf       	out	0x3e, r25	; 62
- 350:	0f be       	out	0x3f, r0	; 63
- 352:	8d bf       	out	0x3d, r24	; 61
- 354:	0d b7       	in	r16, 0x3d	; 61
- 356:	1e b7       	in	r17, 0x3e	; 62
- 358:	0f 5f       	subi	r16, 0xFF	; 255
- 35a:	1f 4f       	sbci	r17, 0xFF	; 255
-	int i;
-	for(i = 0; i < response.parameter_size; ++i){
- 35c:	16 16       	cp	r1, r22
- 35e:	17 06       	cpc	r1, r23
- 360:	54 f4       	brge	.+20     	; 0x376 <suart_command+0x7a>
- 362:	fe 01       	movw	r30, r28
- 364:	3b 96       	adiw	r30, 0x0b	; 11
- 366:	d8 01       	movw	r26, r16
- 368:	6e 0f       	add	r22, r30
- 36a:	7f 1f       	adc	r23, r31
-		parameter_list[i] = buffer[5+i];
- 36c:	91 91       	ld	r25, Z+
- 36e:	9d 93       	st	X+, r25
-	response.error = buffer[4];
-	response.parameter_size = buffer[3]-2;
-	
-	uint8_t parameter_list[response.parameter_size];
-	int i;
-	for(i = 0; i < response.parameter_size; ++i){
- 370:	e6 17       	cp	r30, r22
- 372:	f7 07       	cpc	r31, r23
- 374:	d9 f7       	brne	.-10     	; 0x36c <suart_command+0x70>
-		parameter_list[i] = buffer[5+i];
-	}
-	response.parameters = parameter_list;
-	
-	return response;
- 376:	d9 82       	std	Y+1, r13	; 0x01
- 378:	3a 83       	std	Y+2, r19	; 0x02
- 37a:	4b 83       	std	Y+3, r20	; 0x03
- 37c:	1d 83       	std	Y+5, r17	; 0x05
- 37e:	0c 83       	std	Y+4, r16	; 0x04
- 380:	50 2f       	mov	r21, r16
- 382:	6d 81       	ldd	r22, Y+5	; 0x05
-}
- 384:	2d 2d       	mov	r18, r13
- 386:	70 e0       	ldi	r23, 0x00	; 0
- 388:	80 e0       	ldi	r24, 0x00	; 0
- 38a:	90 e0       	ldi	r25, 0x00	; 0
- 38c:	0f b6       	in	r0, 0x3f	; 63
- 38e:	f8 94       	cli
- 390:	fe be       	out	0x3e, r15	; 62
- 392:	0f be       	out	0x3f, r0	; 63
- 394:	ed be       	out	0x3d, r14	; 61
- 396:	65 96       	adiw	r28, 0x15	; 21
- 398:	0f b6       	in	r0, 0x3f	; 63
- 39a:	f8 94       	cli
- 39c:	de bf       	out	0x3e, r29	; 62
- 39e:	0f be       	out	0x3f, r0	; 63
- 3a0:	cd bf       	out	0x3d, r28	; 61
- 3a2:	df 91       	pop	r29
- 3a4:	cf 91       	pop	r28
- 3a6:	1f 91       	pop	r17
- 3a8:	0f 91       	pop	r16
- 3aa:	ff 90       	pop	r15
- 3ac:	ef 90       	pop	r14
- 3ae:	df 90       	pop	r13
- 3b0:	08 95       	ret
+00000304 <__udivmodsi4_ep>:
+ 304:	66 1f       	adc	r22, r22
+ 306:	77 1f       	adc	r23, r23
+ 308:	88 1f       	adc	r24, r24
+ 30a:	99 1f       	adc	r25, r25
+ 30c:	1a 94       	dec	r1
+ 30e:	69 f7       	brne	.-38     	; 0x2ea <__udivmodsi4_loop>
+ 310:	60 95       	com	r22
+ 312:	70 95       	com	r23
+ 314:	80 95       	com	r24
+ 316:	90 95       	com	r25
+ 318:	9b 01       	movw	r18, r22
+ 31a:	ac 01       	movw	r20, r24
+ 31c:	bd 01       	movw	r22, r26
+ 31e:	cf 01       	movw	r24, r30
+ 320:	08 95       	ret
 
-000003b2 <suart_command_ping>:
+00000322 <_exit>:
+ 322:	f8 94       	cli
 
-servo_response suart_command_ping(uint8_t id){
- 3b2:	cf 93       	push	r28
- 3b4:	df 93       	push	r29
- 3b6:	cd b7       	in	r28, 0x3d	; 61
- 3b8:	de b7       	in	r29, 0x3e	; 62
- 3ba:	2a 97       	sbiw	r28, 0x0a	; 10
- 3bc:	0f b6       	in	r0, 0x3f	; 63
- 3be:	f8 94       	cli
- 3c0:	de bf       	out	0x3e, r29	; 62
- 3c2:	0f be       	out	0x3f, r0	; 63
- 3c4:	cd bf       	out	0x3d, r28	; 61
-	char command[] = {0xFF, 0xFF, id, 0x02, 0x01};
- 3c6:	9f ef       	ldi	r25, 0xFF	; 255
- 3c8:	9e 83       	std	Y+6, r25	; 0x06
- 3ca:	9f 83       	std	Y+7, r25	; 0x07
- 3cc:	88 87       	std	Y+8, r24	; 0x08
- 3ce:	92 e0       	ldi	r25, 0x02	; 2
- 3d0:	99 87       	std	Y+9, r25	; 0x09
- 3d2:	91 e0       	ldi	r25, 0x01	; 1
- 3d4:	9a 87       	std	Y+10, r25	; 0x0a
-	return suart_command(id, command, 5);
- 3d6:	45 e0       	ldi	r20, 0x05	; 5
- 3d8:	be 01       	movw	r22, r28
- 3da:	6a 5f       	subi	r22, 0xFA	; 250
- 3dc:	7f 4f       	sbci	r23, 0xFF	; 255
- 3de:	8e df       	rcall	.-228    	; 0x2fc <suart_command>
-}
- 3e0:	70 e0       	ldi	r23, 0x00	; 0
- 3e2:	80 e0       	ldi	r24, 0x00	; 0
- 3e4:	90 e0       	ldi	r25, 0x00	; 0
- 3e6:	2a 96       	adiw	r28, 0x0a	; 10
- 3e8:	0f b6       	in	r0, 0x3f	; 63
- 3ea:	f8 94       	cli
- 3ec:	de bf       	out	0x3e, r29	; 62
- 3ee:	0f be       	out	0x3f, r0	; 63
- 3f0:	cd bf       	out	0x3d, r28	; 61
- 3f2:	df 91       	pop	r29
- 3f4:	cf 91       	pop	r28
- 3f6:	08 95       	ret
-
-000003f8 <__udivmodsi4>:
- 3f8:	a1 e2       	ldi	r26, 0x21	; 33
- 3fa:	1a 2e       	mov	r1, r26
- 3fc:	aa 1b       	sub	r26, r26
- 3fe:	bb 1b       	sub	r27, r27
- 400:	fd 01       	movw	r30, r26
- 402:	0d c0       	rjmp	.+26     	; 0x41e <__udivmodsi4_ep>
-
-00000404 <__udivmodsi4_loop>:
- 404:	aa 1f       	adc	r26, r26
- 406:	bb 1f       	adc	r27, r27
- 408:	ee 1f       	adc	r30, r30
- 40a:	ff 1f       	adc	r31, r31
- 40c:	a2 17       	cp	r26, r18
- 40e:	b3 07       	cpc	r27, r19
- 410:	e4 07       	cpc	r30, r20
- 412:	f5 07       	cpc	r31, r21
- 414:	20 f0       	brcs	.+8      	; 0x41e <__udivmodsi4_ep>
- 416:	a2 1b       	sub	r26, r18
- 418:	b3 0b       	sbc	r27, r19
- 41a:	e4 0b       	sbc	r30, r20
- 41c:	f5 0b       	sbc	r31, r21
-
-0000041e <__udivmodsi4_ep>:
- 41e:	66 1f       	adc	r22, r22
- 420:	77 1f       	adc	r23, r23
- 422:	88 1f       	adc	r24, r24
- 424:	99 1f       	adc	r25, r25
- 426:	1a 94       	dec	r1
- 428:	69 f7       	brne	.-38     	; 0x404 <__udivmodsi4_loop>
- 42a:	60 95       	com	r22
- 42c:	70 95       	com	r23
- 42e:	80 95       	com	r24
- 430:	90 95       	com	r25
- 432:	9b 01       	movw	r18, r22
- 434:	ac 01       	movw	r20, r24
- 436:	bd 01       	movw	r22, r26
- 438:	cf 01       	movw	r24, r30
- 43a:	08 95       	ret
-
-0000043c <_exit>:
- 43c:	f8 94       	cli
-
-0000043e <__stop_program>:
- 43e:	ff cf       	rjmp	.-2      	; 0x43e <__stop_program>
+00000324 <__stop_program>:
+ 324:	ff cf       	rjmp	.-2      	; 0x324 <__stop_program>
