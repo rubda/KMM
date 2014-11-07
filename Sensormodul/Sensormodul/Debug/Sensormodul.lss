@@ -3,27 +3,27 @@ Sensormodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000160  00000000  00000000  00000074  2**1
+  0 .text         00000180  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          00000002  00800100  00800100  000001d4  2**0
+  1 .bss          00000002  00800100  00800100  000001f4  2**0
                   ALLOC
-  2 .comment      00000030  00000000  00000000  000001d4  2**0
+  2 .comment      00000030  00000000  00000000  000001f4  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 000000a0  00000000  00000000  00000204  2**0
+  3 .debug_aranges 000000a0  00000000  00000000  00000224  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000411  00000000  00000000  000002a4  2**0
+  4 .debug_info   000004a6  00000000  00000000  000002c4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 000002c5  00000000  00000000  000006b5  2**0
+  5 .debug_abbrev 000002d2  00000000  00000000  0000076a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000419  00000000  00000000  0000097a  2**0
+  6 .debug_line   0000044f  00000000  00000000  00000a3c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000134  00000000  00000000  00000d94  2**2
+  7 .debug_frame  00000134  00000000  00000000  00000e8c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    0000023a  00000000  00000000  00000ec8  2**0
+  8 .debug_str    00000221  00000000  00000000  00000fc0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000014b  00000000  00000000  00001102  2**0
+  9 .debug_loc    0000014b  00000000  00000000  000011e1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000070  00000000  00000000  0000124d  2**0
+ 10 .debug_ranges 00000070  00000000  00000000  0000132c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -55,7 +55,7 @@ Disassembly of section .text:
   2e:	00 00       	nop
   30:	3d c0       	rjmp	.+122    	; 0xac <__bad_interrupt>
   32:	00 00       	nop
-  34:	68 c0       	rjmp	.+208    	; 0x106 <__vector_13>
+  34:	78 c0       	rjmp	.+240    	; 0x126 <__vector_13>
   36:	00 00       	nop
   38:	39 c0       	rjmp	.+114    	; 0xac <__bad_interrupt>
   3a:	00 00       	nop
@@ -122,146 +122,168 @@ Disassembly of section .text:
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
   a8:	02 d0       	rcall	.+4      	; 0xae <main>
-  aa:	58 c0       	rjmp	.+176    	; 0x15c <_exit>
+  aa:	68 c0       	rjmp	.+208    	; 0x17c <_exit>
 
 000000ac <__bad_interrupt>:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
 
 000000ae <main>:
+#include "ultraljud.h"
 
 
 int main(void)
 {
-	uint8_t data;
 	setup_spi();
-  ae:	0c d0       	rcall	.+24     	; 0xc8 <setup_spi>
+  ae:	1c d0       	rcall	.+56     	; 0xe8 <setup_spi>
 	
-	while(1)
-    {
-        //ss_low();
-		send_spi(POLL);
-  b0:	80 e8       	ldi	r24, 0x80	; 128
-  b2:	23 d0       	rcall	.+70     	; 0xfa <send_spi>
+	
+	send_spi(ACTIVATE_ADC);
+  b0:	84 e9       	ldi	r24, 0x94	; 148
+  b2:	33 d0       	rcall	.+102    	; 0x11a <send_spi>
+	send_spi(0xFF);
+  b4:	8f ef       	ldi	r24, 0xFF	; 255
+  b6:	31 d0       	rcall	.+98     	; 0x11a <send_spi>
+	send_spi(0xFF);
+  b8:	8f ef       	ldi	r24, 0xFF	; 255
+  ba:	2f d0       	rcall	.+94     	; 0x11a <send_spi>
+	send_spi(START_CONVERSION);
+  bc:	84 e9       	ldi	r24, 0x94	; 148
+  be:	2d d0       	rcall	.+90     	; 0x11a <send_spi>
+	send_spi(0xFF);
+  c0:	8f ef       	ldi	r24, 0xFF	; 255
+  c2:	2b d0       	rcall	.+86     	; 0x11a <send_spi>
+	send_spi(0xFF);		
+  c4:	8f ef       	ldi	r24, 0xFF	; 255
+  c6:	29 d0       	rcall	.+82     	; 0x11a <send_spi>
+	send_spi(POLL);
+  c8:	80 e8       	ldi	r24, 0x80	; 128
+  ca:	27 d0       	rcall	.+78     	; 0x11a <send_spi>
+	send_spi(0xFF);
+  cc:	8f ef       	ldi	r24, 0xFF	; 255
+  ce:	25 d0       	rcall	.+74     	; 0x11a <send_spi>
+	send_spi(0xFF);
+  d0:	8f ef       	ldi	r24, 0xFF	; 255
+  d2:	23 d0       	rcall	.+70     	; 0x11a <send_spi>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  b4:	2f ef       	ldi	r18, 0xFF	; 255
-  b6:	8f e7       	ldi	r24, 0x7F	; 127
-  b8:	96 e1       	ldi	r25, 0x16	; 22
-  ba:	21 50       	subi	r18, 0x01	; 1
-  bc:	80 40       	sbci	r24, 0x00	; 0
-  be:	90 40       	sbci	r25, 0x00	; 0
-  c0:	e1 f7       	brne	.-8      	; 0xba <main+0xc>
-  c2:	00 c0       	rjmp	.+0      	; 0xc4 <main+0x16>
-  c4:	00 00       	nop
-  c6:	f4 cf       	rjmp	.-24     	; 0xb0 <main+0x2>
+  d4:	2f ef       	ldi	r18, 0xFF	; 255
+  d6:	8f e7       	ldi	r24, 0x7F	; 127
+  d8:	96 e1       	ldi	r25, 0x16	; 22
+  da:	21 50       	subi	r18, 0x01	; 1
+  dc:	80 40       	sbci	r24, 0x00	; 0
+  de:	90 40       	sbci	r25, 0x00	; 0
+  e0:	e1 f7       	brne	.-8      	; 0xda <main+0x2c>
+  e2:	00 c0       	rjmp	.+0      	; 0xe4 <main+0x36>
+  e4:	00 00       	nop
+  e6:	ff cf       	rjmp	.-2      	; 0xe6 <main+0x38>
 
-000000c8 <setup_spi>:
+000000e8 <setup_spi>:
 	DDRB |= (1 << SPI_SCLK); // output
 }
 
 void disable_spi()
 {
 	SPCR = 0x00;
-  c8:	8c b5       	in	r24, 0x2c	; 44
-  ca:	80 61       	ori	r24, 0x10	; 16
-  cc:	8c bd       	out	0x2c, r24	; 44
-  ce:	8c b5       	in	r24, 0x2c	; 44
-  d0:	80 64       	ori	r24, 0x40	; 64
-  d2:	8c bd       	out	0x2c, r24	; 44
-  d4:	8c b5       	in	r24, 0x2c	; 44
-  d6:	8c bd       	out	0x2c, r24	; 44
-  d8:	8c b5       	in	r24, 0x2c	; 44
-  da:	88 60       	ori	r24, 0x08	; 8
-  dc:	8c bd       	out	0x2c, r24	; 44
-  de:	8c b5       	in	r24, 0x2c	; 44
-  e0:	84 60       	ori	r24, 0x04	; 4
-  e2:	8c bd       	out	0x2c, r24	; 44
-  e4:	8c b5       	in	r24, 0x2c	; 44
-  e6:	81 60       	ori	r24, 0x01	; 1
-  e8:	8c bd       	out	0x2c, r24	; 44
-  ea:	8c b5       	in	r24, 0x2c	; 44
-  ec:	82 60       	ori	r24, 0x02	; 2
-  ee:	8c bd       	out	0x2c, r24	; 44
-  f0:	25 9a       	sbi	0x04, 5	; 4
-  f2:	26 98       	cbi	0x04, 6	; 4
-  f4:	24 9a       	sbi	0x04, 4	; 4
-  f6:	27 9a       	sbi	0x04, 7	; 4
-  f8:	08 95       	ret
+  e8:	8c b5       	in	r24, 0x2c	; 44
+  ea:	80 61       	ori	r24, 0x10	; 16
+  ec:	8c bd       	out	0x2c, r24	; 44
+  ee:	8c b5       	in	r24, 0x2c	; 44
+  f0:	80 64       	ori	r24, 0x40	; 64
+  f2:	8c bd       	out	0x2c, r24	; 44
+  f4:	8c b5       	in	r24, 0x2c	; 44
+  f6:	8c bd       	out	0x2c, r24	; 44
+  f8:	8c b5       	in	r24, 0x2c	; 44
+  fa:	88 60       	ori	r24, 0x08	; 8
+  fc:	8c bd       	out	0x2c, r24	; 44
+  fe:	8c b5       	in	r24, 0x2c	; 44
+ 100:	84 60       	ori	r24, 0x04	; 4
+ 102:	8c bd       	out	0x2c, r24	; 44
+ 104:	8c b5       	in	r24, 0x2c	; 44
+ 106:	81 60       	ori	r24, 0x01	; 1
+ 108:	8c bd       	out	0x2c, r24	; 44
+ 10a:	8c b5       	in	r24, 0x2c	; 44
+ 10c:	82 60       	ori	r24, 0x02	; 2
+ 10e:	8c bd       	out	0x2c, r24	; 44
+ 110:	25 9a       	sbi	0x04, 5	; 4
+ 112:	26 98       	cbi	0x04, 6	; 4
+ 114:	24 9a       	sbi	0x04, 4	; 4
+ 116:	27 9a       	sbi	0x04, 7	; 4
+ 118:	08 95       	ret
 
-000000fa <send_spi>:
+0000011a <send_spi>:
 }
 
 uint8_t send_spi(uint8_t out)
 {
 	SPDR = out;
-  fa:	8e bd       	out	0x2e, r24	; 46
+ 11a:	8e bd       	out	0x2e, r24	; 46
 	while (!(SPSR & (1<<SPIF))); //Loopar sålänge vi inte har skickat klart
-  fc:	0d b4       	in	r0, 0x2d	; 45
-  fe:	07 fe       	sbrs	r0, 7
- 100:	fd cf       	rjmp	.-6      	; 0xfc <send_spi+0x2>
+ 11c:	0d b4       	in	r0, 0x2d	; 45
+ 11e:	07 fe       	sbrs	r0, 7
+ 120:	fd cf       	rjmp	.-6      	; 0x11c <send_spi+0x2>
 	return SPDR;
- 102:	8e b5       	in	r24, 0x2e	; 46
+ 122:	8e b5       	in	r24, 0x2e	; 46
 	
 }
- 104:	08 95       	ret
+ 124:	08 95       	ret
 
-00000106 <__vector_13>:
+00000126 <__vector_13>:
 void timer_stop() {
 	TCCR1B = 0;
 }
 
 #ifdef ENABLE_TIMER
 ISR(TIMER1_COMPA_vect) {
- 106:	1f 92       	push	r1
- 108:	0f 92       	push	r0
- 10a:	0f b6       	in	r0, 0x3f	; 63
- 10c:	0f 92       	push	r0
- 10e:	11 24       	eor	r1, r1
- 110:	0b b6       	in	r0, 0x3b	; 59
- 112:	0f 92       	push	r0
- 114:	2f 93       	push	r18
- 116:	3f 93       	push	r19
- 118:	4f 93       	push	r20
- 11a:	5f 93       	push	r21
- 11c:	6f 93       	push	r22
- 11e:	7f 93       	push	r23
- 120:	8f 93       	push	r24
- 122:	9f 93       	push	r25
- 124:	af 93       	push	r26
- 126:	bf 93       	push	r27
- 128:	ef 93       	push	r30
- 12a:	ff 93       	push	r31
+ 126:	1f 92       	push	r1
+ 128:	0f 92       	push	r0
+ 12a:	0f b6       	in	r0, 0x3f	; 63
+ 12c:	0f 92       	push	r0
+ 12e:	11 24       	eor	r1, r1
+ 130:	0b b6       	in	r0, 0x3b	; 59
+ 132:	0f 92       	push	r0
+ 134:	2f 93       	push	r18
+ 136:	3f 93       	push	r19
+ 138:	4f 93       	push	r20
+ 13a:	5f 93       	push	r21
+ 13c:	6f 93       	push	r22
+ 13e:	7f 93       	push	r23
+ 140:	8f 93       	push	r24
+ 142:	9f 93       	push	r25
+ 144:	af 93       	push	r26
+ 146:	bf 93       	push	r27
+ 148:	ef 93       	push	r30
+ 14a:	ff 93       	push	r31
 	_t_func();
- 12c:	e0 91 00 01 	lds	r30, 0x0100
- 130:	f0 91 01 01 	lds	r31, 0x0101
- 134:	09 95       	icall
+ 14c:	e0 91 00 01 	lds	r30, 0x0100
+ 150:	f0 91 01 01 	lds	r31, 0x0101
+ 154:	09 95       	icall
 }
- 136:	ff 91       	pop	r31
- 138:	ef 91       	pop	r30
- 13a:	bf 91       	pop	r27
- 13c:	af 91       	pop	r26
- 13e:	9f 91       	pop	r25
- 140:	8f 91       	pop	r24
- 142:	7f 91       	pop	r23
- 144:	6f 91       	pop	r22
- 146:	5f 91       	pop	r21
- 148:	4f 91       	pop	r20
- 14a:	3f 91       	pop	r19
- 14c:	2f 91       	pop	r18
- 14e:	0f 90       	pop	r0
- 150:	0b be       	out	0x3b, r0	; 59
- 152:	0f 90       	pop	r0
- 154:	0f be       	out	0x3f, r0	; 63
- 156:	0f 90       	pop	r0
- 158:	1f 90       	pop	r1
- 15a:	18 95       	reti
+ 156:	ff 91       	pop	r31
+ 158:	ef 91       	pop	r30
+ 15a:	bf 91       	pop	r27
+ 15c:	af 91       	pop	r26
+ 15e:	9f 91       	pop	r25
+ 160:	8f 91       	pop	r24
+ 162:	7f 91       	pop	r23
+ 164:	6f 91       	pop	r22
+ 166:	5f 91       	pop	r21
+ 168:	4f 91       	pop	r20
+ 16a:	3f 91       	pop	r19
+ 16c:	2f 91       	pop	r18
+ 16e:	0f 90       	pop	r0
+ 170:	0b be       	out	0x3b, r0	; 59
+ 172:	0f 90       	pop	r0
+ 174:	0f be       	out	0x3f, r0	; 63
+ 176:	0f 90       	pop	r0
+ 178:	1f 90       	pop	r1
+ 17a:	18 95       	reti
 
-0000015c <_exit>:
- 15c:	f8 94       	cli
+0000017c <_exit>:
+ 17c:	f8 94       	cli
 
-0000015e <__stop_program>:
- 15e:	ff cf       	rjmp	.-2      	; 0x15e <__stop_program>
+0000017e <__stop_program>:
+ 17e:	ff cf       	rjmp	.-2      	; 0x17e <__stop_program>

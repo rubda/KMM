@@ -7,9 +7,9 @@ void suart_init(long baud)
 	UBRR1H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
 	UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
 
-	
 	UCSR1C = (3 << UCSZ10);
-	UCSR1B |= ((1 << RXEN1) | (1 << TXEN1));
+	UCSR1B |= (1 << RXEN1) | (1 << TXEN1) | (1 << TXCIE1) | (1 << RXCIE1);
+	
 }
 
 char suart_read_char()
@@ -30,7 +30,6 @@ void suart_send_char(uint8_t data)
 int suart_read_string(char *s, int size)
 {
 	uint8_t i = 0;
-	SUART_RX_ACTIVE;
 	char c;
 	
 	while(i < size - 1){
@@ -57,8 +56,10 @@ void suart_send_string(char *s, uint8_t size)
 		if(i >= 2) checksum += s[i];
 		suart_send_char(s[i]);
 	}
+	
 	suart_send_char(~checksum);
-	while(!(UCSR1A & (1 << TXC1)));
+	//while((UCSR1A & (1 << TXC1)));
+	//while(!(UCSR1A & (1 << TXC1)));
 }
 
 servo_response suart_command(uint8_t id, char* command, uint8_t size){
