@@ -13,12 +13,19 @@
 
 #include <util/delay.h>
 
-int getAngularRate(uint8_t adcValue)
+int get_angularrate(uint8_t adcValue)
+
+	uint16_t outData;
+	uint8_t	tmpData;
+
 {
-	
 	//Steg 1 sätt ADC till aktiv mode
 	ss_low();
 	send_spi(ACTIVATE_ADC);
+	outData = send_spi(0xFF);
+	outData << 8; 
+	tmpData = send_spi(0xFF);
+	
 	ss_high();
 	/* Kolla om den femtonde biten är 0 */
 	_delay_us(120);
@@ -31,7 +38,6 @@ int getAngularRate(uint8_t adcValue)
 	//Steg 3 poll
 	send_spi(POLL);
 	/* Kolla om den femtonde biten är 0 */
-	_delay_us(120);	
-	
+	_delay_us(120);		
 }	
 	

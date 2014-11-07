@@ -9,7 +9,7 @@
 #include <avr/io.h>
 #include "timer.h"
 
-void initSensors()
+void init_sensors()
 {
 	
 	//Sätt PA0, A2, A3, A4 till ut
@@ -20,6 +20,8 @@ void initSensors()
 
 	//Sätt PA1 till in	
 	DDRA &= ~(1 << PORTA1);
+	
+	//B0 till ut
 	DDRB |= (1 << PORTB0);
 	
 	sensor_list[0] = (struct soundSensor) {0b00000000, 0};
@@ -30,16 +32,22 @@ void initSensors()
 	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
 }
 
-void getData(struct soundSensor sensor) 
+void get_data(struct soundSensor sensor) 
 {
-	sensor.Distance = getDistance(sensor);
+	sensor.Distance = get_distance(sensor);
 }
 
-uint8_t getDistance(struct soundSensor sensor)
+struct soundSensor get_sensor(uint8_t id)
+{
+	return sensor_list[id];
+}
+
+uint8_t get_distance(struct soundSensor sensor)
 {
 	uint8_t DISTANCE;
 	uint8_t TIME = 0; 
 		
+	//Vi skulle väl ora?
 	PORTA = sensor.id & PORTA;
 	
 	PORTA |= (1 << PORTA0);
@@ -55,6 +63,5 @@ uint8_t getDistance(struct soundSensor sensor)
 	_delay_ms(20);
 		
 	DISTANCE = (TIME/100)/58;
-	return DISTANCE;
-		
+	return DISTANCE;	
 }

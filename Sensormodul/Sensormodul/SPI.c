@@ -34,14 +34,13 @@ uint8_t send_spi(uint8_t out)
 	SPDR = out;
 	while (!(SPSR & (1<<SPIF))); //Loopar sålänge vi inte har skickat klart
 	return SPDR;
-	
 }
 
 
-//Onödig gör fan samma sak som send_spi, tror jag har fattat detta nu
+//Onödig gör fan samma sak som send_spi, tror jag har fattat detta nu -- ELLER?
 uint8_t get_spi(uint8_t data)
 {
-	SPDR = data;
+	data = SPDR;
 	//while(!(SPSR & (1<<SPIF)));
 	return SPDR;
 }
