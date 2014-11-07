@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 7372800UL
+#define F_CPU 8000000UL
 
 #include "gyro.h"
 #include "SPI.h"
@@ -29,7 +29,7 @@ void activateADC()
 }
 
 
-uint16_t getAngularRate(uint8_t adcValue)
+uint16_t getAngularRate()
 {
 	uint16_t REG = 0;
 	uint16_t DATA = 0;
