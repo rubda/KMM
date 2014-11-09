@@ -25,11 +25,11 @@ void init_sensors()
 	DDRB |= (1 << PORTB0);
 	
 	sensor_list[0] = (struct soundSensor) {0b00000000, 0};
-	sensor_list[1] = (struct soundSensor) {0b11100111, 0};
-	sensor_list[2] = (struct soundSensor) {0b11101011, 0};
-	sensor_list[3] = (struct soundSensor) {0b11101111, 0};
-	sensor_list[4] = (struct soundSensor) {0b11110011, 0};
-	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
+	sensor_list[1] = (struct soundSensor) {0b00000100, 0};
+	sensor_list[2] = (struct soundSensor) {0b00001000, 0};
+	sensor_list[3] = (struct soundSensor) {0b00001100, 0};
+	sensor_list[4] = (struct soundSensor) {0b00010000, 0};
+	sensor_list[5] = (struct soundSensor) {0b00010100, 0};
 }
 
 void get_data(struct soundSensor sensor) 
@@ -47,8 +47,11 @@ uint8_t get_distance(struct soundSensor sensor)
 	uint8_t DISTANCE;
 	uint8_t TIME = 0; 
 		
-	//Vi skulle väl ora?
-	PORTA = sensor.id & PORTA;
+	// Måste se till att rätt bitar ändras först
+	PORTA = PORTA & 0b11100011;
+	
+	// Sen orar vi in ett specifikt ultraljud
+	PORTA = PORTA | sensor.id;
 	
 	PORTA |= (1 << PORTA0);
 	_delay_us(90);
