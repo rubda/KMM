@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 7372800UL
+#define F_CPU 8000000UL
 
 #include <avr/io.h>
 #include "SPI.h"

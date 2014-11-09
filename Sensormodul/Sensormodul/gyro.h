@@ -6,6 +6,7 @@
  */ 
 
 #include <avr/io.h>
+#include <stdbool.h>
 
 #ifndef GYRO_H_
 #define GYRO_H_
@@ -19,5 +20,7 @@
 void activateADC();
 uint16_t getAngularRate();
 int adcToAngularRate(uint16_t data);
+bool isRotationDone(uint16_t angle);
+
 
 #endif /* GYRO_H_ */

@@ -62,5 +62,18 @@ int adcToAngularRate(uint16_t data)
 	{
 		int vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
 		
-		return (vOutAngularRate - 2500)/6.67; // Uttryck i mV/grader
+		return (vOutAngularRate - 2500)/6.67; // Uttryckt i grader/sec (beroende på vilken gyro modell vi har)
 	}
+	
+bool isRotationDone(uint16_t angle)
+{
+	uint16_t rate = getAngularRate();
+	int achievedAngle = 0;
+		
+	while(angle > achievedAngle)
+	{
+		achievedAngle += adcToAngularRate(rate);
+		//_delay_ms(1000); behövs nog inte
+	}
+	return true;
+}
