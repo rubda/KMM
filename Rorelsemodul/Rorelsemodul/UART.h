@@ -1,4 +1,9 @@
-#define F_CPU 7372800UL
+#define F_CPU 16000000UL
+
+#define BV(bit)               (1 << bit)
+#define set_bit(byte, bit)    (byte |= BV(bit))  // old sbi()
+#define clear_bit(byte, bit)  (byte &= ~BV(bit)) // old cbi()
+#define toggle_bit(byte, bit) (byte ^= BV(bit))
 
 #define PRESCALER 1 //Beroende på vad som passar för att timea RX
 #define TICKS 1		//Beroende på vad som passar för att timea RX
