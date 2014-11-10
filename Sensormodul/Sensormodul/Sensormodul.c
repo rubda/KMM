@@ -12,38 +12,19 @@
 #include "gyro.h"
 #include <util/delay.h>
 #include "ultraljud.h"
+#include "UART.h"
 
 
 int main(void)
 {
-	setup_spi();
-	activateADC();
-	
-	DDRA |= (1 << PORTA5);
-	
-	uint16_t test;
-	int one;
-	
 
-
-
-	
+	uart_init(1200);
+	//uart_send_char('A');
 	while(1)
     {
-		test = getAngularRate();
-		for(int i=16; i>0; i--){
-			one = (test & 0x8000) >> 15;
-			
-			if (one == 1) {
-				PORTA |= (1 <<PORTA5);
-			}else{
-				PORTA &= ~(1 <<PORTA5);
-			}
-			test <<= 1;
-			_delay_ms(10);
-		}
-		
-		
+
+		uart_send_char('P');
+		_delay_ms(1000);
 	}
 	
 	
