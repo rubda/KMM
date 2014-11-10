@@ -1,5 +1,3 @@
-#define F_CPU 16000000UL
-
 #define BV(bit)               (1 << bit)
 #define set_bit(byte, bit)    (byte |= BV(bit))  // old sbi()
 #define clear_bit(byte, bit)  (byte &= ~BV(bit)) // old cbi()
