@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 7372800UL
+#define F_CPU 8000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -20,9 +20,10 @@ struct soundSensor
 
 struct soundSensor sensor_list[6];
 
-void initSensors();
-void getData(struct soundSensor);
-uint8_t getDistance(struct soundSensor);
+void init_sensors();
+void get_data(struct soundSensor);
+struct soundSensor get_sensor(uint8_t id);
+uint8_t get_distance(struct soundSensor);
 
 
 

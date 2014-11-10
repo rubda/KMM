@@ -9,7 +9,7 @@
 #include <avr/io.h>
 #include "timer.h"
 
-void initSensors()
+void init_sensors()
 {
 	
 	//Sätt PA0, A2, A3, A4 till ut
@@ -20,27 +20,38 @@ void initSensors()
 
 	//Sätt PA1 till in	
 	DDRA &= ~(1 << PORTA1);
+	
+	//B0 till ut
 	DDRB |= (1 << PORTB0);
 	
 	sensor_list[0] = (struct soundSensor) {0b00000000, 0};
-	sensor_list[1] = (struct soundSensor) {0b11100111, 0};
-	sensor_list[2] = (struct soundSensor) {0b11101011, 0};
-	sensor_list[3] = (struct soundSensor) {0b11101111, 0};
-	sensor_list[4] = (struct soundSensor) {0b11110011, 0};
-	sensor_list[5] = (struct soundSensor) {0b11110111, 0};
+	sensor_list[1] = (struct soundSensor) {0b00000100, 0};
+	sensor_list[2] = (struct soundSensor) {0b00001000, 0};
+	sensor_list[3] = (struct soundSensor) {0b00001100, 0};
+	sensor_list[4] = (struct soundSensor) {0b00010000, 0};
+	sensor_list[5] = (struct soundSensor) {0b00010100, 0};
 }
 
-void getData(struct soundSensor sensor) 
+void get_data(struct soundSensor sensor) 
 {
-	sensor.Distance = getDistance(sensor);
+	sensor.Distance = get_distance(sensor);
 }
 
-uint8_t getDistance(struct soundSensor sensor)
+struct soundSensor get_sensor(uint8_t id)
+{
+	return sensor_list[id];
+}
+
+uint8_t get_distance(struct soundSensor sensor)
 {
 	uint8_t DISTANCE;
 	uint8_t TIME = 0; 
 		
-	PORTA = sensor.id & PORTA;
+	// Måste se till att rätt bitar ändras först
+	PORTA = PORTA & 0b11100011;
+	
+	// Sen orar vi in ett specifikt ultraljud
+	PORTA = PORTA | sensor.id;
 	
 	PORTA |= (1 << PORTA0);
 	_delay_us(90);
@@ -54,7 +65,6 @@ uint8_t getDistance(struct soundSensor sensor)
 		}
 	_delay_ms(20);
 		
-	DISTANCE = (TIME/100)/58;
-	return DISTANCE;
-		
+	DISTANCE = TIME/58;
+	return DISTANCE;	
 }
