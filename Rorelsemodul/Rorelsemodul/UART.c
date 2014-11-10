@@ -22,7 +22,7 @@ void check_rx() {
 	}
 }
 
-SIGNAL(USART0_RX_vect){
+ISR(USART0_RX_vect){
 	cli();
 	check_rx();
 	sei();
