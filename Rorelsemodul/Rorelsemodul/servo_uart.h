@@ -8,7 +8,7 @@
 /************************************************************************/
 #define UART_SETTINGS 0x0000
 
-#define SUART_RX PORTD2
+#define SUART_RX PIND2
 #define SUART_TX PORTD3
 #define SUART_MODE PORTD5
 

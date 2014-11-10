@@ -7,40 +7,37 @@ int uart_read_string(char *s, int size);
 
 void uart_init(long baud)
 {
-	DDRD = 0x20;
+	// Initialize serial
+	UBRR0 = ((F_CPU / 16 + baud / 2) / baud - 1);         /* (16 MHz / 16 / 38400) - 1 */
+	set_bit(UCSR0B, RXEN0);                               /* enable RX */
+	set_bit(UCSR0B, TXEN0);                               /* enable TX */
 
-	UBRR1H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
-	UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
-
-	UCSR1C = (3 << UCSZ10);
-	UCSR1B |= ((1 << RXEN1) | (1 << TXEN1));
+	set_bit(UCSR0B, RXCIE0);
+	UCSR0C = (3 << UCSZ00);
 }
 
 void check_rx() {
-	if(UCSR1A & (1 << RXC1)){
-		//TIME TO READ
+	if (bit_is_set(UCSR0A, RXC0)){
 		buffer_size = uart_read_string(buffer, 255);
 	}
-	timer0(PRESCALER, TICKS, check_rx);
 }
 
-void uart_start(){
-	timer0(PRESCALER, TICKS, check_rx);
+ISR(USART0_RX_vect){
+	cli();
+	check_rx();
+	sei();
 }
-
 
 char uart_read_char()
 {
-	while(!(UCSR1A & (1 << RXC1)));
-	
-	return UDR1;
+	while(!bit_is_set(UCSR0A, RXC0));
+	return UDR0;
 }
 
 void uart_send_char(uint8_t data)
 {
-	while(!(UCSR1A & (1 << UDRE1)));
-	
-	UDR1 = data;
+	while(!bit_is_set(UCSR0A, UDRE0));
+	UDR0 = data;
 }
 
 int uart_read_string(char *s, int size)
@@ -52,8 +49,10 @@ int uart_read_string(char *s, int size)
 		c = uart_read_char();
 		if(c == '\0')
 			break;
-		s[i] = c;
-		i++;
+		else if(c == '#'){
+			i = 0;
+		}
+		s[i++] = c;
 	}
 	
 	s[i] = 0;
@@ -72,7 +71,7 @@ void uart_send_string(char *s, uint8_t size)
 		uart_send_char(s[i]);
 	}
 	uart_send_char(~checksum);
-	while(!(UCSR1A & (1 << TXC1)));
+	while(!bit_is_set(UCSR0A, TXC0));
 }
 
 uint8_t got_message(){

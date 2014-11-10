@@ -8,19 +8,21 @@ void suart_init(long baud)
 	UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
 
 	UCSR1C = (3 << UCSZ10);
-	UCSR1B |= (1 << RXEN1) | (1 << TXEN1) | (1 << TXCIE1) | (1 << RXCIE1);
+	UCSR1B |= (1 << RXEN1) | (1 << TXEN1) | (1 << TXCIE1);
 	
 }
 
 char suart_read_char()
 {
 	while(!(UCSR1A & (1 << RXC1)));
-	
+	while(!(UCSR1A & (1 << UDRE1)));
 	return UDR1;
 }
 
 void suart_send_char(uint8_t data)
 {
+	
+	SUART_TX_ACTIVE;
 	while(!(UCSR1A & (1 << UDRE1)));
 	
 	UDR1 = data;
@@ -48,9 +50,8 @@ int suart_read_string(char *s, int size)
 void suart_send_string(char *s, uint8_t size)
 {
 	uint8_t i = 0;
-	SUART_TX_ACTIVE;
 	
-	uint8_t checksum = 0;
+	char checksum = 0;
 	
 	for(i = 0; i < size; ++i){
 		if(i >= 2) checksum += s[i];
@@ -58,15 +59,15 @@ void suart_send_string(char *s, uint8_t size)
 	}
 	
 	suart_send_char(~checksum);
-	//while((UCSR1A & (1 << TXC1)));
-	//while(!(UCSR1A & (1 << TXC1)));
 }
 
 servo_response suart_command(uint8_t id, char* command, uint8_t size){
 	servo_response response;
-	
+
 	suart_send_string(command, size);
 	char buffer[16];
+	while((PORTD & (1 << SUART_MODE)));
+	//_delay_ms(10);
 	uint8_t bytes_read = suart_read_string(buffer, 16);
 	
 	if(bytes_read > 5){
@@ -97,9 +98,30 @@ servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t da
 	return suart_command(id, command, 7);
 }
 
-/*servo_response suart_command_write_data(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len){
-	char command[5+list_len]
-	{0xFF, 0xFF, id, 3+len_list, 0x03};
+servo_response suart_command_write_data(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len){
+	char command[6+list_len];
+	command[0] = 0xFF;
+	command[1] = 0xFF;
+	command[2] = id;
+	command[3] = 3+list_len;
+	command[4] = 0x03;
+	command[5] = data_addr;
+	int i;
+	
+	for(i = 0; i < list_len; ++i){
+		command[i+6] = data_list[i];
+	}
+	
+	return suart_command(id, command, 6+list_len);
+}
+
+servo_response suart_command_reg_write(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len){
+	char command[5+list_len];
+	command[0] = 0xFF;
+	command[1] = 0xFF;
+	command[2] = id;
+	command[3] = 2+list_len;
+	command[4] = 0x04;
 	int i;
 	
 	for(i = 0; i < list_len; ++i){
@@ -108,17 +130,6 @@ servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t da
 	
 	return suart_command(id, command, 5+list_len);
 }
-
-servo_response suart_command_reg_write(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len){
-	char command[6+list_len] = {0xFF, 0xFF, id, 3+len_list, 0x04};
-	int i;
-	
-	for(i = 0; i < list_len; ++i){
-		command[5+i] = data_list[i];
-	}
-	
-	return suart_command(id, command, 5+list_len);
-}*/
 
 servo_response suart_command_action(uint8_t id){
 	char command[] =  {0xFF, 0xFF, id, 0x02, 0x05};

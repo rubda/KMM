@@ -19,24 +19,24 @@ int main(void)
 	//extremeelectronics.co.in/avr-tutorials/using-the-usart-of-avr-microcontrollers/
 	//UBRR = 23, 0x0017
 	
-	char send[20] = {0xFF, 0xFF, 0x01, 0x02, 0x01};
-	
 	DDRB = 0xFF;
 	
-	//servo_response res;
-	//if(res == (servo_response)SERVO_ERROR);
+	servo_response res;
+	uint8_t list1[] = {0x01};
+	uint8_t list2[] = {0x01};
+		
+	//res = suart_command_write_data(12, 0x20, list1, 1);
+	//res = suart_command_reset(0xFE);
+	suart_command_read_data(12, 0x11, 0x01);
+	PORTB = res.error;
 	
 	while(1)
 	{	
-		//suart_command_ping(1);
-		suart_send_string(send, 5);
+		
+		
     }
 }
 
 ISR(USART1_TX_vect){
 	SUART_RX_ACTIVE;
-}
-
-ISR(USART1_RX_vect){
-	data = UDR0;
 }
