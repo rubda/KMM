@@ -18,17 +18,36 @@ int main(void)
 {
 	setup_spi();
 	activateADC();
-	getAngularRate();
+	
+	DDRA |= (1 << PORTA5);
+	
+	uint16_t test;
+	int one;
+	
+
+
+
+	
 	while(1)
     {
-        //ss_low();
-		//get_spi(data);
-		//ss_high();
+		test = getAngularRate();
+		for(int i=16; i>0; i--){
+			one = (test & 0x8000) >> 15;
+			
+			if (one == 1) {
+				PORTA |= (1 <<PORTA5);
+			}else{
+				PORTA &= ~(1 <<PORTA5);
+			}
+			test <<= 1;
+			_delay_ms(10);
+		}
 		
 		
+	}
 	
-		
-		
-    }
+	
+	
+	
 }
 

@@ -1,5 +1,3 @@
-#define F_CPU 16000000UL
-
 #define BV(bit)               (1 << bit)
 #define set_bit(byte, bit)    (byte |= BV(bit))  // old sbi()
 #define clear_bit(byte, bit)  (byte &= ~BV(bit)) // old cbi()
@@ -42,3 +40,4 @@ uint8_t got_message();
 uart_message get_message();
 //uart_message create_message(char name[], char attributes[][]);
 void send_message(uart_message m);
+void uart_send_string(char *s, uint8_t size);

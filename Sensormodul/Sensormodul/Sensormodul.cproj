@@ -142,6 +142,12 @@
     <Compile Include="timer.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="UART.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UART.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ultraljud.c">
       <SubType>compile</SubType>
     </Compile>

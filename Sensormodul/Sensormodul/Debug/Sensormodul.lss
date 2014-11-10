@@ -3,27 +3,27 @@ Sensormodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000001cc  00000000  00000000  00000074  2**1
+  0 .text         000001fe  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          00000002  00800100  00800100  00000240  2**0
+  1 .bss          00000002  00800100  00800100  00000272  2**0
                   ALLOC
-  2 .comment      00000030  00000000  00000000  00000240  2**0
+  2 .comment      00000030  00000000  00000000  00000272  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 000000d8  00000000  00000000  00000270  2**0
+  3 .debug_aranges 000000e0  00000000  00000000  000002a2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000727  00000000  00000000  00000348  2**0
+  4 .debug_info   00000817  00000000  00000000  00000382  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000438  00000000  00000000  00000a6f  2**0
+  5 .debug_abbrev 000004d0  00000000  00000000  00000b99  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000597  00000000  00000000  00000ea7  2**0
+  6 .debug_line   00000665  00000000  00000000  00001069  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  000001b0  00000000  00000000  00001440  2**2
+  7 .debug_frame  000001c8  00000000  00000000  000016d0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000002bf  00000000  00000000  000015f0  2**0
+  8 .debug_str    000002e8  00000000  00000000  00001898  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000040c  00000000  00000000  000018af  2**0
+  9 .debug_loc    00000492  00000000  00000000  00001b80  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000098  00000000  00000000  00001cbb  2**0
+ 10 .debug_ranges 000000a0  00000000  00000000  00002012  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -55,7 +55,7 @@ Disassembly of section .text:
   2e:	00 00       	nop
   30:	3d c0       	rjmp	.+122    	; 0xac <__bad_interrupt>
   32:	00 00       	nop
-  34:	9e c0       	rjmp	.+316    	; 0x172 <__vector_13>
+  34:	b7 c0       	rjmp	.+366    	; 0x1a4 <__vector_13>
   36:	00 00       	nop
   38:	39 c0       	rjmp	.+114    	; 0xac <__bad_interrupt>
   3a:	00 00       	nop
@@ -121,8 +121,8 @@ Disassembly of section .text:
   a2:	a2 30       	cpi	r26, 0x02	; 2
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
-  a8:	2b d0       	rcall	.+86     	; 0x100 <main>
-  aa:	8e c0       	rjmp	.+284    	; 0x1c8 <_exit>
+  a8:	2d d0       	rcall	.+90     	; 0x104 <main>
+  aa:	a7 c0       	rjmp	.+334    	; 0x1fa <_exit>
 
 000000ac <__bad_interrupt>:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
@@ -134,15 +134,15 @@ void activateADC()
 	
 	//Steg 1 sätt ADC till aktiv mode
 	ss_low();
-  ae:	5d d0       	rcall	.+186    	; 0x16a <ss_low>
+  ae:	76 d0       	rcall	.+236    	; 0x19c <ss_low>
 	send_spi(ACTIVATE_ADC);
   b0:	84 e9       	ldi	r24, 0x94	; 148
-  b2:	43 d0       	rcall	.+134    	; 0x13a <send_spi>
+  b2:	5c d0       	rcall	.+184    	; 0x16c <send_spi>
 	REG = get_spi(0xFF);
   b4:	8f ef       	ldi	r24, 0xFF	; 255
-  b6:	47 d0       	rcall	.+142    	; 0x146 <get_spi>
+  b6:	60 d0       	rcall	.+192    	; 0x178 <get_spi>
 	ss_high();
-  b8:	5a d0       	rcall	.+180    	; 0x16e <ss_high>
+  b8:	73 d0       	rcall	.+230    	; 0x1a0 <ss_high>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
@@ -157,243 +157,300 @@ void activateADC()
   c4:	00 00       	nop
   c6:	08 95       	ret
 
-000000c8 <getAngularRate>:
-	_delay_us(150);
+000000c8 <startConversion>:
+
+void startConversion(){
+	uint16_t REG = 0;
+	
+	//Steg 2 conversion
+	ss_low();
+  c8:	69 d0       	rcall	.+210    	; 0x19c <ss_low>
+	send_spi(START_CONVERSION);
+  ca:	84 e9       	ldi	r24, 0x94	; 148
+  cc:	4f d0       	rcall	.+158    	; 0x16c <send_spi>
+	REG = get_spi(0xFF);
+  ce:	8f ef       	ldi	r24, 0xFF	; 255
+  d0:	53 d0       	rcall	.+166    	; 0x178 <get_spi>
+	ss_high();
+  d2:	66 c0       	rjmp	.+204    	; 0x1a0 <ss_high>
+  d4:	08 95       	ret
+
+000000d6 <getAngularRate>:
+	REG = 0;
 }
 
 
 uint16_t getAngularRate()
 {
-  c8:	cf 93       	push	r28
-  ca:	df 93       	push	r29
+  d6:	cf 93       	push	r28
+  d8:	df 93       	push	r29
 	uint16_t REG = 0;
 	uint16_t DATA = 0;
 	
-	//Steg 2 conversion
-	ss_low();
-  cc:	4e d0       	rcall	.+156    	; 0x16a <ss_low>
-	send_spi(START_CONVERSION);
-  ce:	84 e9       	ldi	r24, 0x94	; 148
-  d0:	34 d0       	rcall	.+104    	; 0x13a <send_spi>
-	REG = get_spi(0xFF);
-  d2:	8f ef       	ldi	r24, 0xFF	; 255
-  d4:	38 d0       	rcall	.+112    	; 0x146 <get_spi>
-	ss_high();
-  d6:	4b d0       	rcall	.+150    	; 0x16e <ss_high>
-	
-	//if (REG & (1 << 16)) NULL; //BAJS;
-	REG = 0;
+	startConversion();
+  da:	f6 df       	rcall	.-20     	; 0xc8 <startConversion>
 	
 	//Steg 3 poll
 	ss_low();
-  d8:	48 d0       	rcall	.+144    	; 0x16a <ss_low>
+  dc:	5f d0       	rcall	.+190    	; 0x19c <ss_low>
 	send_spi(POLL);
-  da:	80 e8       	ldi	r24, 0x80	; 128
-  dc:	2e d0       	rcall	.+92     	; 0x13a <send_spi>
-  de:	8b e2       	ldi	r24, 0x2B	; 43
-  e0:	91 e0       	ldi	r25, 0x01	; 1
-  e2:	01 97       	sbiw	r24, 0x01	; 1
-  e4:	f1 f7       	brne	.-4      	; 0xe2 <getAngularRate+0x1a>
-  e6:	00 c0       	rjmp	.+0      	; 0xe8 <getAngularRate+0x20>
-  e8:	00 00       	nop
+  de:	80 e8       	ldi	r24, 0x80	; 128
+  e0:	45 d0       	rcall	.+138    	; 0x16c <send_spi>
+  e2:	8b e2       	ldi	r24, 0x2B	; 43
+  e4:	91 e0       	ldi	r25, 0x01	; 1
+  e6:	01 97       	sbiw	r24, 0x01	; 1
+  e8:	f1 f7       	brne	.-4      	; 0xe6 <getAngularRate+0x10>
+  ea:	00 c0       	rjmp	.+0      	; 0xec <getAngularRate+0x16>
+  ec:	00 00       	nop
 	_delay_us(150);
 	
-	//if (REG & (1 << 16)) NULL; //BAJS;
+	if (REG & (1 << 16)) getAngularRate();
 	REG = get_spi(0xFF);
-  ea:	8f ef       	ldi	r24, 0xFF	; 255
-  ec:	2c d0       	rcall	.+88     	; 0x146 <get_spi>
-  ee:	ec 01       	movw	r28, r24
+  ee:	8f ef       	ldi	r24, 0xFF	; 255
+  f0:	43 d0       	rcall	.+134    	; 0x178 <get_spi>
+  f2:	ec 01       	movw	r28, r24
 	ss_high();
-  f0:	3e d0       	rcall	.+124    	; 0x16e <ss_high>
+  f4:	55 d0       	rcall	.+170    	; 0x1a0 <ss_high>
 	
 	REG = REG >> 1;
-  f2:	ce 01       	movw	r24, r28
-  f4:	96 95       	lsr	r25
-  f6:	87 95       	ror	r24
+  f6:	ce 01       	movw	r24, r28
+  f8:	96 95       	lsr	r25
+  fa:	87 95       	ror	r24
 	DATA = REG & 0x07FF; 
 	
 	return DATA;		
 }	
-  f8:	97 70       	andi	r25, 0x07	; 7
-  fa:	df 91       	pop	r29
-  fc:	cf 91       	pop	r28
-  fe:	08 95       	ret
+  fc:	97 70       	andi	r25, 0x07	; 7
+  fe:	df 91       	pop	r29
+ 100:	cf 91       	pop	r28
+ 102:	08 95       	ret
 
-00000100 <main>:
+00000104 <main>:
 #include "ultraljud.h"
 
 
 int main(void)
 {
 	setup_spi();
- 100:	03 d0       	rcall	.+6      	; 0x108 <setup_spi>
+ 104:	1a d0       	rcall	.+52     	; 0x13a <setup_spi>
 	activateADC();
- 102:	d5 df       	rcall	.-86     	; 0xae <activateADC>
-	getAngularRate();
- 104:	e1 df       	rcall	.-62     	; 0xc8 <getAngularRate>
- 106:	ff cf       	rjmp	.-2      	; 0x106 <main+0x6>
+ 106:	d3 df       	rcall	.-90     	; 0xae <activateADC>
+	
+	DDRA |= (1 << PORTA5);
+ 108:	0d 9a       	sbi	0x01, 5	; 1
 
-00000108 <setup_spi>:
+
+	
+	while(1)
+    {
+		test = getAngularRate();
+ 10a:	d0 e1       	ldi	r29, 0x10	; 16
+ 10c:	c0 e0       	ldi	r28, 0x00	; 0
+ 10e:	e3 df       	rcall	.-58     	; 0xd6 <getAngularRate>
+ 110:	2d 2f       	mov	r18, r29
+ 112:	3c 2f       	mov	r19, r28
+		for(int i=16; i>0; i--){
+			one = (test & 0x8000) >> 15;
+			
+			if (one == 1) {
+ 114:	99 23       	and	r25, r25
+ 116:	14 f4       	brge	.+4      	; 0x11c <main+0x18>
+				PORTA |= (1 <<PORTA5);
+ 118:	15 9a       	sbi	0x02, 5	; 2
+ 11a:	01 c0       	rjmp	.+2      	; 0x11e <main+0x1a>
+			}else{
+				PORTA &= ~(1 <<PORTA5);
+ 11c:	15 98       	cbi	0x02, 5	; 2
+			}
+			test <<= 1;
+ 11e:	88 0f       	add	r24, r24
+ 120:	99 1f       	adc	r25, r25
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 122:	ef e1       	ldi	r30, 0x1F	; 31
+ 124:	fe e4       	ldi	r31, 0x4E	; 78
+ 126:	31 97       	sbiw	r30, 0x01	; 1
+ 128:	f1 f7       	brne	.-4      	; 0x126 <main+0x22>
+ 12a:	00 c0       	rjmp	.+0      	; 0x12c <main+0x28>
+ 12c:	00 00       	nop
+ 12e:	21 50       	subi	r18, 0x01	; 1
+ 130:	31 09       	sbc	r19, r1
+
+	
+	while(1)
+    {
+		test = getAngularRate();
+		for(int i=16; i>0; i--){
+ 132:	21 15       	cp	r18, r1
+ 134:	31 05       	cpc	r19, r1
+ 136:	71 f7       	brne	.-36     	; 0x114 <main+0x10>
+ 138:	ea cf       	rjmp	.-44     	; 0x10e <main+0xa>
+
+0000013a <setup_spi>:
 	DDRB |= (1 << SPI_SCLK); // output
 }
 
 void disable_spi()
 {
 	SPCR = 0x00;
- 108:	8c b5       	in	r24, 0x2c	; 44
- 10a:	80 61       	ori	r24, 0x10	; 16
- 10c:	8c bd       	out	0x2c, r24	; 44
- 10e:	8c b5       	in	r24, 0x2c	; 44
- 110:	80 64       	ori	r24, 0x40	; 64
- 112:	8c bd       	out	0x2c, r24	; 44
- 114:	8c b5       	in	r24, 0x2c	; 44
- 116:	8c bd       	out	0x2c, r24	; 44
- 118:	8c b5       	in	r24, 0x2c	; 44
- 11a:	88 60       	ori	r24, 0x08	; 8
- 11c:	8c bd       	out	0x2c, r24	; 44
- 11e:	8c b5       	in	r24, 0x2c	; 44
- 120:	84 60       	ori	r24, 0x04	; 4
- 122:	8c bd       	out	0x2c, r24	; 44
- 124:	8c b5       	in	r24, 0x2c	; 44
- 126:	81 60       	ori	r24, 0x01	; 1
- 128:	8c bd       	out	0x2c, r24	; 44
- 12a:	8c b5       	in	r24, 0x2c	; 44
- 12c:	82 60       	ori	r24, 0x02	; 2
- 12e:	8c bd       	out	0x2c, r24	; 44
- 130:	25 9a       	sbi	0x04, 5	; 4
- 132:	26 98       	cbi	0x04, 6	; 4
- 134:	24 9a       	sbi	0x04, 4	; 4
- 136:	27 9a       	sbi	0x04, 7	; 4
- 138:	08 95       	ret
+ 13a:	8c b5       	in	r24, 0x2c	; 44
+ 13c:	80 61       	ori	r24, 0x10	; 16
+ 13e:	8c bd       	out	0x2c, r24	; 44
+ 140:	8c b5       	in	r24, 0x2c	; 44
+ 142:	80 64       	ori	r24, 0x40	; 64
+ 144:	8c bd       	out	0x2c, r24	; 44
+ 146:	8c b5       	in	r24, 0x2c	; 44
+ 148:	8c bd       	out	0x2c, r24	; 44
+ 14a:	8c b5       	in	r24, 0x2c	; 44
+ 14c:	88 60       	ori	r24, 0x08	; 8
+ 14e:	8c bd       	out	0x2c, r24	; 44
+ 150:	8c b5       	in	r24, 0x2c	; 44
+ 152:	84 60       	ori	r24, 0x04	; 4
+ 154:	8c bd       	out	0x2c, r24	; 44
+ 156:	8c b5       	in	r24, 0x2c	; 44
+ 158:	81 60       	ori	r24, 0x01	; 1
+ 15a:	8c bd       	out	0x2c, r24	; 44
+ 15c:	8c b5       	in	r24, 0x2c	; 44
+ 15e:	82 60       	ori	r24, 0x02	; 2
+ 160:	8c bd       	out	0x2c, r24	; 44
+ 162:	25 9a       	sbi	0x04, 5	; 4
+ 164:	26 98       	cbi	0x04, 6	; 4
+ 166:	24 9a       	sbi	0x04, 4	; 4
+ 168:	27 9a       	sbi	0x04, 7	; 4
+ 16a:	08 95       	ret
 
-0000013a <send_spi>:
+0000016c <send_spi>:
 }
 
 uint8_t send_spi(uint8_t out)
 {
 	SPDR = out;
- 13a:	8e bd       	out	0x2e, r24	; 46
+ 16c:	8e bd       	out	0x2e, r24	; 46
 	while (!(SPSR & (1<<SPIF))); //Loopar sålänge vi inte har skickat klart
- 13c:	0d b4       	in	r0, 0x2d	; 45
- 13e:	07 fe       	sbrs	r0, 7
- 140:	fd cf       	rjmp	.-6      	; 0x13c <send_spi+0x2>
+ 16e:	0d b4       	in	r0, 0x2d	; 45
+ 170:	07 fe       	sbrs	r0, 7
+ 172:	fd cf       	rjmp	.-6      	; 0x16e <send_spi+0x2>
 	return SPDR;
- 142:	8e b5       	in	r24, 0x2e	; 46
+ 174:	8e b5       	in	r24, 0x2e	; 46
 }
- 144:	08 95       	ret
+ 176:	08 95       	ret
 
-00000146 <get_spi>:
+00000178 <get_spi>:
 
 
 uint16_t get_spi(uint8_t data)
 {
- 146:	1f 93       	push	r17
- 148:	cf 93       	push	r28
- 14a:	df 93       	push	r29
- 14c:	18 2f       	mov	r17, r24
+ 178:	1f 93       	push	r17
+ 17a:	cf 93       	push	r28
+ 17c:	df 93       	push	r29
+ 17e:	18 2f       	mov	r17, r24
 	uint16_t REG = 0;
 	uint16_t REG1 = 0;
 	uint16_t REG2 = 0;
 	
 	REG1 = send_spi(data);
- 14e:	f5 df       	rcall	.-22     	; 0x13a <send_spi>
- 150:	c8 2f       	mov	r28, r24
- 152:	d0 e0       	ldi	r29, 0x00	; 0
+ 180:	f5 df       	rcall	.-22     	; 0x16c <send_spi>
+ 182:	c8 2f       	mov	r28, r24
+ 184:	d0 e0       	ldi	r29, 0x00	; 0
 	REG1 = REG1 << 8;
 	REG2 = send_spi(data);
- 154:	81 2f       	mov	r24, r17
- 156:	f1 df       	rcall	.-30     	; 0x13a <send_spi>
+ 186:	81 2f       	mov	r24, r17
+ 188:	f1 df       	rcall	.-30     	; 0x16c <send_spi>
 	uint16_t REG = 0;
 	uint16_t REG1 = 0;
 	uint16_t REG2 = 0;
 	
 	REG1 = send_spi(data);
 	REG1 = REG1 << 8;
- 158:	dc 2f       	mov	r29, r28
- 15a:	cc 27       	eor	r28, r28
+ 18a:	dc 2f       	mov	r29, r28
+ 18c:	cc 27       	eor	r28, r28
 	REG2 = send_spi(data);
 	REG = REG1 | REG2;
 	
 	return REG;
 }
- 15c:	9e 01       	movw	r18, r28
- 15e:	28 2b       	or	r18, r24
- 160:	c9 01       	movw	r24, r18
- 162:	df 91       	pop	r29
- 164:	cf 91       	pop	r28
- 166:	1f 91       	pop	r17
- 168:	08 95       	ret
+ 18e:	9e 01       	movw	r18, r28
+ 190:	28 2b       	or	r18, r24
+ 192:	c9 01       	movw	r24, r18
+ 194:	df 91       	pop	r29
+ 196:	cf 91       	pop	r28
+ 198:	1f 91       	pop	r17
+ 19a:	08 95       	ret
 
-0000016a <ss_low>:
+0000019c <ss_low>:
 
 void ss_low()
 {
 	PORTB &= ~(1 << SPI_SS);
- 16a:	2c 98       	cbi	0x05, 4	; 5
- 16c:	08 95       	ret
+ 19c:	2c 98       	cbi	0x05, 4	; 5
+ 19e:	08 95       	ret
 
-0000016e <ss_high>:
+000001a0 <ss_high>:
 }	
 
 void ss_high()
 {
 	PORTB |= (1 << SPI_SS);
- 16e:	2c 9a       	sbi	0x05, 4	; 5
- 170:	08 95       	ret
+ 1a0:	2c 9a       	sbi	0x05, 4	; 5
+ 1a2:	08 95       	ret
 
-00000172 <__vector_13>:
+000001a4 <__vector_13>:
 void timer_stop() {
 	TCCR1B = 0;
 }
 
 #ifdef ENABLE_TIMER
 ISR(TIMER1_COMPA_vect) {
- 172:	1f 92       	push	r1
- 174:	0f 92       	push	r0
- 176:	0f b6       	in	r0, 0x3f	; 63
- 178:	0f 92       	push	r0
- 17a:	11 24       	eor	r1, r1
- 17c:	0b b6       	in	r0, 0x3b	; 59
- 17e:	0f 92       	push	r0
- 180:	2f 93       	push	r18
- 182:	3f 93       	push	r19
- 184:	4f 93       	push	r20
- 186:	5f 93       	push	r21
- 188:	6f 93       	push	r22
- 18a:	7f 93       	push	r23
- 18c:	8f 93       	push	r24
- 18e:	9f 93       	push	r25
- 190:	af 93       	push	r26
- 192:	bf 93       	push	r27
- 194:	ef 93       	push	r30
- 196:	ff 93       	push	r31
+ 1a4:	1f 92       	push	r1
+ 1a6:	0f 92       	push	r0
+ 1a8:	0f b6       	in	r0, 0x3f	; 63
+ 1aa:	0f 92       	push	r0
+ 1ac:	11 24       	eor	r1, r1
+ 1ae:	0b b6       	in	r0, 0x3b	; 59
+ 1b0:	0f 92       	push	r0
+ 1b2:	2f 93       	push	r18
+ 1b4:	3f 93       	push	r19
+ 1b6:	4f 93       	push	r20
+ 1b8:	5f 93       	push	r21
+ 1ba:	6f 93       	push	r22
+ 1bc:	7f 93       	push	r23
+ 1be:	8f 93       	push	r24
+ 1c0:	9f 93       	push	r25
+ 1c2:	af 93       	push	r26
+ 1c4:	bf 93       	push	r27
+ 1c6:	ef 93       	push	r30
+ 1c8:	ff 93       	push	r31
 	_t_func();
- 198:	e0 91 00 01 	lds	r30, 0x0100
- 19c:	f0 91 01 01 	lds	r31, 0x0101
- 1a0:	09 95       	icall
+ 1ca:	e0 91 00 01 	lds	r30, 0x0100
+ 1ce:	f0 91 01 01 	lds	r31, 0x0101
+ 1d2:	09 95       	icall
 }
- 1a2:	ff 91       	pop	r31
- 1a4:	ef 91       	pop	r30
- 1a6:	bf 91       	pop	r27
- 1a8:	af 91       	pop	r26
- 1aa:	9f 91       	pop	r25
- 1ac:	8f 91       	pop	r24
- 1ae:	7f 91       	pop	r23
- 1b0:	6f 91       	pop	r22
- 1b2:	5f 91       	pop	r21
- 1b4:	4f 91       	pop	r20
- 1b6:	3f 91       	pop	r19
- 1b8:	2f 91       	pop	r18
- 1ba:	0f 90       	pop	r0
- 1bc:	0b be       	out	0x3b, r0	; 59
- 1be:	0f 90       	pop	r0
- 1c0:	0f be       	out	0x3f, r0	; 63
- 1c2:	0f 90       	pop	r0
- 1c4:	1f 90       	pop	r1
- 1c6:	18 95       	reti
+ 1d4:	ff 91       	pop	r31
+ 1d6:	ef 91       	pop	r30
+ 1d8:	bf 91       	pop	r27
+ 1da:	af 91       	pop	r26
+ 1dc:	9f 91       	pop	r25
+ 1de:	8f 91       	pop	r24
+ 1e0:	7f 91       	pop	r23
+ 1e2:	6f 91       	pop	r22
+ 1e4:	5f 91       	pop	r21
+ 1e6:	4f 91       	pop	r20
+ 1e8:	3f 91       	pop	r19
+ 1ea:	2f 91       	pop	r18
+ 1ec:	0f 90       	pop	r0
+ 1ee:	0b be       	out	0x3b, r0	; 59
+ 1f0:	0f 90       	pop	r0
+ 1f2:	0f be       	out	0x3f, r0	; 63
+ 1f4:	0f 90       	pop	r0
+ 1f6:	1f 90       	pop	r1
+ 1f8:	18 95       	reti
 
-000001c8 <_exit>:
- 1c8:	f8 94       	cli
+000001fa <_exit>:
+ 1fa:	f8 94       	cli
 
-000001ca <__stop_program>:
- 1ca:	ff cf       	rjmp	.-2      	; 0x1ca <__stop_program>
+000001fc <__stop_program>:
+ 1fc:	ff cf       	rjmp	.-2      	; 0x1fc <__stop_program>
