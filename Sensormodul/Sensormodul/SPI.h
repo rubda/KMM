@@ -30,7 +30,7 @@
 void setup_spi();
 void disable_spi();
 uint8_t send_spi(uint8_t out);
-uint8_t get_spi(uint8_t data);
+uint16_t get_spi(uint8_t data);
 void ss_low();
 void ss_high();
 

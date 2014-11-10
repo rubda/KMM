@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 7372800UL
+#define F_CPU 8000000UL
 
 #include <avr/io.h>
 #include "SPI.h"
@@ -17,25 +17,15 @@
 int main(void)
 {
 	setup_spi();
-	
-	
-	send_spi(ACTIVATE_ADC);
-	send_spi(0xFF);
-	send_spi(0xFF);
-	send_spi(START_CONVERSION);
-	send_spi(0xFF);
-	send_spi(0xFF);		
-	send_spi(POLL);
-	send_spi(0xFF);
-	send_spi(0xFF);
-	_delay_ms(1000);
-	
-	
+	activateADC();
+	getAngularRate();
 	while(1)
     {
         //ss_low();
 		//get_spi(data);
 		//ss_high();
+		
+		
 	
 		
 		

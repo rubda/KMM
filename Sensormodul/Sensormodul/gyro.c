@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 7372800UL
+#define F_CPU 8000000UL
 
 #include "gyro.h"
 #include "SPI.h"
@@ -13,25 +13,67 @@
 
 #include <util/delay.h>
 
-int getAngularRate(uint8_t adcValue)
+void activateADC()
 {
+	uint16_t REG = 0;
 	
 	//Steg 1 sätt ADC till aktiv mode
 	ss_low();
 	send_spi(ACTIVATE_ADC);
+	REG = get_spi(0xFF);
 	ss_high();
-	/* Kolla om den femtonde biten är 0 */
-	_delay_us(120);
-
-	//Steg 2 conversion
-	send_spi(START_CONVERSION);
-	/* Kolla om den femtonde biten är 0 */
 	
+	//if (REG & (1 << 16)) NULL; //BAJS;
+	REG = 0;
+	_delay_us(150);
+}
+
+
+uint16_t getAngularRate()
+{
+	uint16_t REG = 0;
+	uint16_t DATA = 0;
+	
+	//Steg 2 conversion
+	ss_low();
+	send_spi(START_CONVERSION);
+	REG = get_spi(0xFF);
+	ss_high();
+	
+	//if (REG & (1 << 16)) NULL; //BAJS;
+	REG = 0;
 	
 	//Steg 3 poll
+	ss_low();
 	send_spi(POLL);
-	/* Kolla om den femtonde biten är 0 */
-	_delay_us(120);	
+	_delay_us(150);
 	
+	//if (REG & (1 << 16)) NULL; //BAJS;
+	REG = get_spi(0xFF);
+	ss_high();
+	
+	REG = REG >> 1;
+	DATA = REG & 0x07FF; 
+	
+	return DATA;		
 }	
+
+int adcToAngularRate(uint16_t data)
+	{
+		int vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
+		
+		return (vOutAngularRate - 2500)/6.67; // Uttryckt i grader/sec (beroende på vilken gyro modell vi har)
+	}
 	
+bool isRotationDone(uint16_t angle)
+{
+	uint16_t rate = getAngularRate();
+	int achievedAngle = 0;
+		
+	while(angle > achievedAngle)
+	{
+		achievedAngle += adcToAngularRate(rate);
+		//_delay_ms(1000); behövs nog inte
+	}
+	return true;
+}

@@ -34,16 +34,21 @@ uint8_t send_spi(uint8_t out)
 	SPDR = out;
 	while (!(SPSR & (1<<SPIF))); //Loopar sålänge vi inte har skickat klart
 	return SPDR;
-	
 }
 
 
-//Onödig gör fan samma sak som send_spi, tror jag har fattat detta nu
-uint8_t get_spi(uint8_t data)
+uint16_t get_spi(uint8_t data)
 {
-	SPDR = data;
-	//while(!(SPSR & (1<<SPIF)));
-	return SPDR;
+	uint16_t REG = 0;
+	uint16_t REG1 = 0;
+	uint16_t REG2 = 0;
+	
+	REG1 = send_spi(data);
+	REG1 = REG1 << 8;
+	REG2 = send_spi(data);
+	REG = REG1 | REG2;
+	
+	return REG;
 }
 
 void ss_low()
