@@ -8,7 +8,8 @@ int uart_read_string(char *s, int size);
 void uart_init(long baud)
 {
 	// Initialize serial
-	UBRR0 = ((F_CPU / 16 + baud / 2) / baud - 1);         /* (16 MHz / 16 / 38400) - 1 */
+	//UBRR0 = ((F_CPU / 16 + baud / 2) / baud - 1);         /* (16 MHz / 16 / 38400) - 1 */
+	UBRR0 = 0x0340;
 	set_bit(UCSR0B, RXEN0);                               /* enable RX */
 	set_bit(UCSR0B, TXEN0);                               /* enable TX */
 
@@ -22,11 +23,11 @@ void check_rx() {
 	}
 }
 
-ISR(USART0_RX_vect){
+/*ISR(USART0_RX_vect){
 	cli();
 	check_rx();
 	sei();
-}
+}*/
 
 char uart_read_char()
 {

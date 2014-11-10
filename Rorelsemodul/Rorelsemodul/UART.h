@@ -16,7 +16,7 @@
 /************************************************************************/
 /* Baudrate: 19200                                                      */
 /************************************************************************/
-#define UART_SETTINGS 0x0001
+//#define UART_SETTINGS 0x0001
 
 #define UART_RX PORTD2
 #define UART_TX PORTD3
@@ -42,3 +42,5 @@ uint8_t got_message();
 uart_message get_message();
 //uart_message create_message(char name[], char attributes[][]);
 void send_message(uart_message m);
+void uart_send_string(char *s, uint8_t size);
+void uart_send_char(uint8_t data);
