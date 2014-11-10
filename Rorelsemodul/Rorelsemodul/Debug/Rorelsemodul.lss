@@ -19,11 +19,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_frame  00000404  00000000  00000000  00001bdc  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00000378  00000000  00000000  00001fe0  2**0
+  8 .debug_str    000003b1  00000000  00000000  00001fe0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    00000d60  00000000  00000000  00002358  2**0
+  9 .debug_loc    00000d60  00000000  00000000  00002391  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 000000e8  00000000  00000000  000030b8  2**0
+ 10 .debug_ranges 000000e8  00000000  00000000  000030f1  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -269,12 +269,6 @@ ISR(TIMER2_COMPA_vect) {
  1ae:	18 95       	reti
 
 000001b0 <main>:
-#include <avr/interrupt.h>
-
-volatile unsigned char data;
-
-int main(void)
-{	
  1b0:	cf 93       	push	r28
  1b2:	df 93       	push	r29
  1b4:	00 d0       	rcall	.+0      	; 0x1b6 <main+0x6>
@@ -282,50 +276,28 @@ int main(void)
  1b8:	1f 92       	push	r1
  1ba:	cd b7       	in	r28, 0x3d	; 61
  1bc:	de b7       	in	r29, 0x3e	; 62
-	suart_init(1000000);
  1be:	60 e4       	ldi	r22, 0x40	; 64
  1c0:	72 e4       	ldi	r23, 0x42	; 66
  1c2:	8f e0       	ldi	r24, 0x0F	; 15
  1c4:	90 e0       	ldi	r25, 0x00	; 0
  1c6:	15 d0       	rcall	.+42     	; 0x1f2 <suart_init>
-	sei();
  1c8:	78 94       	sei
-	
-	//www.wormfood.net/avrbaudcalc.php
-	//extremeelectronics.co.in/avr-tutorials/using-the-usart-of-avr-microcontrollers/
-	//UBRR = 23, 0x0017
-	
-	DDRB = 0xFF;
  1ca:	8f ef       	ldi	r24, 0xFF	; 255
  1cc:	84 b9       	out	0x04, r24	; 4
-	uint8_t list1[] = {0x01};
-	uint8_t list2[] = {0x01};
-		
-	//res = suart_command_write_data(12, 0x20, list1, 1);
-	//res = suart_command_reset(0xFE);
-	suart_command_read_data(12, 0x11, 0x01);
  1ce:	41 e0       	ldi	r20, 0x01	; 1
  1d0:	61 e1       	ldi	r22, 0x11	; 17
  1d2:	8c e0       	ldi	r24, 0x0C	; 12
  1d4:	00 d1       	rcall	.+512    	; 0x3d6 <suart_command_read_data>
-	PORTB = res.error;
  1d6:	8a 81       	ldd	r24, Y+2	; 0x02
  1d8:	85 b9       	out	0x05, r24	; 5
  1da:	ff cf       	rjmp	.-2      	; 0x1da <main+0x2a>
 
 000001dc <__vector_30>:
-		
-		
-    }
-}
-
-ISR(USART1_TX_vect){
  1dc:	1f 92       	push	r1
  1de:	0f 92       	push	r0
  1e0:	0f b6       	in	r0, 0x3f	; 63
  1e2:	0f 92       	push	r0
  1e4:	11 24       	eor	r1, r1
-	SUART_RX_ACTIVE;
  1e6:	5d 98       	cbi	0x0b, 5	; 11
  1e8:	0f 90       	pop	r0
  1ea:	0f be       	out	0x3f, r0	; 63
@@ -334,12 +306,6 @@ ISR(USART1_TX_vect){
  1f0:	18 95       	reti
 
 000001f2 <suart_init>:
-}
-
-servo_response suart_command_ping(uint8_t id){
-	char command[] = {0xFF, 0xFF, id, 0x02, 0x01};
-	return suart_command(id, command, 5);
-}
  1f2:	9b 01       	movw	r18, r22
  1f4:	ac 01       	movw	r20, r24
  1f6:	80 e2       	ldi	r24, 0x20	; 32
@@ -589,8 +555,6 @@ servo_response suart_command_ping(uint8_t id){
  3d4:	08 95       	ret
 
 000003d6 <suart_command_read_data>:
-
-servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t data_len){
  3d6:	cf 93       	push	r28
  3d8:	df 93       	push	r29
  3da:	cd b7       	in	r28, 0x3d	; 61
@@ -601,7 +565,6 @@ servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t da
  3e4:	de bf       	out	0x3e, r29	; 62
  3e6:	0f be       	out	0x3f, r0	; 63
  3e8:	cd bf       	out	0x3d, r28	; 61
-	char command[] = {0xFF, 0xFF, id, 0x04, 0x02, data_addr, data_len};
  3ea:	9f ef       	ldi	r25, 0xFF	; 255
  3ec:	9e 83       	std	Y+6, r25	; 0x06
  3ee:	9f 83       	std	Y+7, r25	; 0x07
@@ -612,13 +575,11 @@ servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t da
  3f8:	9a 87       	std	Y+10, r25	; 0x0a
  3fa:	6b 87       	std	Y+11, r22	; 0x0b
  3fc:	4c 87       	std	Y+12, r20	; 0x0c
-	return suart_command(id, command, 7);
  3fe:	47 e0       	ldi	r20, 0x07	; 7
  400:	be 01       	movw	r22, r28
  402:	6a 5f       	subi	r22, 0xFA	; 250
  404:	7f 4f       	sbci	r23, 0xFF	; 255
  406:	8a df       	rcall	.-236    	; 0x31c <suart_command>
-}
  408:	70 e0       	ldi	r23, 0x00	; 0
  40a:	80 e0       	ldi	r24, 0x00	; 0
  40c:	90 e0       	ldi	r25, 0x00	; 0

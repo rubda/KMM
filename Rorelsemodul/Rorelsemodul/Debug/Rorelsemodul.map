@@ -56,7 +56,7 @@ Discarded input sections
  .data          0x00000000        0x0 UART.o
  .bss           0x00000000        0x0 UART.o
  .text.uart_init
-                0x00000000       0x5a UART.o
+                0x00000000       0x4e UART.o
  .text.uart_start
                 0x00000000        0xe UART.o
  .text.uart_read_char
@@ -77,14 +77,14 @@ Discarded input sections
                 0x00000000       0xc0 UART.o
  .bss.buffer_size
                 0x00000000        0x1 UART.o
- .debug_info    0x00000000      0x468 UART.o
+ .debug_info    0x00000000      0x473 UART.o
  .debug_abbrev  0x00000000      0x22d UART.o
  .debug_loc     0x00000000      0x53d UART.o
  .debug_aranges
                 0x00000000       0x68 UART.o
  .debug_ranges  0x00000000       0x58 UART.o
- .debug_line    0x00000000      0x2ed UART.o
- .debug_str     0x00000000      0x23f UART.o
+ .debug_line    0x00000000      0x2e6 UART.o
+ .debug_str     0x00000000      0x25a UART.o
  .comment       0x00000000       0x31 UART.o
  .debug_frame   0x00000000      0x148 UART.o
  COMMON         0x00000000      0x100 UART.o
@@ -533,13 +533,13 @@ END GROUP
  .debug_frame   0x000001ac       0x50 Rorelsemodul.o
  .debug_frame   0x000001fc      0x208 servo_uart.o
 
-.debug_str      0x00000000      0x378
+.debug_str      0x00000000      0x3b1
  *(.debug_str)
- .debug_str     0x00000000      0x1b7 atmega-timers.o
-                                0x1eb (size before relaxing)
- .debug_str     0x000001b7       0x9b Rorelsemodul.o
+ .debug_str     0x00000000      0x1c9 atmega-timers.o
+                                0x1fd (size before relaxing)
+ .debug_str     0x000001c9       0xc2 Rorelsemodul.o
                                 0x1d4 (size before relaxing)
- .debug_str     0x00000252      0x126 servo_uart.o
+ .debug_str     0x0000028b      0x126 servo_uart.o
                                 0x2e4 (size before relaxing)
 
 .debug_loc      0x00000000      0xd60
