@@ -67,8 +67,8 @@ servo_response suart_command(uint8_t id, char* command, uint8_t size){
 	suart_send_string(command, size);
 	char buffer[16];
 	while((PORTD & (1 << SUART_MODE)));
-	//_delay_ms(10);
-	uint8_t bytes_read = suart_read_string(buffer, 16);
+	_delay_ms(10);
+	/*uint8_t bytes_read = suart_read_string(buffer, 16);
 	
 	if(bytes_read > 5){
 		PORTB = 0x99;
@@ -83,7 +83,7 @@ servo_response suart_command(uint8_t id, char* command, uint8_t size){
 	for(i = 0; i < response.parameter_size; ++i){
 		parameter_list[i] = buffer[5+i];
 	}
-	response.parameters = parameter_list;
+	response.parameters = parameter_list;*/
 	
 	return response;
 }

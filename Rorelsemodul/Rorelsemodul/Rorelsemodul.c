@@ -21,14 +21,18 @@ int main(void)
 	
 	DDRB = 0xFF;
 	
-	servo_response res;
-	uint8_t list1[] = {0x01};
-	uint8_t list2[] = {0x01};
+	//servo_response res;
+	//uint8_t list1[] = {0x01};
+	//uint8_t list2[] = {0x01};
 		
 	//res = suart_command_write_data(12, 0x20, list1, 1);
 	//res = suart_command_reset(0xFE);
-	suart_command_read_data(12, 0x11, 0x01);
-	PORTB = res.error;
+	//suart_command_ping(1);
+	//PORTB = res.error;
+	//suart_send_string(list1, 1);
+	SUART_RX_ACTIVE;
+	//_delay_ms(10);
+	//SUART_TX_ACTIVE;
 	
 	while(1)
 	{	
