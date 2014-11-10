@@ -3,27 +3,27 @@ Rorelsemodul.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000468  00000000  00000000  00000074  2**1
+  0 .text         00000558  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          00000006  00800100  00800100  000004dc  2**0
+  1 .bss          00000107  00800100  00800100  000005cc  2**0
                   ALLOC
-  2 .comment      00000030  00000000  00000000  000004dc  2**0
+  2 .comment      00000030  00000000  00000000  000005cc  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000118  00000000  00000000  0000050c  2**0
+  3 .debug_aranges 00000180  00000000  00000000  000005fc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000a7c  00000000  00000000  00000624  2**0
+  4 .debug_info   00000e8a  00000000  00000000  0000077c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 000003c0  00000000  00000000  000010a0  2**0
+  5 .debug_abbrev 000005bc  00000000  00000000  00001606  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000779  00000000  00000000  00001460  2**0
+  6 .debug_line   00000a6a  00000000  00000000  00001bc2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000404  00000000  00000000  00001bdc  2**2
+  7 .debug_frame  00000598  00000000  00000000  0000262c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000003b1  00000000  00000000  00001fe0  2**0
+  8 .debug_str    00000426  00000000  00000000  00002bc4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    00000d60  00000000  00000000  00002391  2**0
+  9 .debug_loc    0000138b  00000000  00000000  00002fea  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 000000e8  00000000  00000000  000030f1  2**0
+ 10 .debug_ranges 00000140  00000000  00000000  00004375  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -69,7 +69,7 @@ Disassembly of section .text:
   4a:	00 00       	nop
   4c:	2f c0       	rjmp	.+94     	; 0xac <__bad_interrupt>
   4e:	00 00       	nop
-  50:	2d c0       	rjmp	.+90     	; 0xac <__bad_interrupt>
+  50:	36 c2       	rjmp	.+1132   	; 0x4be <__vector_20>
   52:	00 00       	nop
   54:	2b c0       	rjmp	.+86     	; 0xac <__bad_interrupt>
   56:	00 00       	nop
@@ -109,7 +109,7 @@ Disassembly of section .text:
   96:	cd bf       	out	0x3d, r28	; 61
 
 00000098 <__do_clear_bss>:
-  98:	21 e0       	ldi	r18, 0x01	; 1
+  98:	22 e0       	ldi	r18, 0x02	; 2
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
   9e:	01 c0       	rjmp	.+2      	; 0xa2 <.do_clear_bss_start>
@@ -118,11 +118,11 @@ Disassembly of section .text:
   a0:	1d 92       	st	X+, r1
 
 000000a2 <.do_clear_bss_start>:
-  a2:	a6 30       	cpi	r26, 0x06	; 6
+  a2:	a7 30       	cpi	r26, 0x07	; 7
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
   a8:	83 d0       	rcall	.+262    	; 0x1b0 <main>
-  aa:	dc c1       	rjmp	.+952    	; 0x464 <_exit>
+  aa:	54 c2       	rjmp	.+1192   	; 0x554 <_exit>
 
 000000ac <__bad_interrupt>:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
@@ -153,8 +153,8 @@ void timer2_stop() {
   ce:	bf 93       	push	r27
   d0:	ef 93       	push	r30
   d2:	ff 93       	push	r31
-  d4:	e0 91 00 01 	lds	r30, 0x0100
-  d8:	f0 91 01 01 	lds	r31, 0x0101
+  d4:	e0 91 01 01 	lds	r30, 0x0101
+  d8:	f0 91 02 01 	lds	r31, 0x0102
   dc:	09 95       	icall
   de:	ff 91       	pop	r31
   e0:	ef 91       	pop	r30
@@ -196,8 +196,8 @@ void timer2_stop() {
  124:	bf 93       	push	r27
  126:	ef 93       	push	r30
  128:	ff 93       	push	r31
- 12a:	e0 91 04 01 	lds	r30, 0x0104
- 12e:	f0 91 05 01 	lds	r31, 0x0105
+ 12a:	e0 91 05 01 	lds	r30, 0x0105
+ 12e:	f0 91 06 01 	lds	r31, 0x0106
  132:	09 95       	icall
  134:	ff 91       	pop	r31
  136:	ef 91       	pop	r30
@@ -244,8 +244,8 @@ ISR(TIMER2_COMPA_vect) {
  17c:	ef 93       	push	r30
  17e:	ff 93       	push	r31
 	_t2_func();
- 180:	e0 91 02 01 	lds	r30, 0x0102
- 184:	f0 91 03 01 	lds	r31, 0x0103
+ 180:	e0 91 03 01 	lds	r30, 0x0103
+ 184:	f0 91 04 01 	lds	r31, 0x0104
  188:	09 95       	icall
 }
  18a:	ff 91       	pop	r31
@@ -327,7 +327,7 @@ ISR(TIMER2_COMPA_vect) {
  216:	7d 4b       	sbci	r23, 0xBD	; 189
  218:	80 4f       	sbci	r24, 0xF0	; 240
  21a:	9f 4f       	sbci	r25, 0xFF	; 255
- 21c:	01 d1       	rcall	.+514    	; 0x420 <__udivmodsi4>
+ 21c:	79 d1       	rcall	.+754    	; 0x510 <__udivmodsi4>
  21e:	da 01       	movw	r26, r20
  220:	c9 01       	movw	r24, r18
  222:	01 97       	sbiw	r24, 0x01	; 1
@@ -593,48 +593,247 @@ ISR(TIMER2_COMPA_vect) {
  41c:	cf 91       	pop	r28
  41e:	08 95       	ret
 
-00000420 <__udivmodsi4>:
- 420:	a1 e2       	ldi	r26, 0x21	; 33
- 422:	1a 2e       	mov	r1, r26
- 424:	aa 1b       	sub	r26, r26
- 426:	bb 1b       	sub	r27, r27
- 428:	fd 01       	movw	r30, r26
- 42a:	0d c0       	rjmp	.+26     	; 0x446 <__udivmodsi4_ep>
+00000420 <uart_read_char>:
+}
 
-0000042c <__udivmodsi4_loop>:
- 42c:	aa 1f       	adc	r26, r26
- 42e:	bb 1f       	adc	r27, r27
- 430:	ee 1f       	adc	r30, r30
- 432:	ff 1f       	adc	r31, r31
- 434:	a2 17       	cp	r26, r18
- 436:	b3 07       	cpc	r27, r19
- 438:	e4 07       	cpc	r30, r20
- 43a:	f5 07       	cpc	r31, r21
- 43c:	20 f0       	brcs	.+8      	; 0x446 <__udivmodsi4_ep>
- 43e:	a2 1b       	sub	r26, r18
- 440:	b3 0b       	sbc	r27, r19
- 442:	e4 0b       	sbc	r30, r20
- 444:	f5 0b       	sbc	r31, r21
+void uart_send_char(uint8_t data)
+{
+	while(!bit_is_set(UCSR0A, UDRE0));
+	UDR0 = data;
+ 420:	e0 ec       	ldi	r30, 0xC0	; 192
+ 422:	f0 e0       	ldi	r31, 0x00	; 0
+ 424:	80 81       	ld	r24, Z
+ 426:	88 23       	and	r24, r24
+ 428:	ec f7       	brge	.-6      	; 0x424 <uart_read_char+0x4>
+ 42a:	80 91 c6 00 	lds	r24, 0x00C6
+ 42e:	08 95       	ret
 
-00000446 <__udivmodsi4_ep>:
- 446:	66 1f       	adc	r22, r22
- 448:	77 1f       	adc	r23, r23
- 44a:	88 1f       	adc	r24, r24
- 44c:	99 1f       	adc	r25, r25
- 44e:	1a 94       	dec	r1
- 450:	69 f7       	brne	.-38     	; 0x42c <__udivmodsi4_loop>
- 452:	60 95       	com	r22
- 454:	70 95       	com	r23
- 456:	80 95       	com	r24
- 458:	90 95       	com	r25
- 45a:	9b 01       	movw	r18, r22
- 45c:	ac 01       	movw	r20, r24
- 45e:	bd 01       	movw	r22, r26
- 460:	cf 01       	movw	r24, r30
- 462:	08 95       	ret
+00000430 <uart_read_string>:
+}
 
-00000464 <_exit>:
- 464:	f8 94       	cli
+int uart_read_string(char *s, int size)
+{
+ 430:	cf 92       	push	r12
+ 432:	df 92       	push	r13
+ 434:	ef 92       	push	r14
+ 436:	ff 92       	push	r15
+ 438:	0f 93       	push	r16
+ 43a:	1f 93       	push	r17
+ 43c:	cf 93       	push	r28
+ 43e:	df 93       	push	r29
+ 440:	8c 01       	movw	r16, r24
+	uint8_t i = 0;
+	char c;
+	
+	while(i < size - 1){
+ 442:	7b 01       	movw	r14, r22
+ 444:	81 e0       	ldi	r24, 0x01	; 1
+ 446:	e8 1a       	sub	r14, r24
+ 448:	f1 08       	sbc	r15, r1
+ 44a:	1e 14       	cp	r1, r14
+ 44c:	1f 04       	cpc	r1, r15
+ 44e:	cc f4       	brge	.+50     	; 0x482 <uart_read_string+0x52>
+ 450:	c0 e0       	ldi	r28, 0x00	; 0
+ 452:	d0 e0       	ldi	r29, 0x00	; 0
+	UDR0 = data;
+}
 
-00000466 <__stop_program>:
- 466:	ff cf       	rjmp	.-2      	; 0x466 <__stop_program>
+int uart_read_string(char *s, int size)
+{
+	uint8_t i = 0;
+ 454:	d1 2c       	mov	r13, r1
+	while(i < size - 1){
+		c = uart_read_char();
+		if(c == '\0')
+			break;
+		else if(c == '#'){
+			i = 0;
+ 456:	c1 2c       	mov	r12, r1
+{
+	uint8_t i = 0;
+	char c;
+	
+	while(i < size - 1){
+		c = uart_read_char();
+ 458:	e3 df       	rcall	.-58     	; 0x420 <uart_read_char>
+		if(c == '\0')
+ 45a:	88 23       	and	r24, r24
+ 45c:	a9 f0       	breq	.+42     	; 0x488 <uart_read_string+0x58>
+			break;
+		else if(c == '#'){
+ 45e:	83 32       	cpi	r24, 0x23	; 35
+ 460:	11 f0       	breq	.+4      	; 0x466 <uart_read_string+0x36>
+ 462:	9d 2d       	mov	r25, r13
+ 464:	01 c0       	rjmp	.+2      	; 0x468 <uart_read_string+0x38>
+			i = 0;
+ 466:	9c 2d       	mov	r25, r12
+		}
+		s[i++] = c;
+ 468:	dd 24       	eor	r13, r13
+ 46a:	d3 94       	inc	r13
+ 46c:	d9 0e       	add	r13, r25
+ 46e:	f8 01       	movw	r30, r16
+ 470:	e9 0f       	add	r30, r25
+ 472:	f1 1d       	adc	r31, r1
+ 474:	80 83       	st	Z, r24
+int uart_read_string(char *s, int size)
+{
+	uint8_t i = 0;
+	char c;
+	
+	while(i < size - 1){
+ 476:	cd 2d       	mov	r28, r13
+ 478:	d0 e0       	ldi	r29, 0x00	; 0
+ 47a:	ce 15       	cp	r28, r14
+ 47c:	df 05       	cpc	r29, r15
+ 47e:	64 f3       	brlt	.-40     	; 0x458 <uart_read_string+0x28>
+ 480:	03 c0       	rjmp	.+6      	; 0x488 <uart_read_string+0x58>
+ 482:	c0 e0       	ldi	r28, 0x00	; 0
+ 484:	d0 e0       	ldi	r29, 0x00	; 0
+	UDR0 = data;
+}
+
+int uart_read_string(char *s, int size)
+{
+	uint8_t i = 0;
+ 486:	d1 2c       	mov	r13, r1
+			i = 0;
+		}
+		s[i++] = c;
+	}
+	
+	s[i] = 0;
+ 488:	f8 01       	movw	r30, r16
+ 48a:	ed 0d       	add	r30, r13
+ 48c:	f1 1d       	adc	r31, r1
+ 48e:	10 82       	st	Z, r1
+	
+	return i + 1;
+}
+ 490:	ce 01       	movw	r24, r28
+ 492:	01 96       	adiw	r24, 0x01	; 1
+ 494:	df 91       	pop	r29
+ 496:	cf 91       	pop	r28
+ 498:	1f 91       	pop	r17
+ 49a:	0f 91       	pop	r16
+ 49c:	ff 90       	pop	r15
+ 49e:	ef 90       	pop	r14
+ 4a0:	df 90       	pop	r13
+ 4a2:	cf 90       	pop	r12
+ 4a4:	08 95       	ret
+
+000004a6 <check_rx>:
+	set_bit(UCSR0B, RXCIE0);
+	UCSR0C = (3 << UCSZ00);
+}
+
+void check_rx() {
+	if (bit_is_set(UCSR0A, RXC0)){
+ 4a6:	80 91 c0 00 	lds	r24, 0x00C0
+ 4aa:	88 23       	and	r24, r24
+ 4ac:	3c f4       	brge	.+14     	; 0x4bc <check_rx+0x16>
+		buffer_size = uart_read_string(buffer, 255);
+ 4ae:	6f ef       	ldi	r22, 0xFF	; 255
+ 4b0:	70 e0       	ldi	r23, 0x00	; 0
+ 4b2:	87 e0       	ldi	r24, 0x07	; 7
+ 4b4:	91 e0       	ldi	r25, 0x01	; 1
+ 4b6:	bc df       	rcall	.-136    	; 0x430 <uart_read_string>
+ 4b8:	80 93 00 01 	sts	0x0100, r24
+ 4bc:	08 95       	ret
+
+000004be <__vector_20>:
+	}
+}
+
+SIGNAL(USART0_RX_vect){
+ 4be:	1f 92       	push	r1
+ 4c0:	0f 92       	push	r0
+ 4c2:	0f b6       	in	r0, 0x3f	; 63
+ 4c4:	0f 92       	push	r0
+ 4c6:	11 24       	eor	r1, r1
+ 4c8:	0b b6       	in	r0, 0x3b	; 59
+ 4ca:	0f 92       	push	r0
+ 4cc:	2f 93       	push	r18
+ 4ce:	3f 93       	push	r19
+ 4d0:	4f 93       	push	r20
+ 4d2:	5f 93       	push	r21
+ 4d4:	6f 93       	push	r22
+ 4d6:	7f 93       	push	r23
+ 4d8:	8f 93       	push	r24
+ 4da:	9f 93       	push	r25
+ 4dc:	af 93       	push	r26
+ 4de:	bf 93       	push	r27
+ 4e0:	ef 93       	push	r30
+ 4e2:	ff 93       	push	r31
+	cli();
+ 4e4:	f8 94       	cli
+	check_rx();
+ 4e6:	df df       	rcall	.-66     	; 0x4a6 <check_rx>
+	sei();
+ 4e8:	78 94       	sei
+}
+ 4ea:	ff 91       	pop	r31
+ 4ec:	ef 91       	pop	r30
+ 4ee:	bf 91       	pop	r27
+ 4f0:	af 91       	pop	r26
+ 4f2:	9f 91       	pop	r25
+ 4f4:	8f 91       	pop	r24
+ 4f6:	7f 91       	pop	r23
+ 4f8:	6f 91       	pop	r22
+ 4fa:	5f 91       	pop	r21
+ 4fc:	4f 91       	pop	r20
+ 4fe:	3f 91       	pop	r19
+ 500:	2f 91       	pop	r18
+ 502:	0f 90       	pop	r0
+ 504:	0b be       	out	0x3b, r0	; 59
+ 506:	0f 90       	pop	r0
+ 508:	0f be       	out	0x3f, r0	; 63
+ 50a:	0f 90       	pop	r0
+ 50c:	1f 90       	pop	r1
+ 50e:	18 95       	reti
+
+00000510 <__udivmodsi4>:
+ 510:	a1 e2       	ldi	r26, 0x21	; 33
+ 512:	1a 2e       	mov	r1, r26
+ 514:	aa 1b       	sub	r26, r26
+ 516:	bb 1b       	sub	r27, r27
+ 518:	fd 01       	movw	r30, r26
+ 51a:	0d c0       	rjmp	.+26     	; 0x536 <__udivmodsi4_ep>
+
+0000051c <__udivmodsi4_loop>:
+ 51c:	aa 1f       	adc	r26, r26
+ 51e:	bb 1f       	adc	r27, r27
+ 520:	ee 1f       	adc	r30, r30
+ 522:	ff 1f       	adc	r31, r31
+ 524:	a2 17       	cp	r26, r18
+ 526:	b3 07       	cpc	r27, r19
+ 528:	e4 07       	cpc	r30, r20
+ 52a:	f5 07       	cpc	r31, r21
+ 52c:	20 f0       	brcs	.+8      	; 0x536 <__udivmodsi4_ep>
+ 52e:	a2 1b       	sub	r26, r18
+ 530:	b3 0b       	sbc	r27, r19
+ 532:	e4 0b       	sbc	r30, r20
+ 534:	f5 0b       	sbc	r31, r21
+
+00000536 <__udivmodsi4_ep>:
+ 536:	66 1f       	adc	r22, r22
+ 538:	77 1f       	adc	r23, r23
+ 53a:	88 1f       	adc	r24, r24
+ 53c:	99 1f       	adc	r25, r25
+ 53e:	1a 94       	dec	r1
+ 540:	69 f7       	brne	.-38     	; 0x51c <__udivmodsi4_loop>
+ 542:	60 95       	com	r22
+ 544:	70 95       	com	r23
+ 546:	80 95       	com	r24
+ 548:	90 95       	com	r25
+ 54a:	9b 01       	movw	r18, r22
+ 54c:	ac 01       	movw	r20, r24
+ 54e:	bd 01       	movw	r22, r26
+ 550:	cf 01       	movw	r24, r30
+ 552:	08 95       	ret
+
+00000554 <_exit>:
+ 554:	f8 94       	cli
+
+00000556 <__stop_program>:
+ 556:	ff cf       	rjmp	.-2      	; 0x556 <__stop_program>

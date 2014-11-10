@@ -12,6 +12,7 @@ void uart_init(long baud)
 	set_bit(UCSR0B, RXEN0);                               /* enable RX */
 	set_bit(UCSR0B, TXEN0);                               /* enable TX */
 
+	set_bit(UCSR0B, RXCIE0);
 	UCSR0C = (3 << UCSZ00);
 }
 
@@ -19,13 +20,13 @@ void check_rx() {
 	if (bit_is_set(UCSR0A, RXC0)){
 		buffer_size = uart_read_string(buffer, 255);
 	}
-	timer0(PRESCALER, TICKS, check_rx);
 }
 
-void uart_start(){
-	timer0(PRESCALER, TICKS, check_rx);
+SIGNAL(USART0_RX_vect){
+	cli();
+	check_rx();
+	sei();
 }
-
 
 char uart_read_char()
 {
