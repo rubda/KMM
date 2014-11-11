@@ -46,8 +46,6 @@ uint16_t getAngularRate()
 	uint16_t REG = 0;
 	uint16_t DATA = 0;
 	
-	startConversion();
-	
 	//Steg 3 poll
 	ss_low();
 	send_spi(POLL);
@@ -77,7 +75,8 @@ bool isRotationDone(uint16_t angle)
 		
 	if (angle > 0){
 		while(angle > achievedAngle)
-		{	
+		{		
+			startConversion();
 			rate = getAngularRate();
 			achievedAngle += adcToAngularRate(rate);
 			//_delay_ms(1000); behövs nog inte
@@ -85,7 +84,8 @@ bool isRotationDone(uint16_t angle)
 		return true;
 	}else{
 		while(achievedAngle > angle)
-		{
+		{	
+			startConversion();
 			rate = getAngularRate();
 			achievedAngle += adcToAngularRate(rate);
 		}
