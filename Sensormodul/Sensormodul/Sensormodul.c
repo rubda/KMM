@@ -18,13 +18,20 @@
 int main(void)
 {
 
-	uart_init(1200);
-	//uart_send_char('A');
+	init_sensors();
+	
+
 	while(1)
     {
 
-		uart_send_char('P');
-		_delay_ms(1000);
+		//get_distance(get_sensor(4));
+	
+		//DDRB |= (1 << PORTB0);
+		//_delay_ms(1000);
+		//PORTB ^= (1 << PORTB0);
+		get_distance(get_sensor(1));
+		//_delay_ms(10);
+		
 	}
 	
 	
