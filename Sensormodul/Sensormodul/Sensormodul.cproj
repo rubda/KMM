@@ -142,12 +142,6 @@
     <Compile Include="SPI.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="timer.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="timer.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="UART.c">
       <SubType>compile</SubType>
     </Compile>
