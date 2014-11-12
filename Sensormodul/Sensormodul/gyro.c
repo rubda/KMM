@@ -74,26 +74,27 @@ int adcToAngularRate(uint16_t data)
 	}
 	
 	
-void rotate(int angle)
+void rotateTo(int angle)
 {
 	uint16_t rate;
-	int achievedAngle = 0;
+	int ACHIEVED_ANGLE = 0;
+	int OFFSET = 10;
 		
 	if (angle >= 0){
-		while(angle > achievedAngle)
+		while(angle-OFFSET > ACHIEVED_ANGLE)
 		{		
 			startConversion();
 			rate = getAngularRate();
-			achievedAngle += adcToAngularRate(rate);
+			ACHIEVED_ANGLE += adcToAngularRate(rate);
 			_delay_ms(1000); //behövs nog inte
 		}
 		hasRotated(1);
 	}else{
-		while(achievedAngle > angle)
+		while(ACHIEVED_ANGLE > angle+OFFSET)
 		{
 			startConversion();
 			rate = getAngularRate();
-			achievedAngle += adcToAngularRate(rate);
+			ACHIEVED_ANGLE += adcToAngularRate(rate);
 			_delay_ms(1000); //behövs nog inte
 		}
 		hasRotated(1);

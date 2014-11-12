@@ -17,25 +17,38 @@
 
 int main(void)
 {
-
-	DDRB |= (1 << PORTB0);
-	PORTB &= ~(1 << PORTB0);
+	
+	int SENSOR_ID = 0;
+	int ANGLE = 0;
+	int TIME_TO_TURN = 0; //Flagga
+	
+	init_sensors();
 	setup_spi();
 	activateADC();
 	
-	int foo = 90;
-	
-	
 	while(1)
     {
-		foo = -foo;
-		rotate(foo);
-		while(!getIsRotated());
-		PORTB |= (1 << PORTB0);
-		hasRotated(0);
-		_delay_ms(5000);
-		PORTB &= ~(1 << PORTB0);
+		get_distance(get_sensor(SENSOR_ID));
 		
+		//Kolla om styrmodulen har begärt något
+	
+		if (SENSOR_ID = 5) {
+			SENSOR_ID = 0;
+		}else{
+			SENSOR_ID++;
+		}
+		
+		//Kolla om styrmodulen har begärt något
+		
+		if (TIME_TO_TURN){
+			rotateTo(ANGLE);
+			while(!getIsRotated());
+			hasRotated(0);
+			//Skicka till styrmodulen att den har roterat klart!
+		}
+		
+	
+
 	}
 	
 	

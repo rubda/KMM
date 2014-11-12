@@ -20,7 +20,7 @@ void activateADC();
 void startConversion();
 uint16_t getAngularRate();
 int adcToAngularRate(uint16_t data);
-void rotate(int angle);
+void rotateTo(int angle);
 int getIsRotated();
 
 
