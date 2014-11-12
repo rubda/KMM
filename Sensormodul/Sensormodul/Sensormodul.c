@@ -18,19 +18,23 @@
 int main(void)
 {
 
-	init_sensors();
+	DDRB |= (1 << PORTB0);
+	PORTB &= ~(1 << PORTB0);
+	setup_spi();
+	activateADC();
 	
-
+	int foo = 90;
+	
+	
 	while(1)
     {
-
-		//get_distance(get_sensor(4));
-	
-		//DDRB |= (1 << PORTB0);
-		//_delay_ms(1000);
-		//PORTB ^= (1 << PORTB0);
-		get_distance(get_sensor(1));
-		//_delay_ms(10);
+		foo = -foo;
+		rotate(foo);
+		while(!getIsRotated());
+		PORTB |= (1 << PORTB0);
+		hasRotated(0);
+		_delay_ms(5000);
+		PORTB &= ~(1 << PORTB0);
 		
 	}
 	
