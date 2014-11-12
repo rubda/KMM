@@ -12,38 +12,43 @@
 #include "gyro.h"
 #include <util/delay.h>
 #include "ultraljud.h"
+#include "UART.h"
 
 
 int main(void)
 {
+	
+	int SENSOR_ID = 0;
+	int ANGLE = 0;
+	int TIME_TO_TURN = 0; //Flagga
+	
+	init_sensors();
 	setup_spi();
 	activateADC();
 	
-	DDRA |= (1 << PORTA5);
-	
-	uint16_t test;
-	int one;
-	
-
-
-
-	
 	while(1)
     {
-		test = getAngularRate();
-		for(int i=16; i>0; i--){
-			one = (test & 0x8000) >> 15;
-			
-			if (one == 1) {
-				PORTA |= (1 <<PORTA5);
-			}else{
-				PORTA &= ~(1 <<PORTA5);
-			}
-			test <<= 1;
-			_delay_ms(10);
+		get_distance(get_sensor(SENSOR_ID));
+		
+		//Kolla om styrmodulen har begärt något
+	
+		if (SENSOR_ID = 5) {
+			SENSOR_ID = 0;
+		}else{
+			SENSOR_ID++;
 		}
 		
+		//Kolla om styrmodulen har begärt något
 		
+		if (TIME_TO_TURN){
+			rotateTo(ANGLE);
+			while(!getIsRotated());
+			hasRotated(0);
+			//Skicka till styrmodulen att den har roterat klart!
+		}
+		
+	
+
 	}
 	
 	

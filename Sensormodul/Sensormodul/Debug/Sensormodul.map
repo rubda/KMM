@@ -27,13 +27,14 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-t
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1284p.o (exit)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_clear_bss.o)
-                              Sensormodul.o (__do_clear_bss)
+                              gyro.o (__do_clear_bss)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_umulhisi3.o)
                               gyro.o (__umulhisi3)
 
 Allocating common symbols
 Common symbol       size              file
 
+buffer              0x100             UART.o
 _t_func             0x2               timer.o
 sensor_list         0xc               Sensormodul.o
 
@@ -44,14 +45,23 @@ Discarded input sections
  .text          0x00000000        0x0 gyro.o
  .data          0x00000000        0x0 gyro.o
  .bss           0x00000000        0x0 gyro.o
+ .text.startConversion
+                0x00000000       0x16 gyro.o
+ .text.getAngularRate
+                0x00000000       0x34 gyro.o
  .text.adcToAngularRate
                 0x00000000       0x46 gyro.o
- .text.isRotationDone
-                0x00000000       0x30 gyro.o
+ .text.rotateTo
+                0x00000000       0xa0 gyro.o
+ .text.hasRotated
+                0x00000000        0xa gyro.o
+ .text.getIsRotated
+                0x00000000        0xa gyro.o
+ .bss.isRotated
+                0x00000000        0x2 gyro.o
  .text          0x00000000        0x0 Sensormodul.o
  .data          0x00000000        0x0 Sensormodul.o
  .bss           0x00000000        0x0 Sensormodul.o
- COMMON         0x00000000        0xc Sensormodul.o
  .text          0x00000000        0x0 SPI.o
  .data          0x00000000        0x0 SPI.o
  .bss           0x00000000        0x0 SPI.o
@@ -64,27 +74,26 @@ Discarded input sections
  .text.timer_stop
                 0x00000000        0x6 timer.o
  .text.wait     0x00000000       0x36 timer.o
+ .text          0x00000000        0x0 UART.o
+ .data          0x00000000        0x0 UART.o
+ .bss           0x00000000        0x0 UART.o
+ .text.uart_init
+                0x00000000       0x2a UART.o
+ .text.uart_send_char
+                0x00000000       0x10 UART.o
+ .text.uart_send_string
+                0x00000000       0x50 UART.o
+ .text.got_message
+                0x00000000        0x6 UART.o
+ .text.create_attribute
+                0x00000000       0x6e UART.o
+ .text.get_message
+                0x00000000       0xc0 UART.o
  .text          0x00000000        0x0 ultraljud.o
  .data          0x00000000        0x0 ultraljud.o
  .bss           0x00000000        0x0 ultraljud.o
- .text.init_sensors
-                0x00000000       0x48 ultraljud.o
- .text.get_sensor
-                0x00000000       0x12 ultraljud.o
- .text.get_distance
-                0x00000000       0x50 ultraljud.o
  .text.get_data
                 0x00000000        0x6 ultraljud.o
- .debug_info    0x00000000      0x2ac ultraljud.o
- .debug_abbrev  0x00000000      0x1a8 ultraljud.o
- .debug_loc     0x00000000       0xde ultraljud.o
- .debug_aranges
-                0x00000000       0x38 ultraljud.o
- .debug_ranges  0x00000000       0x28 ultraljud.o
- .debug_line    0x00000000      0x22d ultraljud.o
- .debug_str     0x00000000      0x228 ultraljud.o
- .comment       0x00000000       0x31 ultraljud.o
- .debug_frame   0x00000000       0x54 ultraljud.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(divsf3.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(divsf3.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(divsf3.o)
@@ -214,6 +223,7 @@ LOAD gyro.o
 LOAD Sensormodul.o
 LOAD SPI.o
 LOAD timer.o
+LOAD UART.o
 LOAD ultraljud.o
 START GROUP
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a
@@ -314,7 +324,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x1fe
+.text           0x00000000      0x334
  *(.vectors)
  .vectors       0x00000000       0x8c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1284p.o
                 0x00000000                __vector_default
@@ -402,40 +412,54 @@ END GROUP
                 0x000000ac                __vector_10
                 0x000000ac                __vector_16
                 0x000000ac                __vector_18
-                0x000000ac                __vector_20
                 0x000000ae                . = ALIGN (0x2)
  *(.text.*)
  .text.activateADC
                 0x000000ae       0x1a gyro.o
                 0x000000ae                activateADC
- .text.startConversion
-                0x000000c8        0xe gyro.o
-                0x000000c8                startConversion
- .text.getAngularRate
-                0x000000d6       0x2e gyro.o
-                0x000000d6                getAngularRate
- .text.main     0x00000104       0x36 Sensormodul.o
-                0x00000104                main
+ .text.main     0x000000c8        0xe Sensormodul.o
+                0x000000c8                main
  .text.setup_spi
-                0x0000013a       0x32 SPI.o
-                0x0000013a                setup_spi
+                0x000000d6       0x32 SPI.o
+                0x000000d6                setup_spi
  .text.send_spi
-                0x0000016c        0xc SPI.o
-                0x0000016c                send_spi
- .text.get_spi  0x00000178       0x24 SPI.o
-                0x00000178                get_spi
- .text.ss_low   0x0000019c        0x4 SPI.o
-                0x0000019c                ss_low
- .text.ss_high  0x000001a0        0x4 SPI.o
-                0x000001a0                ss_high
+                0x00000108        0xc SPI.o
+                0x00000108                send_spi
+ .text.get_spi  0x00000114       0x24 SPI.o
+                0x00000114                get_spi
+ .text.ss_low   0x00000138        0x4 SPI.o
+                0x00000138                ss_low
+ .text.ss_high  0x0000013c        0x4 SPI.o
+                0x0000013c                ss_high
  .text.__vector_13
-                0x000001a4       0x56 timer.o
-                0x000001a4                __vector_13
-                0x000001fa                . = ALIGN (0x2)
+                0x00000140       0x56 timer.o
+                0x00000140                __vector_13
+ .text.uart_read_char
+                0x00000196       0x10 UART.o
+                0x00000196                uart_read_char
+ .text.uart_read_string
+                0x000001a6       0x76 UART.o
+                0x000001a6                uart_read_string
+ .text.check_rx
+                0x0000021c       0x18 UART.o
+                0x0000021c                check_rx
+ .text.__vector_20
+                0x00000234       0x52 UART.o
+                0x00000234                __vector_20
+ .text.init_sensors
+                0x00000286       0x48 ultraljud.o
+                0x00000286                init_sensors
+ .text.get_sensor
+                0x000002ce       0x12 ultraljud.o
+                0x000002ce                get_sensor
+ .text.get_distance
+                0x000002e0       0x50 ultraljud.o
+                0x000002e0                get_distance
+                0x00000330                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000001fa        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                0x000001fa                _exit
-                0x000001fa                exit
+ .fini9         0x00000330        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000330                _exit
+                0x00000330                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -454,11 +478,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000001fa        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000330        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x000001fe                _etext = .
+                0x00000334                _etext = .
 
-.data           0x00800100        0x0 load address 0x000001fe
+.data           0x00800100        0x0 load address 0x00000334
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -469,23 +493,30 @@ END GROUP
                 0x00800100                _edata = .
                 0x00800100                PROVIDE (__data_end, .)
 
-.bss            0x00800100        0x2
+.bss            0x00800100      0x10f
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
+ .bss.buffer_size
+                0x00800100        0x1 UART.o
+                0x00800100                buffer_size
  *(COMMON)
- COMMON         0x00800100        0x2 timer.o
-                0x00800100                _t_func
-                0x00800102                PROVIDE (__bss_end, .)
-                0x000001fe                __data_load_start = LOADADDR (.data)
-                0x000001fe                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800101        0xc Sensormodul.o
+                0x00800101                sensor_list
+ COMMON         0x0080010d        0x2 timer.o
+                0x0080010d                _t_func
+ COMMON         0x0080010f      0x100 UART.o
+                0x0080010f                buffer
+                0x0080020f                PROVIDE (__bss_end, .)
+                0x00000334                __data_load_start = LOADADDR (.data)
+                0x00000334                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800102        0x0
-                0x00800102                PROVIDE (__noinit_start, .)
+.noinit         0x0080020f        0x0
+                0x0080020f                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800102                PROVIDE (__noinit_end, .)
-                0x00800102                _end = .
-                0x00800102                PROVIDE (__heap_start, .)
+                0x0080020f                PROVIDE (__noinit_end, .)
+                0x0080020f                _end = .
+                0x0080020f                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -531,6 +562,8 @@ END GROUP
  .comment       0x00000000       0x31 Sensormodul.o
  .comment       0x00000000       0x31 SPI.o
  .comment       0x00000000       0x31 timer.o
+ .comment       0x00000000       0x31 UART.o
+ .comment       0x00000000       0x31 ultraljud.o
 
 .note.gnu.build-id
  *(.note.gnu.build-id)
@@ -547,65 +580,82 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0xe0
+.debug_aranges  0x00000000      0x190
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x40 gyro.o
+                0x00000000       0x50 gyro.o
  .debug_aranges
-                0x00000040       0x20 Sensormodul.o
+                0x00000050       0x20 Sensormodul.o
  .debug_aranges
-                0x00000060       0x48 SPI.o
+                0x00000070       0x48 SPI.o
  .debug_aranges
-                0x000000a8       0x38 timer.o
+                0x000000b8       0x38 timer.o
+ .debug_aranges
+                0x000000f0       0x68 UART.o
+ .debug_aranges
+                0x00000158       0x38 ultraljud.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x817
+.debug_info     0x00000000     0x1034
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x366 gyro.o
- .debug_info    0x00000366      0x1ee Sensormodul.o
- .debug_info    0x00000554      0x179 SPI.o
- .debug_info    0x000006cd      0x14a timer.o
+ .debug_info    0x00000000      0x516 gyro.o
+ .debug_info    0x00000516      0x198 Sensormodul.o
+ .debug_info    0x000006ae      0x179 SPI.o
+ .debug_info    0x00000827      0x14a timer.o
+ .debug_info    0x00000971      0x417 UART.o
+ .debug_info    0x00000d88      0x2ac ultraljud.o
 
-.debug_abbrev   0x00000000      0x4d0
+.debug_abbrev   0x00000000      0x8d0
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x1a6 gyro.o
- .debug_abbrev  0x000001a6      0x16f Sensormodul.o
- .debug_abbrev  0x00000315       0xe7 SPI.o
- .debug_abbrev  0x000003fc       0xd4 timer.o
+ .debug_abbrev  0x00000000      0x254 gyro.o
+ .debug_abbrev  0x00000254      0x11d Sensormodul.o
+ .debug_abbrev  0x00000371       0xe7 SPI.o
+ .debug_abbrev  0x00000458       0xd4 timer.o
+ .debug_abbrev  0x0000052c      0x1fc UART.o
+ .debug_abbrev  0x00000728      0x1a8 ultraljud.o
 
-.debug_line     0x00000000      0x665
+.debug_line     0x00000000      0xb71
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000      0x209 gyro.o
- .debug_line    0x00000209      0x18a Sensormodul.o
- .debug_line    0x00000393      0x181 SPI.o
- .debug_line    0x00000514      0x151 timer.o
+ .debug_line    0x00000000      0x295 gyro.o
+ .debug_line    0x00000295       0xeb Sensormodul.o
+ .debug_line    0x00000380      0x181 SPI.o
+ .debug_line    0x00000501      0x151 timer.o
+ .debug_line    0x00000652      0x2f2 UART.o
+ .debug_line    0x00000944      0x22d ultraljud.o
 
-.debug_frame    0x00000000      0x1c8
+.debug_frame    0x00000000      0x3d0
  *(.debug_frame)
- .debug_frame   0x00000000       0x84 gyro.o
- .debug_frame   0x00000084       0x24 Sensormodul.o
- .debug_frame   0x000000a8       0x84 SPI.o
- .debug_frame   0x0000012c       0x9c timer.o
+ .debug_frame   0x00000000       0xa4 gyro.o
+ .debug_frame   0x000000a4       0x24 Sensormodul.o
+ .debug_frame   0x000000c8       0x84 SPI.o
+ .debug_frame   0x0000014c       0x9c timer.o
+ .debug_frame   0x000001e8      0x194 UART.o
+ .debug_frame   0x0000037c       0x54 ultraljud.o
 
-.debug_str      0x00000000      0x2e8
+.debug_str      0x00000000      0x434
  *(.debug_str)
- .debug_str     0x00000000      0x220 gyro.o
-                                0x254 (size before relaxing)
- .debug_str     0x00000220       0x60 Sensormodul.o
-                                0x210 (size before relaxing)
- .debug_str     0x00000280       0x21 SPI.o
+ .debug_str     0x00000000      0x248 gyro.o
+                                0x281 (size before relaxing)
+ .debug_str     0x00000248       0x88 Sensormodul.o
+                                0x1ef (size before relaxing)
+ .debug_str     0x000002d0       0x21 SPI.o
                                 0x1a9 (size before relaxing)
- .debug_str     0x000002a1       0x47 timer.o
+ .debug_str     0x000002f1       0x47 timer.o
                                 0x1a0 (size before relaxing)
+ .debug_str     0x00000338       0xd4 UART.o
+                                0x25e (size before relaxing)
+ .debug_str     0x0000040c       0x28 ultraljud.o
+                                0x228 (size before relaxing)
 
-.debug_loc      0x00000000      0x492
+.debug_loc      0x00000000      0xbff
  *(.debug_loc)
- .debug_loc     0x00000000      0x226 gyro.o
- .debug_loc     0x00000226       0x58 Sensormodul.o
- .debug_loc     0x0000027e      0x107 SPI.o
- .debug_loc     0x00000385      0x10d timer.o
+ .debug_loc     0x00000000      0x324 gyro.o
+ .debug_loc     0x00000324      0x107 SPI.o
+ .debug_loc     0x0000042b      0x10d timer.o
+ .debug_loc     0x00000538      0x5e9 UART.o
+ .debug_loc     0x00000b21       0xde ultraljud.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -625,12 +675,14 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xa0
+.debug_ranges   0x00000000      0x148
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x30 gyro.o
- .debug_ranges  0x00000030       0x10 Sensormodul.o
- .debug_ranges  0x00000040       0x38 SPI.o
- .debug_ranges  0x00000078       0x28 timer.o
+ .debug_ranges  0x00000000       0x58 gyro.o
+ .debug_ranges  0x00000058       0x10 Sensormodul.o
+ .debug_ranges  0x00000068       0x38 SPI.o
+ .debug_ranges  0x000000a0       0x28 timer.o
+ .debug_ranges  0x000000c8       0x58 UART.o
+ .debug_ranges  0x00000120       0x28 ultraljud.o
 
 .debug_macro
  *(.debug_macro)
