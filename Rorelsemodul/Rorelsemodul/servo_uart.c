@@ -245,15 +245,17 @@ void stretch_leg(uint8_t leg_id){
 }
 
 void reset_leg(uint8_t leg_id){
+	move_servo_dir(leg_list[leg_id-1][0], inner_servo_start);
+	_delay_ms(800);
+	
 	if(leg_id % 2 == 1){
-		move_servo_reg(leg_list[leg_id-1][2], l_outer_servo_start);
-		move_servo_reg(leg_list[leg_id-1][1], l_middle_servo_start);
+		move_servo_dir(leg_list[leg_id-1][1], l_middle_servo_start);
+		_delay_ms(800);
+		move_servo_dir(leg_list[leg_id-1][2], l_outer_servo_start);
 	}else{
-		move_servo_reg(leg_list[leg_id-1][2], r_outer_servo_start);
-		move_servo_reg(leg_list[leg_id-1][1], r_middle_servo_start);
+		
+		move_servo_dir(leg_list[leg_id-1][1], r_middle_servo_start);
+		_delay_ms(800);
+		move_servo_dir(leg_list[leg_id-1][2], r_outer_servo_start);
 	}
-		_delay_us(400);
-		move_servo_reg(leg_list[leg_id-1][0], inner_servo_start);
-			
-		_delay_us(300);
 }

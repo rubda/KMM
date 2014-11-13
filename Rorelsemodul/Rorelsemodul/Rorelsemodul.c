@@ -21,6 +21,7 @@ int main(void)
 	set_servo_speed();
 	robot_start_position();
 	//_delay_ms(2000);
+	//reset_leg(4);
 	_delay_ms(1000);
 	
 	
