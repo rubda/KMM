@@ -18,14 +18,19 @@ public class Main {
        // for (int i = 0; i < hej.length; i++) {
        //     System.out.println(hej[i]);
        // }
-       // System.out.println(hej[10]);
-        serialPortHandler.connect(args[0]);
-
-        try {
-            sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        // System.out.println(hej[10]);
+        while(true){
+            try {
+                serialPortHandler.connect(args[0]);
+                break;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                continue;
+            }
         }
+
+
+
 
         Communication communication =
                 new Communication(serialPortHandler.getSerialInputStream(),
