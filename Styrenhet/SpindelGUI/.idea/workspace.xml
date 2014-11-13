@@ -72,7 +72,7 @@
       <file leaf-file-name="Main.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="38" selection-start="803" selection-end="803" vertical-scroll-proportion="0.44" vertical-offset="150" max-vertical-offset="750">
+            <state line="24" column="44" selection-start="718" selection-end="718" vertical-scroll-proportion="0.5601023" vertical-offset="51" max-vertical-offset="765">
               <folding />
             </state>
           </provider>
@@ -99,7 +99,7 @@
       <file leaf-file-name="SerialPortHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/SerialPortHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="47" selection-start="3472" selection-end="3472" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1755">
+            <state line="26" column="0" selection-start="840" selection-end="840" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1755">
               <folding />
             </state>
           </provider>
@@ -135,7 +135,7 @@
       <file leaf-file-name="ParameterComponent.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ParameterComponent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="25" selection-start="602" selection-end="659" vertical-scroll-proportion="0.0" vertical-offset="345" max-vertical-offset="540">
+            <state line="23" column="25" selection-start="602" selection-end="659" vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="450">
               <folding />
             </state>
           </provider>
@@ -144,7 +144,7 @@
       <file leaf-file-name="Communication.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Communication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="31" selection-start="650" selection-end="705" vertical-scroll-proportion="0.0" vertical-offset="750" max-vertical-offset="1680">
+            <state line="40" column="0" selection-start="1041" selection-end="1041" vertical-scroll-proportion="0.0" vertical-offset="475" max-vertical-offset="1680">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -188,14 +188,15 @@
         <option value="$PROJECT_DIR$/src/SampleSPPServer.java" />
         <option value="$PROJECT_DIR$/src/hejsan.txt" />
         <option value="$PROJECT_DIR$/src/MainComponent.java" />
-        <option value="$PROJECT_DIR$/src/SerialPortHandler.java" />
         <option value="$PROJECT_DIR$/src/FrameWork.java" />
         <option value="$PROJECT_DIR$/src/Communication.java" />
+        <option value="$PROJECT_DIR$/src/SerialPortHandler.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="1" />
     <option name="y" value="22" />
     <option name="width" value="1280" />
     <option name="height" value="726" />
@@ -496,7 +497,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1280" height="726" extended-state="6" />
+    <frame x="1" y="22" width="1280" height="726" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -509,14 +510,14 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32724506" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32724506" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35159817" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35159817" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934928" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -826,13 +827,6 @@
         <state line="594" column="0" selection-start="25597" selection-end="25597" vertical-scroll-proportion="0.7133758" vertical-offset="8671" max-vertical-offset="8985" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ParameterComponent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="25" selection-start="602" selection-end="659" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/hejsan.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="6" selection-start="6" selection-end="6" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="90">
@@ -861,13 +855,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MainComponent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="0" selection-start="3676" selection-end="3676" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1770">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FrameWork.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="71" column="117" selection-start="2340" selection-end="2340" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1305">
@@ -875,25 +862,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/SerialPortHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/MainComponent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="47" selection-start="3472" selection-end="3472" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1755">
+        <state line="115" column="0" selection-start="3676" selection-end="3676" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1770">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ParameterComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="25" selection-start="602" selection-end="659" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Communication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="31" selection-start="650" selection-end="705" vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="1680">
+        <state line="40" column="0" selection-start="1041" selection-end="1041" vertical-scroll-proportion="0.0" vertical-offset="475" max-vertical-offset="1680">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/SerialPortHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="0" selection-start="840" selection-end="840" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1755">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="38" selection-start="803" selection-end="803" vertical-scroll-proportion="0.44" vertical-offset="150" max-vertical-offset="750">
+        <state line="24" column="44" selection-start="718" selection-end="718" vertical-scroll-proportion="0.5601023" vertical-offset="51" max-vertical-offset="765">
           <folding />
         </state>
       </provider>

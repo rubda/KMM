@@ -19,7 +19,8 @@ public class Main {
        //     System.out.println(hej[i]);
        // }
        // System.out.println(hej[10]);
-        serialPortHandler.connect("COM6");
+        serialPortHandler.connect(args[0]);
+
         try {
             sleep(4000);
         } catch (InterruptedException e) {
