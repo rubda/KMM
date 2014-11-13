@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.TooManyListenersException;
 
+import static java.lang.Thread.sleep;
+
 
 public class Main {
 
@@ -18,7 +20,11 @@ public class Main {
        // }
        // System.out.println(hej[10]);
         serialPortHandler.connect("COM6");
-
+        try {
+            sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Communication communication =
                 new Communication(serialPortHandler.getSerialInputStream(),

@@ -42,7 +42,6 @@ public class Communication implements SerialPortEventListener {
        }  catch (IOException ex) {
            System.err.println(ex.getMessage());
        }
-
     }
 
     // Receive and interpret a message
