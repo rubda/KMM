@@ -4,6 +4,9 @@
     <root id="archive" name="SpindelGUI.jar">
       <element id="library" level="project" name="RXTXcomm" />
       <element id="module-output" name="SpindelGUI" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
     </root>
   </artifact>
 </component>

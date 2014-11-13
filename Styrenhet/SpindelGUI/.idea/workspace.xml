@@ -72,7 +72,7 @@
       <file leaf-file-name="Main.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="48" selection-start="193" selection-end="193" vertical-scroll-proportion="0.2" vertical-offset="0" max-vertical-offset="690">
+            <state line="13" column="35" selection-start="365" selection-end="365" vertical-scroll-proportion="0.36" vertical-offset="0" max-vertical-offset="690">
               <folding />
             </state>
           </provider>
@@ -281,7 +281,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ControlUnit/ControlUnit.iml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -893,7 +893,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="48" selection-start="193" selection-end="193" vertical-scroll-proportion="0.2" vertical-offset="0" max-vertical-offset="690">
+        <state line="13" column="35" selection-start="365" selection-end="365" vertical-scroll-proportion="0.36" vertical-offset="0" max-vertical-offset="690">
           <folding />
         </state>
       </provider>
