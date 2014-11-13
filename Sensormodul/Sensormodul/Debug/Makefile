@@ -37,10 +37,10 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../display.c \
 ../gyro.c \
 ../Sensormodul.c \
 ../SPI.c \
-../timer.c \
 ../UART.c \
 ../ultraljud.c
 
@@ -52,34 +52,34 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+display.o \
 gyro.o \
 Sensormodul.o \
 SPI.o \
-timer.o \
 UART.o \
 ultraljud.o
 
 OBJS_AS_ARGS +=  \
+display.o \
 gyro.o \
 Sensormodul.o \
 SPI.o \
-timer.o \
 UART.o \
 ultraljud.o
 
 C_DEPS +=  \
+display.d \
 gyro.d \
 Sensormodul.d \
 SPI.d \
-timer.d \
 UART.d \
 ultraljud.d
 
 C_DEPS_AS_ARGS +=  \
+display.d \
 gyro.d \
 Sensormodul.d \
 SPI.d \
-timer.d \
 UART.d \
 ultraljud.d
 

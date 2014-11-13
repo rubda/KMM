@@ -29,7 +29,7 @@ ISR(TIMER1_COMPA_vect) {
 }
 #endif
 
-void wait(uint8_t prescaler, uint16_t ticks) {
+void CHILLAXA(uint8_t prescaler, uint16_t ticks) {
 	if (ticks == 0)
 	return;
 	TIMSK1 &= ~(_BV(OCIE1A));

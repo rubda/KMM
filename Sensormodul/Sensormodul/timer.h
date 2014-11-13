@@ -24,7 +24,7 @@
 
 void timer(uint8_t prescaler, uint16_t ticks, void (*f)());
 void timer_stop();
-void wait(uint8_t prescaler, uint16_t ticks);
+void CHILLAXA(uint8_t prescaler, uint16_t ticks);
 
 
 
