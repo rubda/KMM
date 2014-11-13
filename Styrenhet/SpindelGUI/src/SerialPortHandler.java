@@ -91,7 +91,6 @@ public class SerialPortHandler {
         return portArray;
     }
 
-
     /**
      * \brief Register listener for data available event
      *

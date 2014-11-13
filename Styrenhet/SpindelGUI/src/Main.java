@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.util.TooManyListenersException;
 
 
 public class Main {
@@ -10,17 +11,33 @@ public class Main {
     static String[] hej;
     public static void main(String[] args) throws IOException {
         FrameWork frameWork = new FrameWork();
-        SerialPortHandler sph = new SerialPortHandler();
-        hej = sph.listSerialPorts();
-        for (int i = 0; i < hej.length; i++) {
-            System.out.println(hej[i]);
-        }
-        System.out.println(hej[10]);
-        sph.connect(hej[10]);
+        SerialPortHandler serialPortHandler = new SerialPortHandler();
+       // hej = serialPortHandler.listSerialPorts();
+       // for (int i = 0; i < hej.length; i++) {
+       //     System.out.println(hej[i]);
+       // }
+       // System.out.println(hej[10]);
+        serialPortHandler.connect("COM6");
 
-        String serialMessage = "AT\r\n";
-        OutputStream outstream = sph.getSerialOutputStream();
-        outstream.write(serialMessage.getBytes());
+
+        Communication communication =
+                new Communication(serialPortHandler.getSerialInputStream(),
+                        serialPortHandler.getSerialOutputStream());
+
+        try {
+            serialPortHandler.addDataAvailableListener(communication);
+        } catch (TooManyListenersException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        while(true){
+
+        }
+
+
+        //String serialMessage = "AT\r\n";
+        //OutputStream outstream = serialPortHandler.getSerialOutputStream();
+        //outstream.write(serialMessage.getBytes());
 
     }
 }
