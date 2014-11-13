@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SpindelGUI">
+    <output-path>$PROJECT_DIR$/out/artifacts/SpindelGUI</output-path>
+    <root id="archive" name="SpindelGUI.jar">
+      <element id="library" level="project" name="RXTXcomm" />
+      <element id="module-output" name="SpindelGUI" />
+    </root>
+  </artifact>
+</component>

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="SpindelGUI.jar" />
+      <artifact name="SpindelGUI" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
@@ -72,7 +72,7 @@
       <file leaf-file-name="Main.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="27" selection-start="481" selection-end="481" vertical-scroll-proportion="0.44" vertical-offset="0" max-vertical-offset="690">
+            <state line="9" column="48" selection-start="193" selection-end="193" vertical-scroll-proportion="0.2" vertical-offset="0" max-vertical-offset="690">
               <folding />
             </state>
           </provider>
@@ -893,7 +893,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="27" selection-start="481" selection-end="481" vertical-scroll-proportion="0.44" vertical-offset="0" max-vertical-offset="690">
+        <state line="9" column="48" selection-start="193" selection-end="193" vertical-scroll-proportion="0.2" vertical-offset="0" max-vertical-offset="690">
           <folding />
         </state>
       </provider>
@@ -904,7 +904,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>SpindelGUI.jar</last-edited>
+          <last-edited>SpindelGUI</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
