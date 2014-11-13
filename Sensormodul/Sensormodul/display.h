@@ -26,9 +26,11 @@
 
 void wait(int n);
 void init_display();
-
-void displayClear();
-
+void clear_display();
+unsigned char int_to_char(int digit);
+void toggle_enable();
+void set_display(int mode, int instr);
+void write_to_display(int value);
 
 
 

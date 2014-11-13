@@ -27,11 +27,11 @@ int main(void)
 	//setup_spi();
 	//activateADC();
 	
-	_delay_ms(50);
+	_delay_ms(30);
 	init_display();
+	//write_to_display(9);
 	while(1)
     {
-		
 		//get_distance(get_sensor(SENSOR_ID));
 		//
 		////Kolla om styrmodulen har begärt något
