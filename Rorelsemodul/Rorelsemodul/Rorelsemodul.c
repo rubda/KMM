@@ -15,20 +15,23 @@ int main(void)
 	sei();
 	suart_init(1000000);
 		
-	uint8_t test1[] = {0xFF, 0x00};
-		
+	// BYT TAKTIK www.youtube.com/watch?v=Tsxe8AuSsUc                                                                     */
+	
+	uint8_t test2[] = {0x70, 0x01}; 
+	uint8_t test1[] = {0x8f, 0x02};
+
 	_delay_ms(1000);
-	set_servo_speed();
+	set_speed(0x00FF);
 	robot_start_position();
-	//_delay_ms(2000);
-	//reset_leg(4);
-	_delay_ms(1000);
-	
-	
+	_delay_ms(2000);
+		
 	while(1)
 	{
-		
+		take_step(0x0050);
+		_delay_ms(3000);
 	}
+	
+	return 0;
 }
 
 ISR(USART1_TX_vect){

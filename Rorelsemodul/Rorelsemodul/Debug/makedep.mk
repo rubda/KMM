@@ -4,6 +4,8 @@
 
 atmega-timers.c
 
+hexapod_control.c
+
 Rorelsemodul.c
 
 servo_uart.c
