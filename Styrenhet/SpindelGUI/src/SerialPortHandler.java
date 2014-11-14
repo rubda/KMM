@@ -29,6 +29,7 @@ public class SerialPortHandler {
             // open, close the port before throwing an exception.
             outStream = serialPort.getOutputStream();
             inStream = serialPort.getInputStream();
+
         } catch (NoSuchPortException e) {
             throw new IOException(e.getMessage());
         } catch (PortInUseException e) {
@@ -37,6 +38,7 @@ public class SerialPortHandler {
             serialPort.close();
             throw e;
         }
+
     }
 
     /**
@@ -90,7 +92,6 @@ public class SerialPortHandler {
         portArray = (String[]) portList.toArray(new String[0]);
         return portArray;
     }
-
 
     /**
      * \brief Register listener for data available event

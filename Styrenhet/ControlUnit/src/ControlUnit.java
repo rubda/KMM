@@ -64,20 +64,20 @@ public class ControlUnit implements SerialPortEventListener {
         } catch (TooManyListenersException ex) {
             System.err.println(ex.getMessage());
         }
-
-        OutputStream outStream = serialHelper.getSerialOutputStream();
-        data = data + "\r";
-        try {
-            outStream.write(data.getBytes());
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-
-        try {
-            // Sleep for 10-secs
-            Thread.sleep(10000);
-        } catch (InterruptedException ex) {
-        }
+//
+//        OutputStream outStream = serialHelper.getSerialOutputStream();
+//        data = data + "\r";
+//        try {
+//            outStream.write(data.getBytes());
+//        } catch (IOException ex) {
+//            System.err.println(ex.getMessage());
+//        }
+//
+//        try {
+//            // Sleep for 10-secs
+//            Thread.sleep(10000);
+//        } catch (InterruptedException ex) {
+//        }
     }
 
     private static void checkDisconnect(SerialHelper serialHelper) {
