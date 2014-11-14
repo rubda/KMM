@@ -61,3 +61,5 @@ void move_back_leg(uint8_t leg_id);
 uint16_t get_relative_speed(float multiplier);
 void move_middle_leg(uint8_t leg_id);
 void take_step(uint16_t length);
+void robot_init();
+void setup_first_step();

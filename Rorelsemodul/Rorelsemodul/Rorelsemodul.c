@@ -13,17 +13,14 @@
 int main(void)
 {	
 	sei();
-	suart_init(1000000);
+	robot_init();
 		
 	// BYT TAKTIK www.youtube.com/watch?v=Tsxe8AuSsUc                                                                     */
 	
 	uint8_t test2[] = {0x70, 0x01}; 
 	uint8_t test1[] = {0x8f, 0x02};
 
-	_delay_ms(1000);
-	set_speed(0x00FF);
-	robot_start_position();
-	_delay_ms(2000);
+	
 		
 	while(1)
 	{

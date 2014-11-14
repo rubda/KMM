@@ -3,8 +3,6 @@
 uint8_t speed[2] = {0xFF, 0x00};
 uint8_t *leg_list[6];
 
-
-
 void robot_init(){
 	leg_list[0] = LEG1;
 	leg_list[1] = LEG2;
@@ -13,6 +11,7 @@ void robot_init(){
 	leg_list[4] = LEG5;
 	leg_list[5] = LEG6;
 	
+	suart_init(1000000);
 	set_speed();
 	_delay_us(200);
 	robot_start_position();
@@ -87,6 +86,7 @@ void robot_start_position(){
 	
 	SERVO_ACTION;
 }
+
 void move_servo_reg(uint8_t id, uint8_t *position){
 	suart_command_reg_write(id, GOAL_POSITION_L, position, 2);
 }
@@ -147,19 +147,73 @@ void prepare_step_backward(int8_t leg_id, uint16_t length){
 		pos += length;
 	}else{
 		pos -= length;
-		uint8_t pos2[] = {pos, pos >> 8};
 	}
+	
+	uint8_t pos2[] = {pos, pos >> 8};
 	//move_servo_reg(inner_servo(leg_id), pos2);
 }
 
+uint8_t* int_to_list(uint16_t i){
+	uint8_t pos[2] = {i, i >> 8};
+	return pos;
+}
+
+// TODO: Kolla plus och minus för benen
 void move_leg_forward(uint8_t leg_id, uint16_t length){
+	uint16_t start_pos = 0x01FF;
+	
 	if(leg_id == 1 || leg_id == 2){
-		move
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos));
+	}else if(leg_id == 3){
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos - (length / 2)));
+	}else if(leg_id == 4){
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos + (length / 2)));
+	}else if(leg_id == 5){
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos - length));
+	}else{
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos + length));
 	}
 }
 
-void take_step(uint16_t length){
+//TODO: Kolla plus och minus för benen
+void move_leg_backward(uint8_t leg_id, uint16_t length){
+	uint16_t start_pos = 0x01FF;
+	
+	if(leg_id == 1){
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos - length));
+	}else if(leg_id == 2){
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos + length));
+	}else if(leg_id == 3){
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos - (length / 2)));
+	}else if(leg_id == 4){
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos + (length / 2)));
+	}else{
+		move_servo_reg(inner_servo(leg_id), int_to_list(start_pos));
+	}
+}
+
+void setup_first_step(uint16_t length){
 	lift_leg(1);
+	lift_leg(4);
+	lift_leg(5);
+	SERVO_ACTION;
+	_delay_ms(1000);
+	
+	move_leg_forward(1, length);
+	move_leg_forward(4, length);
+	move_leg_forward(5, length);
+	SERVO_ACTION;
+	_delay_ms(1000);
+	
+	put_down_leg(1);
+	put_down_leg(4);
+	put_down_leg(5);
+	SERVO_ACTION;
+	_delay_ms(1000);
+}
+
+void take_step(uint16_t length){
+	/*lift_leg(1);
 	lift_leg(4);
 	lift_leg(5);
 	SERVO_ACTION;
@@ -199,5 +253,48 @@ void take_step(uint16_t length){
 	put_down_leg(3);
 	put_down_leg(6);
 	SERVO_ACTION;
+	_delay_ms(1000);*/
+	
+	lift_leg(2);
+	lift_leg(3);
+	lift_leg(6);
+	SERVO_ACTION;
 	_delay_ms(1000);
+	
+	move_leg_backward(1, length);
+	move_leg_backward(4, length);
+	move_leg_backward(5, length);
+	move_leg_forward(2, length);
+	move_leg_forward(3, length);
+	move_leg_forward(6, length);
+	SERVO_ACTION;
+	_delay_ms(1000);
+	
+	put_down_leg(2);
+	put_down_leg(3);
+	put_down_leg(6);
+	SERVO_ACTION;
+	_delay_ms(1000);
+	
+	lift_leg(1);
+	lift_leg(4);
+	lift_leg(5);
+	SERVO_ACTION;
+	_delay_ms(1000);
+	
+	move_leg_backward(2, length);
+	move_leg_backward(3, length);
+	move_leg_backward(6, length);
+	move_leg_forward(1, length);
+	move_leg_forward(4, length);
+	move_leg_forward(5, length);
+	SERVO_ACTION;
+	_delay_ms(1000);
+	
+	put_down_leg(1);
+	put_down_leg(4);
+	put_down_leg(5);
+	SERVO_ACTION;
+	_delay_ms(1000);
+	
 };
