@@ -19,6 +19,8 @@ public class Communication implements SerialPortEventListener {
     private InputStream inStream;
     private static OutputStream outStream;
 
+    private int lastindex = 0;
+
     public Communication(String message){
     }
 
@@ -79,14 +81,20 @@ public class Communication implements SerialPortEventListener {
             int availableBytes = inStream.available();
             if (availableBytes > 0) {
                 // Read the serial port
-                inStream.read(readBuffer, 0, availableBytes);
+                inStream.read(readBuffer, lastindex, availableBytes);
 
                 // Print it out
                 System.out.println("Recv :" +
                         new String(readBuffer, 0, availableBytes));
 
+                if(readBuffer.toString().charAt(readBuffer.length) == (';')){
 
-                receive(new String(readBuffer, 0, availableBytes));
+                    receive(new String(readBuffer, 0, availableBytes));
+                    lastindex = 0;
+                }
+                else   {
+                    lastindex = availableBytes;
+                }
 
             }
         } catch (IOException e) {
