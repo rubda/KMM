@@ -18,6 +18,9 @@
 
 int main(void)
 {
+	uint16_t DISTANCE = 0;
+	
+	int ANGLE = 0;
 	
 	//int SENSOR_ID = 0;
 	//int ANGLE = 0;
@@ -28,10 +31,20 @@ int main(void)
 	//activateADC();
 	
 	_delay_ms(30);
+	setup_spi();
+	activateADC();
 	init_display();
-	//write_to_display(9);
+	init_sensors();
 	while(1)
     {
+		
+		
+		distance_to_display(4);
+		//ANGLE = rotateTo(90);
+		//distance_to_display(ANGLE);
+		//DISTANCE = get_distance(get_sensor(4));
+		//distance_to_display(DISTANCE);
+		
 		//get_distance(get_sensor(SENSOR_ID));
 		//
 		////Kolla om styrmodulen har begärt något
