@@ -66,7 +66,7 @@ void init_display()
 	
 	//write_to_display(2, 0);
 	//data_to_display(9);
-	BOSSE();
+	//BOSSE();
 	//distance_to_display(120);
 	
 }

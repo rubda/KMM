@@ -7,7 +7,6 @@
 
 #include "ultraljud.h"
 #include <avr/io.h>
-#include "timer.h"
 
 void init_sensors()
 {

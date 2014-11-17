@@ -21,7 +21,17 @@ void uart_init(uint16_t settings) // 0x0340
 
 void check_rx() {
 	if (bit_is_set(UCSR0A, RXC0)){
-		buffer_size = uart_read_string(buffer, 255);
+	buffer_size = uart_read_string(buffer, 255);
+		
+	/*int i;
+	
+	for (i = 0; i < buffer_size+1; ++i){
+		set_display(0x00, 0x80+i);
+		toggle_enable();
+	
+		set_display(0x02, buffer[i]);
+		toggle_enable();
+	}*/
 	}
 }
 
@@ -50,15 +60,16 @@ int uart_read_string(char *s, int size)
 	
 	while(i < size - 1){
 		c = uart_read_char();
-		if(c == '\0')
+		if(c == ';'){
+			s[i] = c;
 			break;
-		else if(c == '#'){
+		}else if(c == '#'){
 			i = 0;
 		}
 		s[i++] = c;
 	}
 	
-	s[i] = 0;
+	s[i + 1] = 0;
 	
 	return i + 1;
 }

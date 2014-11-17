@@ -1,4 +1,4 @@
-#define F_CPU 16000000UL
+#define F_CPU 8000000UL
 
 #define BV(bit)               (1 << bit)
 #define set_bit(byte, bit)    (byte |= BV(bit))  // old sbi()
@@ -8,6 +8,9 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+
+extern char buffer[256];
+extern uint8_t buffer_size;
 
 struct attribute 
 {
