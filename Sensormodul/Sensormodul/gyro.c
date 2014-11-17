@@ -31,7 +31,8 @@ void activateADC()
 	_delay_us(200);
 }
 
-void startConversion(){
+void startConversion()
+{
 	uint16_t REG = 0;
 	
 	//Steg 2 conversion

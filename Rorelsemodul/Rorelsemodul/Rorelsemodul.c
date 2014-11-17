@@ -7,30 +7,29 @@
  *  Author: Carl Arvidsson
  */ 
 
-#include "servo_uart.h"
+#include "hexapod_control.h"
 #include <avr/interrupt.h>
+#include "UART.h"
+
+// BYT TAKTIK www.youtube.com/watch?v=Tsxe8AuSsUc
+// Position: 0x01 = 0.29 grader 
+// Speed: 0x01 = 0.111 rpm
 
 int main(void)
 {	
 	sei();
-	suart_init(1000000);
-		
-	uint8_t test1[] = {0xFF, 0x00};
-		
-	_delay_ms(1000);
-	set_servo_speed();
-	robot_start_position();
-	//_delay_ms(2000);
-	_delay_ms(1000);
+	uart_init(0x0010);
 	
+	_delay_ms(100);
+	uart_send_string("Hejsan");
 	
 	while(1)
 	{
-		
-	}
+	}	                                                               
 }
 
 ISR(USART1_TX_vect){
 	SUART_RX_ACTIVE;
 }
+
 

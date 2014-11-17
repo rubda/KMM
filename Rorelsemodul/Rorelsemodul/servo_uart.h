@@ -16,40 +16,6 @@
 #define SUART_TX_ACTIVE PORTD |= (1 << PORTD5)
 #define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD5)
 
-/************************************************************************/
-/* Servo address definitions                                                                     */
-/************************************************************************/
-#define BROADCAST_ID 0xFE
-#define GOAL_POSITION_L 0x1E
-#define GOAL_POSITION_H 0x1F
-#define MOVING_SPEED_L 0x20
-#define MOVING_SPEED_H 0x21
-#define PRESENT_POSITION_L 0x24
-#define PRESENT_POSITION_H 0x25
-#define PRESENT_SPEED_L 0x26
-#define PRESENT_SPEED_H 0x27
-#define PRESENT_LOAD_L 0x28
-#define PRESENT_LOAD_H 0x29
-#define ID_ADDR 0x03
-
-extern uint8_t speed[2];
-extern uint8_t r_middle_servo_start[2];
-extern uint8_t r_outer_servo_start[2];
-extern uint8_t l_middle_servo_start[2];
-extern uint8_t l_outer_servo_start[2];
-extern uint8_t inner_servo_start[2];
-
-extern uint8_t l_middle_servo_lift[2];
-extern uint8_t r_middle_servo_lift[2];
-
-extern uint8_t leg1[3];
-extern uint8_t leg2[3];
-extern uint8_t leg3[3];
-extern uint8_t leg4[3];
-extern uint8_t leg5[3];
-extern uint8_t leg6[3];
-
-extern uint8_t *leg_list[6];
 
 struct suart_response
 {
@@ -77,12 +43,3 @@ servo_response suart_command_write_data(uint8_t id, uint8_t data_addr, uint8_t *
 servo_response suart_command_reg_write(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len);
 servo_response suart_command_action(uint8_t id);
 servo_response suart_command_reset(uint8_t id);
-
-void robot_start_position();
-void set_servo_speed();
-void move_servo_dir(uint8_t id, uint8_t *position);
-void move_servo_reg(uint8_t id, uint8_t *position);
-void lift_leg(uint8_t leg_id);
-void put_down_leg(uint8_t leg_id);
-void stretch_leg(uint8_t leg_id);
-void reset_leg(uint8_t leg_id);
