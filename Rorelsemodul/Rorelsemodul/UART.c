@@ -32,6 +32,7 @@ ISR(USART0_RX_vect){
 char uart_read_char()
 {
 	while(!bit_is_set(UCSR0A, RXC0));
+	
 	return UDR0;
 }
 

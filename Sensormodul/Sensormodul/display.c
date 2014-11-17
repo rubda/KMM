@@ -16,46 +16,49 @@ void wait(int n){
 
 void init_display()
 {
-		DDRB |= (1 << DISP_RS);
-		DDRB |= (1 << DISP_RW);
-		DDRB |= (1 << DISP_E);
-		DDRC |= (1 << DISP_DB7);
-		DDRC |= (1 << DISP_DB6);
-		DDRD |= (1 << DISP_DB5);
-		DDRD |= (1 << DISP_DB4);
-		DDRD |= (1 << DISP_DB3);
-		DDRD |= (1 << DISP_DB2);
-		DDRD |= (1 << DISP_DB1);
-		DDRD |= (1 << DISP_DB0);
-		
-		PORTB &= ~(1 << DISP_E);
-		_delay_ms(1000);
-	
-		// Function set
-		set_display(0x00, 0x38);
-		toggle_enable();
-
-		// Display on
-		set_display(0x00, 0x0F);
-		toggle_enable();
-		
-		// Clear display
-		clear_display();
-		toggle_enable();
-		wait(2000);
-	
-		// Entry mode
-		set_display(0x00, 0x06);
-		//_delay_us(1000);
-		toggle_enable();
-		wait(2000);
-		
-		//write 4
-		set_display(0x00,0x82);
-		toggle_enable();
-		set_display(0x02,0x34);
-		toggle_enable();
-		wait(40);
+    DDRB |= (1 << DISP_RS);
+    DDRB |= (1 << DISP_RW);
+    DDRB |= (1 << DISP_E);
+    DDRC |= (1 << DISP_DB7);
+    DDRC |= (1 << DISP_DB6);
+    DDRD |= (1 << DISP_DB5);
+    DDRD |= (1 << DISP_DB4);
+    DDRD |= (1 << DISP_DB3);
+    DDRD |= (1 << DISP_DB2);
+    DDRD |= (1 << DISP_DB1);
+    DDRD |= (1 << DISP_DB0);
+    
+    PORTB &= ~(1 << DISP_E);
+    _delay_ms(20);
+    
+    // Detta borde funka, men fråga mig inte varför
+    set_display(0x00, 0x30);
+    toggle_enable();
+    
+    set_display(0x00, 0x30);
+    toggle_enable();
+    
+    set_display(0x00, 0x30);
+    toggle_enable();
+    
+    // Function set
+    set_display(0x00, 0x38);
+    toggle_enable();
+    
+    // Display on
+    set_display(0x00, 0x0F);
+    toggle_enable();
+    
+    // Clear display
+    clear_display();
+    toggle_enable();
+    //wait(2000);
+    
+    // Entry mode
+    set_display(0x00, 0x06);
+    //_delay_us(1000);
+    toggle_enable();
+    //wait(2000);
 
 }
 
@@ -68,11 +71,11 @@ void clear_display()
 void toggle_enable()
 {
 	PORTB |= (1 << DISP_E);
-	wait(40);
-	//_delay_ms(42);
+	//wait(40);
+	_delay_ms(10);
 	PORTB &= ~(1 << DISP_E);
-	wait(40);
-	//_delay_ms(42);
+	//wait(40);
+	_delay_ms(10);
 }
 
 
