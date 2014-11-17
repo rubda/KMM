@@ -42,9 +42,9 @@ public class Main {
             System.err.println(ex.getMessage());
         }
 
-        while(true){
+      //  while(true){
 
-        }
+       // }
 
 
         //String serialMessage = "AT\r\n";

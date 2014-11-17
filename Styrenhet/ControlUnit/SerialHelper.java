@@ -75,7 +75,7 @@ public class SerialHelper {
     /**
      * \brief Connect to the selected serial port with 57600bps-8N1 mode
      */
-    public void connect(String portName) throws IOException {
+    public void connect(String portName, int baudRate) throws IOException {
         try {
             // Obtain a CommPortIdentifier object for the port you want to open
             CommPortIdentifier portId =
@@ -85,7 +85,7 @@ public class SerialHelper {
             serialPort = (SerialPort) portId.open("Demo application", 5000);
 
             // Set the parameters of the connection.
-            setSerialPortParameters();
+            setSerialPortParameters(baudRate);
 
             // Open the input and output streams for the connection.
             // If they won't open, close the port before throwing an
@@ -121,9 +121,9 @@ public class SerialHelper {
     /**
      * \brief Sets the serial port parameters to 57600bps-8N1
      */
-    protected void setSerialPortParameters() throws IOException {
+    protected void setSerialPortParameters(int baudRate) throws IOException {
 
-        final int baudRate = 57600; // 57600bps
+        //final int baudRate = 57600; // 57600bps
 
         try {
             // Set serial port to 57600bps-8N1..my favourite
