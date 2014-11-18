@@ -12,19 +12,21 @@
 #ifndef ULTRALJUD_H_
 #define ULTRALJUD_H_
 
+#include "UART.h"
+
 struct soundSensor
 {
 	uint8_t id;
-	uint8_t Distance;
+	uint16_t Distance;
 };
 
 struct soundSensor sensor_list[6];
 
 void init_sensors();
-void get_data(struct soundSensor);
 struct soundSensor get_sensor(uint8_t id);
-uint8_t get_distance(struct soundSensor);
-
+uint16_t get_distance(struct soundSensor);
+uint16_t get_data(uint8_t id);
+void get_sensors_distance(char**);
 
 
 	

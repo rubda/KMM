@@ -7,7 +7,7 @@
 
 #include "ultraljud.h"
 #include <avr/io.h>
-#include "timer.h"
+
 
 void init_sensors()
 {
@@ -32,9 +32,10 @@ void init_sensors()
 	sensor_list[5] = (struct soundSensor) {0b00010100, 0};
 }
 
-void get_data(struct soundSensor sensor) 
+uint16_t get_data(uint8_t id)
 {
-	sensor.Distance = get_distance(sensor);
+	sensor_list[id].Distance = get_distance(sensor_list[id]);
+	return sensor_list[id].Distance;
 }
 
 struct soundSensor get_sensor(uint8_t id)
@@ -42,10 +43,10 @@ struct soundSensor get_sensor(uint8_t id)
 	return sensor_list[id];
 }
 
-uint8_t get_distance(struct soundSensor sensor)
+uint16_t get_distance(struct soundSensor sensor)
 {
-	uint8_t DISTANCE;
-	uint8_t TIME = 0; 
+	uint16_t DISTANCE;
+	uint16_t TIME = 0; 
 		
 	// Måste se till att rätt bitar ändras först
 	PORTA = PORTA & 0b11100011;
@@ -65,6 +66,13 @@ uint8_t get_distance(struct soundSensor sensor)
 		}
 	_delay_ms(20); //för test?
 		
-	DISTANCE = TIME/58;
+	DISTANCE = TIME/40;
 	return DISTANCE;	
+}
+
+void get_sensors_distance(char** data){
+	int i;
+	for (i = 0; i < 6; ++i){
+		 data[i] = int_to_string(get_data(i));
+	}
 }

@@ -12,11 +12,11 @@
 
 
 #include <util/delay.h>
-int isRotated = 0; 
+int IS_ROTATED = 0; 
 
 
 
-void activateADC()
+void activate_adc()
 {
 	uint16_t REG = 0;
 	
@@ -26,12 +26,12 @@ void activateADC()
 	REG = get_spi(0xFF);
 	ss_high();
 	
-	if (REG & (1 << 16)) activateADC();
+	if (REG & (1 << 16)) activate_adc();
 	REG = 0;
 	_delay_us(200);
 }
 
-void startConversion()
+void start_conversion()
 {
 	uint16_t REG = 0;
 	
@@ -40,12 +40,12 @@ void startConversion()
 	send_spi(START_CONVERSION);
 	REG = get_spi(0xFF);
 	ss_high();
-	if (REG & (1 << 16)) startConversion();
+	if (REG & (1 << 16)) start_conversion();
 	REG = 0;
 }
 
 
-uint16_t getAngularRate()
+uint16_t get_angular_rate()
 {
 	uint16_t REG = 0;
 	uint16_t DATA = 0;
@@ -55,7 +55,7 @@ uint16_t getAngularRate()
 	send_spi(POLL);
 	_delay_us(200);
 	
-	if (REG & (1 << 16)) getAngularRate();
+	if (REG & (1 << 16)) get_angular_rate();
 	REG = get_spi(0xFF);
 	ss_high();
 	
@@ -65,7 +65,7 @@ uint16_t getAngularRate()
 	return DATA;		
 }	
 
-int adcToAngularRate(uint16_t data)
+int adc_to_angular_rate(uint16_t data)
 	{
 		int OFFSET = 2500;
 		
@@ -75,7 +75,7 @@ int adcToAngularRate(uint16_t data)
 	}
 	
 	
-void rotateTo(int angle)
+int rotate_to(int angle)
 {
 	uint16_t rate;
 	int ACHIEVED_ANGLE = 0;
@@ -84,30 +84,31 @@ void rotateTo(int angle)
 	if (angle >= 0){
 		while(angle-OFFSET > ACHIEVED_ANGLE)
 		{		
-			startConversion();
-			rate = getAngularRate();
-			ACHIEVED_ANGLE += adcToAngularRate(rate);
+			start_conversion();
+			rate = get_angular_rate();
+			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
 			_delay_ms(1000); //behövs nog inte
 		}
-		hasRotated(1);
+		has_rotated(1);
 	}else{
 		while(ACHIEVED_ANGLE > angle+OFFSET)
 		{
-			startConversion();
-			rate = getAngularRate();
-			ACHIEVED_ANGLE += adcToAngularRate(rate);
+			start_conversion();
+			rate = get_angular_rate();
+			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
 			_delay_ms(1000); //behövs nog inte
 		}
-		hasRotated(1);
+		has_rotated(1);
 	}	
+	return ACHIEVED_ANGLE;
 }
 
-void hasRotated(int bit)
+void has_rotated(int bit)
 {
-	isRotated = bit;
+	IS_ROTATED = bit;
 }
 
-int getIsRotated()
+int get_is_rotated()
 {
-	return isRotated;
+	return IS_ROTATED;
 }
