@@ -21,6 +21,9 @@ public class MainComponent extends JComponent {
 
         InputMap map = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
+        map.put(KeyStroke.getKeyStroke("pressed I"), "initiate");
+        map.put(KeyStroke.getKeyStroke("pressed S"), "sendSensorString");
+
 
         map.put(KeyStroke.getKeyStroke("pressed LEFT"), "rotateLeft");
         map.put(KeyStroke.getKeyStroke("pressed RIGHT"), "rotateRight");
@@ -33,6 +36,18 @@ public class MainComponent extends JComponent {
         map.put(KeyStroke.getKeyStroke("released UP"), "stopWalkingForward");
         map.put(KeyStroke.getKeyStroke("released DOWN"), "stopWalkingBackwards");
 
+
+        Action initiate = new AbstractAction(){
+            public void actionPerformed(final ActionEvent e) {
+                    Communication.sendAction("#init:0;");
+            }
+        };
+
+        Action sendSensorString = new AbstractAction(){
+            public void actionPerformed(final ActionEvent e) {
+                Communication.sendAction("#action:RF;");
+            }
+        };
 
         Action rotateLeft = new AbstractAction(){
             public void actionPerformed(final ActionEvent e) {
@@ -114,6 +129,8 @@ public class MainComponent extends JComponent {
             }
         };
 
+        getActionMap().put("initiate", initiate);
+        getActionMap().put("sendSensorString", sendSensorString);
         getActionMap().put("rotateLeft", rotateLeft);
         getActionMap().put("rotateRight", rotateRight);
         getActionMap().put("walkForward", walkForward);

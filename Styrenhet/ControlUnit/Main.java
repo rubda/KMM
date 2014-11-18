@@ -1,8 +1,5 @@
 import java.util.TooManyListenersException;
 
-/**
- * Created by danielfalk on 11/17/14.
- */
 public class Main {
 
     public static void main(String[] args) {
@@ -21,7 +18,7 @@ public class Main {
         checkListSerialPorts(serialHelperRobot);
 
         checkConnect(serialHelperComputer, args[0], 57600);
-        checkConnect(serialHelperSensors, args[1], 57600);
+        checkConnect(serialHelperSensors, args[1], 9600);
         checkConnect(serialHelperRobot, args[2], 9600);
 
 
@@ -85,7 +82,6 @@ public class Main {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-
     }
 
 /*    private static void checkAddDataAvailableListener(SerialHelper serialHelper, String data) {
@@ -101,28 +97,25 @@ public class Main {
         } catch (TooManyListenersException ex) {
             System.err.println(ex.getMessage());
         }*/
-//
-//        OutputStream outStream = serialHelper.getSerialOutputStream();
-//        data = data + "\r";
-//        try {
-//            outStream.write(data.getBytes());
-//        } catch (IOException ex) {
-//            System.err.println(ex.getMessage());
-//        }
-//
-//        try {
-//            // Sleep for 10-secs
-//            Thread.sleep(10000);
-//        } catch (InterruptedException ex) {
-//        }
-//    }
+
+/*      OutputStream outStream = serialHelper.getSerialOutputStream();
+        data = data + "\r";
+        try {
+            outStream.write(data.getBytes());
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        try {
+            // Sleep for 10-secs
+            Thread.sleep(10000);
+        } catch (InterruptedException ex) {
+        }
+    }*/
 
     private static void checkDisconnect(SerialHelper serialHelper) {
         System.out.println("Disconnect from serial port");
         serialHelper.disconnect();
         System.out.println("Disconnected");
     }
-
-
-
 }
