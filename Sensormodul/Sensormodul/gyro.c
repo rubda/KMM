@@ -75,7 +75,7 @@ int adcToAngularRate(uint16_t data)
 	}
 	
 	
-void rotateTo(int angle)
+int rotateTo(int angle)
 {
 	uint16_t rate;
 	int ACHIEVED_ANGLE = 0;
@@ -100,6 +100,7 @@ void rotateTo(int angle)
 		}
 		hasRotated(1);
 	}	
+	return ACHIEVED_ANGLE;
 }
 
 void hasRotated(int bit)

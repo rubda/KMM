@@ -1,23 +1,16 @@
+#define F_CPU 8000000UL
+
 #define BV(bit)               (1 << bit)
 #define set_bit(byte, bit)    (byte |= BV(bit))  // old sbi()
 #define clear_bit(byte, bit)  (byte &= ~BV(bit)) // old cbi()
 #define toggle_bit(byte, bit) (byte ^= BV(bit))
 
-#define PRESCALER 1 //Beroende på vad som passar för att timea RX
-#define TICKS 1		//Beroende på vad som passar för att timea RX
-
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-//#include "atmega-timers.h"
 
-/************************************************************************/
-/* Baudrate: 19200                                                      */
-/************************************************************************/
-#define UART_SETTINGS 0x0001
-
-#define UART_RX PORTD2
-#define UART_TX PORTD3
+extern char buffer[256];
+extern uint8_t buffer_size;
 
 struct attribute 
 {
@@ -34,11 +27,11 @@ struct uart_message
 };
 typedef struct uart_message uart_message;
 
-void uart_init(long baud);
+void uart_init(uint16_t settings);
 
 uint8_t got_message();
 uart_message get_message();
-//uart_message create_message(char name[], char attributes[][]);
-void send_message(uart_message m);
-void uart_send_string(char *s, uint8_t size);
+void send_message(char name[], const char *attributes[], uint8_t attr_length);
+void uart_send_string(const char *s);
 void uart_send_char(uint8_t data);
+char* int_to_string(uint16_t digit);

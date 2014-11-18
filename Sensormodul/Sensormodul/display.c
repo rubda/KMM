@@ -6,6 +6,7 @@
  */ 
 #include "display.h"
 #include <util/delay.h>
+#include "UART.h"
 int wait_time = 40;
 
 void wait(int n){
@@ -29,7 +30,7 @@ void init_display()
     DDRD |= (1 << DISP_DB0);
     
     PORTB &= ~(1 << DISP_E);
-    _delay_ms(20);
+    _delay_ms(1000);
     
     // Detta borde funka, men fråga mig inte varför
     set_display(0x00, 0x30);
@@ -52,14 +53,22 @@ void init_display()
     // Clear display
     clear_display();
     toggle_enable();
-    //wait(2000);
+    //wait(1000);
     
     // Entry mode
     set_display(0x00, 0x06);
     //_delay_us(1000);
     toggle_enable();
-    //wait(2000);
-
+    //wait(1000);
+	
+	//set_display(0x00, 0x02);
+	//toggle_enable();
+	
+	//write_to_display(2, 0);
+	//data_to_display(9);
+	//BOSSE();
+	//distance_to_display(120);
+	
 }
 
 void clear_display()
@@ -71,13 +80,12 @@ void clear_display()
 void toggle_enable()
 {
 	PORTB |= (1 << DISP_E);
-	//wait(40);
+	//wait(20);
 	_delay_ms(10);
 	PORTB &= ~(1 << DISP_E);
-	//wait(40);
+	//wait(20);
 	_delay_ms(10);
 }
-
 
 void set_display(int mode, int instr)
 {	
@@ -101,6 +109,9 @@ void set_display(int mode, int instr)
 	//wait(150);
 	_delay_us(150);
 	*/
+	
+	_delay_ms(10);
+	
 	PORTC |= (((instr >> 7) & 1) << DISP_DB7);
 	PORTC |= (((instr >> 6) & 1) << DISP_DB6);
 	PORTD |= (((instr >> 5) & 1) << DISP_DB5);
@@ -110,26 +121,93 @@ void set_display(int mode, int instr)
 	PORTD |= (((instr >> 1) & 1) << DISP_DB1);
 	PORTD |= (((instr >> 0) & 1) << DISP_DB0);
 	
+	_delay_ms(10);
+	
 /*	_delay_us(80);
 	//wait(80);
 	PORTB &= ~(1 << DISP_E);
 	//wait(250);
 	_delay_us(250);*/
 }
-	
-void write_to_display(value)
+
+void BOSSE()
 {
-	unsigned char symbol = int_to_char(value);
+	int i;
+	char name[] = "BOSSE";
 	
-	set_display(0x00, 0x86);
+	for (i = 0; i < 5; ++i){
+		set_display(0x00, 0x85+i);
+		toggle_enable();
+	
+		set_display(0x02, name[i]);
+		toggle_enable();
+		}
+}
+	
+void write_to_display(uint16_t value, int pos)
+{
+	uint16_t symbol = int_to_char(value);
+	
+	set_display(0x00, 0x95+pos);
 	toggle_enable();
 	
 	set_display(0x02, symbol);
 	toggle_enable();
 }
 
-unsigned char int_to_char(int digit)
+void distance_to_display(int id)
 {
-	unsigned char data = '0' + digit;
+	char name[] = "DIST";
+	char space[] = " ";
+	char col[] = ":";
+	uint16_t  DISTANCE = get_distance(get_sensor(id));
+	
+	uint16_t FORTH = DISTANCE / 1000;
+	uint16_t THIRD = DISTANCE / 100 - (DISTANCE / 1000)*10;
+	uint16_t SECOND = (DISTANCE / 10) - (DISTANCE / 100)*10;
+	uint16_t FIRST = (DISTANCE / 1) - (DISTANCE / 10)*10;
+	
+	int i;
+	for (i = 0; i < 4; ++i){
+		set_display(0x00, 0x90+i);
+		toggle_enable();
+	
+		set_display(0x02, name[i]);
+		toggle_enable();
+		}
+	
+	//Ett mellanslag
+	set_display(0x00, 0x94);
+	toggle_enable();
+	
+	set_display(0x02, space[0]);
+	toggle_enable();	
+	
+	//Id
+	write_to_display(id, 0);
+	
+	//Ett kolon
+	set_display(0x00, 0x96);
+	toggle_enable();
+	
+	set_display(0x02, col[0]);
+	toggle_enable();
+	
+	//Ett mellanslag
+	set_display(0x00, 0x97);
+	toggle_enable();
+	
+	set_display(0x02, space[0]);
+	toggle_enable();		
+		
+	write_to_display(FORTH, 3);
+	write_to_display(THIRD, 4);
+	write_to_display(SECOND, 5);
+	write_to_display(FIRST, 6);
+}
+
+uint16_t int_to_char(uint16_t digit)
+{
+	uint16_t data = '0' + digit;
 	return data; 
 }
