@@ -1,3 +1,6 @@
+#ifndef UART_H_
+#define UART_H_
+
 #define F_CPU 8000000UL
 
 #define BV(bit)               (1 << bit)
@@ -35,3 +38,6 @@ void send_message(char name[], const char *attributes[], uint8_t attr_length);
 void uart_send_string(const char *s);
 void uart_send_char(uint8_t data);
 char* int_to_string(uint16_t digit);
+int string_to_int(char *string);
+
+#endif

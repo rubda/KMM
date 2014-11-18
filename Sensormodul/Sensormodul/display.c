@@ -6,8 +6,9 @@
  */ 
 #include "display.h"
 #include <util/delay.h>
-#include "UART.h"
-int wait_time = 40;
+//#include "UART.h"
+
+
 
 void wait(int n){
 	

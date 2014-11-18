@@ -39,6 +39,7 @@ SUBDIRS :=
 C_SRCS +=  \
 ../display.c \
 ../gyro.c \
+../messages.c \
 ../Sensormodul.c \
 ../SPI.c \
 ../UART.c \
@@ -54,6 +55,7 @@ ASM_SRCS +=
 OBJS +=  \
 display.o \
 gyro.o \
+messages.o \
 Sensormodul.o \
 SPI.o \
 UART.o \
@@ -62,6 +64,7 @@ ultraljud.o
 OBJS_AS_ARGS +=  \
 display.o \
 gyro.o \
+messages.o \
 Sensormodul.o \
 SPI.o \
 UART.o \
@@ -70,6 +73,7 @@ ultraljud.o
 C_DEPS +=  \
 display.d \
 gyro.d \
+messages.d \
 Sensormodul.d \
 SPI.d \
 UART.d \
@@ -78,6 +82,7 @@ ultraljud.d
 C_DEPS_AS_ARGS +=  \
 display.d \
 gyro.d \
+messages.d \
 Sensormodul.d \
 SPI.d \
 UART.d \
@@ -97,6 +102,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

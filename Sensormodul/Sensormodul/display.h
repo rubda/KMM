@@ -8,6 +8,8 @@
 #define F_CPU 8000000UL
 #include <avr/io.h>
 
+#include "ultraljud.h"
+
 #define DISP_RS PORTB0
 #define DISP_RW PORTB1
 #define DISP_E PORTB2

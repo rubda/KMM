@@ -8,6 +8,7 @@
 #include "ultraljud.h"
 #include <avr/io.h>
 
+
 void init_sensors()
 {
 	
@@ -67,4 +68,11 @@ uint16_t get_distance(struct soundSensor sensor)
 		
 	DISTANCE = TIME/40;
 	return DISTANCE;	
+}
+
+void get_sensors_distance(char** data){
+	int i;
+	for (i = 0; i < 6; ++i){
+		 data[i] = int_to_string(get_data(i));
+	}
 }

@@ -1,6 +1,7 @@
 #include "UART.h"
 #include <stdio.h>
-
+#include <string.h>
+#include <stdlib.h>
 
 char buffer[256];
 uint8_t buffer_size = 0;
@@ -153,3 +154,17 @@ char* int_to_string(uint16_t digit)
 	sprintf(dist, "%u", digit);
 	return dist; 
 }
+
+
+int string_to_int(char *string)
+{
+	int val;
+	char str[20];
+	
+	strcpy(str, string);
+	val = atoi(str);
+	
+	return val;
+}
+
+
