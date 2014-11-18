@@ -37,7 +37,5 @@ uart_message get_message();
 void send_message(char name[], const char *attributes[], uint8_t attr_length);
 void uart_send_string(const char *s);
 void uart_send_char(uint8_t data);
-char* int_to_string(uint16_t digit);
-int string_to_int(char *string);
 
 #endif

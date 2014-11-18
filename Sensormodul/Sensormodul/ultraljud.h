@@ -13,6 +13,7 @@
 #define ULTRALJUD_H_
 
 #include "UART.h"
+#include "messages.h"
 
 struct soundSensor
 {
