@@ -33,7 +33,6 @@ import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
 import java.util.TooManyListenersException;
 
-import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
 import java.io.InputStream;
@@ -43,10 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-/**
- * \brief Additional help to handle serial connect / disconnect, and registering
- *        interrupt handler
- */
+// brief Additional help to handle serial connect / disconnect, and registering interrupt handler
 public class SerialHelper {
 
     private SerialPort serialPort;
@@ -72,14 +68,11 @@ public class SerialHelper {
         return portArray;
     }
 
-    /**
-     * \brief Connect to the selected serial port with 57600bps-8N1 mode
-     */
+    // brief Connect to the selected serial port with 57600bps-8N1 mode
     public void connect(String portName, int baudRate) throws IOException {
         try {
             // Obtain a CommPortIdentifier object for the port you want to open
-            CommPortIdentifier portId =
-                    CommPortIdentifier.getPortIdentifier(portName);
+            CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portName);
 
             // Get the port's ownership
             serialPort = (SerialPort) portId.open("Demo application", 5000);
@@ -102,25 +95,19 @@ public class SerialHelper {
         }
     }
 
-    /**
-     * \brief Get the serial port input stream
-     * \return The serial port input stream
-     */
+    // brief Get the serial port input stream
+    // return The serial port input stream
     public InputStream getSerialInputStream() {
         return inStream;
     }
 
-    /**
-     * \brief Get the serial port output stream
-     * \return The serial port output stream
-     */
+    // brief Get the serial port output stream
+    // return The serial port output stream
     public OutputStream getSerialOutputStream() {
         return outStream;
     }
 
-    /**
-     * \brief Sets the serial port parameters to 57600bps-8N1
-     */
+    // brief Sets the serial port parameters to 57600bps-8N1
     protected void setSerialPortParameters(int baudRate) throws IOException {
 
         //final int baudRate = 57600; // 57600bps
@@ -139,11 +126,8 @@ public class SerialHelper {
         }
     }
 
-    /**
-     * \brief Register listener for data available event
-     *
-     * @param dataAvailableListener The data available listener
-     */
+    // brief Register listener for data available event
+    // @param dataAvailableListener The data available listener
     public void addDataAvailableListener(SerialPortEventListener dataAvailableListener)
             throws TooManyListenersException {
         // Add the serial port event listener
@@ -151,9 +135,7 @@ public class SerialHelper {
         serialPort.notifyOnDataAvailable(true);
     }
 
-    /**
-     * \brief Disconnect the serial port
-     */
+    // brief Disconnect the serial port
     public void disconnect() {
         if (serialPort != null) {
             try {

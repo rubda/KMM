@@ -38,7 +38,6 @@ public class Communication implements SerialPortEventListener {
     // Send action
     public static void sendAction(String message){
         System.out.println(message);
-        message = message+"\r"; //behövs detta?
        try {
            outStream.write(message.getBytes());
        }  catch (IOException ex) {
@@ -81,7 +80,7 @@ public class Communication implements SerialPortEventListener {
             int availableBytes = inStream.available();
             if (availableBytes > 0) {
                 // Read the serial port
-                inStream.read(readBuffer, lastindex, availableBytes);
+                inStream.read(readBuffer, lastindex, lastindex+availableBytes);
 
                 // Print it out
                 System.out.println("Recv :" +
@@ -89,7 +88,7 @@ public class Communication implements SerialPortEventListener {
 
                 if(readBuffer.toString().charAt(readBuffer.length) == (';')){
 
-                    receive(new String(readBuffer, 0, availableBytes));
+                    receive(new String(readBuffer, 0, lastindex+availableBytes));
                     lastindex = 0;
                 }
                 else   {

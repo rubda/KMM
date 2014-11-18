@@ -1,17 +1,27 @@
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by danielfalk on 11/17/14.
- */
 public class SensorCommunication extends Communication {
+
+    static OutputStream outStream;
+
     public SensorCommunication(InputStream inStream, OutputStream outStream) {
-        super(inStream, outStream);
+        super(inStream);
+        this.outStream = outStream;
     }
 
     @Override
     void receive(String inputString) {
         System.out.println("ReceiveSensors: "+inputString);
+        send(inputString);
     }
 
+    public static void send(String message) {
+        try {
+            outStream.write(message.getBytes());
+        }  catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
 }

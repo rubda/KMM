@@ -41,25 +41,19 @@ public class SerialPortHandler {
 
     }
 
-    /**
-     * Get the serial port input stream
-     * @return The serial port input stream
-     */
+    // Get the serial port input stream
+    // @return The serial port input stream
     public InputStream getSerialInputStream() {
         return inStream;
     }
 
-    /**
-     * Get the serial port output stream
-     * @return The serial port output stream
-     */
+    // Get the serial port output stream
+    // @return The serial port output stream
     public OutputStream getSerialOutputStream() {
         return outStream;
     }
 
-    /**
-     * Sets the serial port parameters
-     */
+    // Sets the serial port parameters
     private void setSerialPortParameters() throws IOException {
         int baudRate = 57600; // 57600bps
 
@@ -93,11 +87,8 @@ public class SerialPortHandler {
         return portArray;
     }
 
-    /**
-     * \brief Register listener for data available event
-     *
-     * @param dataAvailableListener The data available listener
-     */
+    // brief Register listener for data available event
+    // @param dataAvailableListener The data available listener
     public void addDataAvailableListener(SerialPortEventListener dataAvailableListener)
             throws TooManyListenersException {
         // Add the serial port event listener
@@ -105,9 +96,7 @@ public class SerialPortHandler {
         serialPort.notifyOnDataAvailable(true);
     }
 
-    /**
-     * \brief Disconnect the serial port
-     */
+    // brief Disconnect the serial port
     public void disconnect() {
         if (serialPort != null) {
             try {
