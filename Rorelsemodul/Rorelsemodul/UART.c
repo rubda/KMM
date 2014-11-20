@@ -1,5 +1,8 @@
 #include "UART.h"
 
+const char *false[] = {"false"};
+const char *true[] = {"true"};
+
 char buffer[256];
 uint8_t buffer_size = 0;
 

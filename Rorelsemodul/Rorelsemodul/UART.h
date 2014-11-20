@@ -9,6 +9,9 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+extern const char *false[];
+extern const char *true[];
+
 struct attribute 
 {
 	char data[20];
