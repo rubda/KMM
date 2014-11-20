@@ -32,18 +32,18 @@ void init_sensors()
 	sensor_list[3] = (struct soundSensor) {0b00010100, 0};
 }
 
-uint16_t get_data(uint8_t id)
+/*uint16_t get_data(uint8_t id)
 {
 	sensor_list[id].Distance = get_distance(sensor_list[id]);
 	return sensor_list[id].Distance;
-}
+}*/
 
-struct soundSensor get_sensor(uint8_t id)
+struct soundSensor *get_sensor(uint8_t id)
 {
-	return sensor_list[id];
+	return &sensor_list[id];
 }
 
-uint16_t get_distance(struct soundSensor sensor)
+void get_distance(struct soundSensor* sensor)
 {
 	uint16_t DISTANCE;
 	uint16_t TIME = 0; 
@@ -52,7 +52,7 @@ uint16_t get_distance(struct soundSensor sensor)
 	PORTA = PORTA & 0b11100011;
 	
 	// Sen orar vi in ett specifikt ultraljud
-	PORTA = PORTA | sensor.id;
+	PORTA = PORTA | sensor->id;
 	
 	PORTA |= (1 << PORTA0);
  	_delay_us(90);
@@ -67,12 +67,13 @@ uint16_t get_distance(struct soundSensor sensor)
 	_delay_ms(20); //för test?
 		
 	DISTANCE = TIME/40;
-	return DISTANCE;	
+	
+	sensor->Distance = DISTANCE;
 }
 
-void get_sensors_distance(char** data){
+void get_sensors_distance(char* data[]){
 	int i;
 	for (i = 0; i < 6; ++i){
-		 data[i] = int_to_string(get_data(i));
+		itoa(get_sensor(i)->Distance, data[i], 10);
 	}
 }

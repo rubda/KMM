@@ -60,7 +60,7 @@ void init_display()
 
 	
 
-	BOSSE();
+	//BOSSE();
 
 	
 }
@@ -176,7 +176,7 @@ void distance_to_display(int id)
 	char name[] = "DIST";
 	char space[] = " ";
 	char col[] = ":";
-	uint16_t  DISTANCE = get_distance(get_sensor(id));
+	uint16_t  DISTANCE = get_sensor(id)->Distance;
 	
 	uint16_t FORTH = DISTANCE / 1000;
 	uint16_t THIRD = DISTANCE / 100 - (DISTANCE / 1000)*10;
