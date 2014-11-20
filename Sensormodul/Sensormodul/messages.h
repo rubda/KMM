@@ -19,8 +19,10 @@
 
 
 	
-int get_cmd(uart_message message);
-int get_validation(uart_message message);
-void message_handler(uart_message message_in);
+int get_cmd(uart_message *message);
+int get_validation(uart_message *message);
+void message_handler(uart_message *message_in);
+char* int_to_string(uint16_t digit);
+int string_to_int(char *string);
 
 #endif /* MESSAGES_H_ */

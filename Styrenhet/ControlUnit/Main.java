@@ -2,6 +2,14 @@ import java.util.TooManyListenersException;
 
 public class Main {
 
+
+    static ComputerCommunication ComputerCommunication;
+    static SensorCommunication SensorCommunication;
+    static MovementCommunication MovementCommunication;
+
+    static Boolean robotReady = false;
+
+
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Wrong arguments!");
@@ -11,50 +19,46 @@ public class Main {
 
         SerialHelper serialHelperComputer = new SerialHelper();
         SerialHelper serialHelperSensors = new SerialHelper();
-        SerialHelper serialHelperRobot = new SerialHelper();
+        SerialHelper serialHelperMovement = new SerialHelper();
 
         checkListSerialPorts(serialHelperComputer);
         checkListSerialPorts(serialHelperSensors);
-        checkListSerialPorts(serialHelperRobot);
+        checkListSerialPorts(serialHelperMovement);
 
         checkConnect(serialHelperComputer, args[0], 57600);
         checkConnect(serialHelperSensors, args[1], 9600);
-        checkConnect(serialHelperRobot, args[2], 9600);
+        checkConnect(serialHelperMovement, args[2], 9600);
 
 
         //checkAddDataAvailableListener(serialHelper, args[1]);
         //System.out.println("Check data available listener");
 
-        ComputerCommunication ComputerCommunication =
-                new ComputerCommunication(serialHelperComputer.getSerialInputStream(),
-                        serialHelperComputer.getSerialOutputStream());
-
+        ComputerCommunication = new ComputerCommunication(serialHelperComputer.getSerialInputStream(), serialHelperComputer.getSerialOutputStream());
         try {
             serialHelperComputer.addDataAvailableListener(ComputerCommunication);
 
         } catch (TooManyListenersException ex) {
             System.err.println(ex.getMessage());
         }
-        SensorCommunication SensorCommunication =
-                new SensorCommunication(serialHelperSensors.getSerialInputStream(),
-                        serialHelperSensors.getSerialOutputStream());
 
+        SensorCommunication = new SensorCommunication(serialHelperSensors.getSerialInputStream(), serialHelperSensors.getSerialOutputStream());
         try {
             serialHelperSensors.addDataAvailableListener(SensorCommunication);
-
         } catch (TooManyListenersException ex) {
             System.err.println(ex.getMessage());
         }
-        RobotCommunication RobotCommunication =
-                new RobotCommunication(serialHelperRobot.getSerialInputStream(),
-                        serialHelperRobot.getSerialOutputStream());
 
+        MovementCommunication = new MovementCommunication(serialHelperMovement.getSerialInputStream(), serialHelperMovement.getSerialOutputStream());
         try {
-            serialHelperRobot.addDataAvailableListener(RobotCommunication);
-
+            serialHelperMovement.addDataAvailableListener(MovementCommunication);
         } catch (TooManyListenersException ex) {
             System.err.println(ex.getMessage());
         }
+
+
+
+
+
 
 
         //checkDisconnect(serialHelper);
@@ -117,5 +121,46 @@ public class Main {
         System.out.println("Disconnect from serial port");
         serialHelper.disconnect();
         System.out.println("Disconnected");
+    }
+
+    public static void setRobotReady(Boolean robotReady) {
+        Main.robotReady = robotReady;
+    }
+    void auto(){
+        boolean goal = false;
+
+        MovementCommunication.send("#init:0;");
+        //lås här och vänta på klartecken
+        while(!robotReady){}
+
+        while (!goal){
+            updateSensorArray();
+
+
+            if(SensorCommunication.getSensorValue(2) >= 120){
+                     //kör fram
+                MovementCommunication.send("#walk:f;");
+            }
+            else if(SensorCommunication.getSensorValue(2) <= 110){
+                //Gå fram till avstånd  ungefär 10 cm
+            }
+            else{
+                //bättre väg åt sidan
+                if(SensorCommunication.getSensorValue(1)>SensorCommunication.getSensorValue(2)){
+
+                }
+                else if(SensorCommunication.getSensorValue(3)>SensorCommunication.getSensorValue(2)){
+
+                }
+                else{
+
+                }
+            }
+
+        }
+    }
+
+    private void updateSensorArray(){
+        SensorCommunication.send("#distance:0;");
     }
 }

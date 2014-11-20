@@ -45,7 +45,7 @@ public class MainComponent extends JComponent {
 
         Action sendSensorString = new AbstractAction(){
             public void actionPerformed(final ActionEvent e) {
-                Communication.sendAction("#action:RF;");
+                Communication.sendAction("#distance:1;");
             }
         };
 

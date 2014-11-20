@@ -12,25 +12,50 @@ const char *rot[] = {"0"};
 char *SENSOR_DATA[] = {"000", "000", "000", "000", "000", "000"};
 char *distance_data[1];
 
+char* int_to_string(uint16_t digit)
+{
+	char dist[20];
 
-	
-int get_cmd(uart_message message){
-	
-	char *cmd = message.data[0].data;
-	
-	if(strcmp(cmd,"rotate")==0){
-		return 1;
-		}else if(strcmp(cmd,"distance")==0){
-		return 2;
-		}else if(strcmp(cmd,"accept")==0){
-		return 3;
-	}
-	return 0;
+	sprintf(dist, "%u", digit);
+	return dist; 
 }
 
-int get_validation(uart_message message){
+
+int string_to_int(char *string)
+{
+	int val;
+	char str[20];
 	
-	char *valid = message.data[1].data ;
+	strcpy(str, string);
+	val = atoi(str);
+	
+	return val;
+}
+	
+int get_cmd(uart_message *message){
+	
+	char *cmd = (*message).data[0].data;
+	
+	write_string(cmd);
+	if(strcmp(cmd,"rotate") == 0){
+		//data_to_display(1336);
+		return 1;
+	}else if(strcmp(cmd,"distance") == 0){
+		//data_to_display(1337);
+		return 2;
+	}else if(strcmp(cmd,"accept") == 0){
+		//data_to_display(1338);
+		return 3;
+	}else{
+		//data_to_display(1339);
+		return 0;
+	}
+	
+}
+
+int get_validation(uart_message *message){
+	
+	char *valid = (*message).data[1].data ;
 	
 	if(strcmp(valid,"false") == 0){
 		return 0;
@@ -40,57 +65,31 @@ int get_validation(uart_message message){
 	return 0;
 }
 
-void message_handler(uart_message message_in){
+void message_handler(uart_message *message_in){
 	
 	int ANGLE = 0;
+	uint8_t c;
 	
 	switch (get_cmd(message_in)){
 		case 1:	//rotate
 			send_message("accept", true, 1);
-			ANGLE = string_to_int(message_in.data[1].data);
+			ANGLE = string_to_int((*message_in).data[1].data);
 			rotate_to(ANGLE);
 			rot[0] = int_to_string(ANGLE);
 			send_message("rotate",rot, 1);
 			break;
 		case 2:	//distance
-			switch (string_to_int(message_in.data[1].data)){
-				 get_sensors_distance(SENSOR_DATA);
-				case 0:
-					send_message("accept", true, 1);
-					send_message("distance", (const char**)SENSOR_DATA, 6);
-					break;
-				case 1:
-					send_message("accept", true, 1);
-					distance_data[0] = SENSOR_DATA[0];
-					send_message("distance",(const char**)distance_data, 1);
-					break;
-				case 2:
-					send_message("accept", true, 1);
-					distance_data[0] = SENSOR_DATA[1];
-					send_message("distance", (const char**)distance_data, 1);
-					break;
-				case 3:
-					send_message("accept", true, 1);
-					distance_data[0] = SENSOR_DATA[2];
-					send_message("distance", (const char**)distance_data, 1);
-					break;
-				case 4:
-					send_message("accept", true, 1);
-					distance_data[0] = SENSOR_DATA[3];
-					send_message("distance", (const char**)distance_data, 1);
-					break;
-				case 5:
-					send_message("accept", true, 1);
-					distance_data[0] = SENSOR_DATA[4];
-					send_message("distance", (const char**)distance_data, 1);
-					break;
-				case 6:
-					send_message("accept", true, 1);
-					distance_data[0] = SENSOR_DATA[5];
-					send_message("distance", (const char**)distance_data, 1);
-					break;
-				default:
-					break;
+			c = string_to_int((*message_in).data[1].data);
+			if(c == 0){
+				get_sensors_distance(SENSOR_DATA);
+				send_message("accept", true, 1);
+				send_message("distance", (const char**)SENSOR_DATA, 6);
+			}else if(c > 0 && c <= 6){
+				get_sensors_distance(SENSOR_DATA);
+				send_message("accept", true, 1);
+				send_message("distance",(const char**)SENSOR_DATA[c-1], 1);
+			}else{
+				send_message("accept", false, 1);
 			}
 			break;
 		case 3: //accept
@@ -104,6 +103,7 @@ void message_handler(uart_message message_in){
 			}
 			break;
 		default:
+			//data_to_display(get_cmd(message_in));
 			break;
 	}
 
