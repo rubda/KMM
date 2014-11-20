@@ -28,18 +28,20 @@ int main(void)
 	uart_init(0x0067);
 	
 	uart_message mess;
-	char *attr[] = {"true"};
+	char *attr[] = {"12"};
 
 	while(1)
 	{
 		if(got_message()){
-			mess = get_message();
-			if(strcmp(mess.data[0].data, "accept") != 0){
-				send_message("accept", attr, 1);	
+			get_message(&mess);
+			if(strcmp(mess.data[0].data, "stop") == 0){
+				//uart_send_char('0' + mess.length);
+				uart_send_string(mess.data[1].data);
+				uart_send_char(';');
+				if(strcmp(mess.data[1].data, "r") == 0)
+					rotate(0x0050, RIGHT);	
 			}
 		}
-		
-		_delay_ms(2000);
 	}	                                                               
 }
 
