@@ -4,20 +4,17 @@ import gnu.io.SerialPortEventListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.TooManyListenersException;
 
 public class Communication implements SerialPortEventListener {
 
     static String[] parts;
-    /**
-     * Buffer to hold the reading
-     */
+    // Buffer to hold the reading
     private byte[] readBuffer = new byte[400];
-    /**
-     * I/O stream for serial port
-     */
+    // I/O stream for serial port
     private InputStream inStream;
     private static OutputStream outStream;
+
+    private static String lastAction;
 
     private int lastindex = 0;
 
@@ -27,8 +24,6 @@ public class Communication implements SerialPortEventListener {
     public Communication(InputStream inStream, OutputStream outStream) {
         this.inStream = inStream;
         this.outStream = outStream;
-
-
     }
 
     // Send parameters
@@ -38,11 +33,14 @@ public class Communication implements SerialPortEventListener {
     // Send action
     public static void sendAction(String message){
         System.out.println(message);
-       try {
-           outStream.write(message.getBytes());
-       }  catch (IOException ex) {
-           System.err.println(ex.getMessage());
-       }
+        if (!message.equals(lastAction)) {
+            lastAction = message;
+            try {
+                outStream.write(message.getBytes());
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
     }
 
     // Receive and interpret a message

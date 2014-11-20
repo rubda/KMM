@@ -12,20 +12,22 @@ public class ComputerCommunication extends Communication {
     }
 
     public void receive(String inputString){
+        System.out.println("ReceiveComputer: "+inputString);
+
         String parts[] = inputString.split(":");
         if(parts[0].equals("#walk") ||
                 parts[0].equals("#rotate") ||
                 parts[0].equals("#turn") ||
-                parts[0].equals("#stop")){
-            SensorCommunication.send(inputString);
-            RobotCommunication.send(inputString);
-            send(inputString);
+                parts[0].equals("#stop") ||
+                parts[0].equals("#speed")){
+            MovementCommunication.send(inputString);
         }
-        else{
+        else {
             SensorCommunication.send(inputString);
-            RobotCommunication.send(inputString);
-            send(inputString);
         }
+        //else if (parts[0].equals("#param")){
+            //sätt parametrar
+        //}
     }
 
     public static void send(String message) {
