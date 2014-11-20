@@ -46,16 +46,18 @@ int uart_read_string(char *s, int size)
 	char c;
 	
 	while(i < size - 1){
-		c = uart_read_char();
-		if(c == ';')
-			break;
-		else if(c == '#'){
+		c = uart_read_char(); //#walk:f;
+		
+		if(c == '#'){
 			i = 0;
 		}
 		s[i++] = c;
+		
+		if(c == ';')
+			break;
 	}
 	
-	s[i] = 0;
+	s[i] = '\0';
 	
 	return i + 1;
 }
@@ -66,60 +68,44 @@ void uart_send_string(const char *s){
 		uart_send_char(s[i]);
 	}
 }
-/*
-void uart_send_string(char *s, uint8_t size)
-{
-	uint8_t i = 0;
-	
-	//uint8_t checksum = 0;
-	
-	for(i = 0; i < size; ++i){
-		//if(i >= 2) checksum += s[i];
-		uart_send_char(s[i]);
-	}
-	//uart_send_char(~checksum);
-	//while(!bit_is_set(UCSR0A, TXC0));
-}*/
 
 uint8_t got_message(){
 	return buffer_size;
 }
 
-attribute create_attribute(char *string, int start, int end){
-	char str[end-start+1];
+void create_attribute(char *string, int start, int end, attribute* attr){
 	int i;
-	for(i = start; i < end; ++i){
-		str[i-start] = string[i];
-	}
-	str[end-start] = '\0';
 	
-	attribute attr;
-	attr.data = str;
-	attr.length = end-start-1;
-	return attr;
+	for(i = start; i < end; ++i){
+		attr->data[i-start] = string[i];
+	}
+	
+	attr->data[end-start] = '\0';
+	attr->length = end - start;
 }
 
+     
 // DISABLE INTERRUPT?!
-uart_message get_message(){
+void get_message(uart_message * message){
 	cli();
-	uart_message message;
-	message.length = 0;
+	message->length = 0;
 	if(got_message() && buffer[0] == '#'){
 		//#COMMAND:ATTR1:ATTRN;	
 		int i;
 		int start = 1;
-		for(i = start; i < buffer_size && buffer[i-1] != ';'; ++i){
+		for(i = start; i < buffer_size; ++i){
 			if(buffer[i] == ':' || buffer[i] == ';'){
-				message.data[message.length++] = create_attribute(buffer, start, i);
+				create_attribute(buffer, start, i, &message->data[message->length++]);
+				
 				start = i + 1;
+			}else if(buffer[i-1] == ';'){
+				break;
 			}
 		}
 		buffer_size = 0;
 		sei();
-		return message;
 	}
 	sei();
-	return message;
 }
 
 void send_message(char name[], const char *attr[], uint8_t attr_length) {
