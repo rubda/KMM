@@ -11,13 +11,13 @@ uint8_t leg5[] = {7, 9, 11};
 uint8_t leg6[] = {8, 10, 12};
 	
 uint8_t R_MIDDLE_SERVO_START[] = {0xC0, 0x02};	
-uint8_t R_OUTER_SERVO_START[] = {0xD3, 0x00};
+uint8_t R_OUTER_SERVO_START[] = {0xC0, 0x00};
 uint8_t L_MIDDLE_SERVO_START[] = {0x3F, 0x01};
-uint8_t L_OUTER_SERVO_START[] = {0x2C, 0x03};
+uint8_t L_OUTER_SERVO_START[] = {0x3F, 0x03};
 uint8_t INNER_SERVO_START[] = {0xFF, 0x01};
 
 //Init robot and UART communication
-void robot_init(){
+void robot_init(uint16_t speed){
 	leg_list[0] = leg1;
 	leg_list[1] = leg2;
 	leg_list[2] = leg3;
@@ -26,8 +26,8 @@ void robot_init(){
 	leg_list[5] = leg6;
 	
 	suart_init(1000000);
-	_delay_ms(1000);
-	set_speed(0x0080);
+	_delay_ms(10);
+	set_speed(speed);
 }
 
 //Get inner servo of leg
@@ -56,9 +56,14 @@ void set_speed(uint16_t s){
 	speed[1] = s >> 8;
 	
 	uint8_t torque_enable[] = {0x01};
+	uint8_t slope[] = {0xFF};
 	suart_command_write_data(BROADCAST_ID, MOVING_SPEED_L, speed, 2);
 	_delay_us(300);
 	suart_command_write_data(BROADCAST_ID, 0x18, torque_enable, 1);
+	_delay_us(300);
+	suart_command_write_data(BROADCAST_ID, 0x1C, slope, 1);
+	_delay_us(300);
+	suart_command_write_data(BROADCAST_ID, 0x1D, slope, 1);
 }
 
 //Set speed of individual servo
@@ -76,7 +81,7 @@ void robot_start_position(){
 	
 	for(i = 1; i < 7; ++i){
 		move_servo_reg(inner_servo(i), INNER_SERVO_START);
-		_delay_us(300);
+		_delay_ms(1);
 	}
 	
 	SERVO_ACTION;
@@ -89,7 +94,7 @@ void robot_start_position(){
 			move_servo_reg(middle_servo(i), R_MIDDLE_SERVO_START);
 		}
 		
-		_delay_us(300);
+		_delay_ms(1);
 	}
 	
 	SERVO_ACTION;
@@ -102,7 +107,7 @@ void robot_start_position(){
 			move_servo_reg(outer_servo(i), R_OUTER_SERVO_START);
 		}
 		
-		_delay_us(300);
+		_delay_ms(1);
 	}
 	
 	SERVO_ACTION;
@@ -119,15 +124,13 @@ void move_servo_dir(uint8_t id, uint8_t *position){
 }
 
 //Lifts leg to "lift" position. Moves middle and outer servo
-/*void lift_leg(uint8_t leg_id){
+void lift_leg(uint8_t leg_id){
 	if(leg_id%2 == 1){
 		move_servo_reg(middle_servo(leg_id), L_MIDDLE_SERVO_LIFT);
-		move_servo_reg(outer_servo(leg_id), L_OUTER_SERVO_LIFT);
 	}else{
 		move_servo_reg(middle_servo(leg_id), R_MIDDLE_SERVO_LIFT);
-		move_servo_reg(outer_servo(leg_id), R_OUTER_SERVO_LIFT);
 	}
-}*/
+}
 
 //Put down leg. Moves middle and outer servo
 void put_down_leg(uint8_t leg_id){
@@ -230,18 +233,18 @@ void move_leg_backward(uint8_t leg_id, uint16_t length){
 }
 
 //Moves leg 1, 4, 5 into walking position. Use only if robot is in starting position
-void setup_first_step(uint16_t length, int direction){
+void setup_first_step(uint16_t length_l, uint16_t   length_r, int direction){
 	lift_leg(1);
 	lift_leg(4);
 	lift_leg(5);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	if(direction == FORWARD){
-		move_leg_forward(1, length);
-		move_leg_forward(4, length);
-		move_leg_forward(5, length);
-	}else if(direction == BACKWARD){
+		move_leg_forward(1, length_l);
+		move_leg_forward(4, length_r);
+		move_leg_forward(5, length_l);
+	/*}else if(direction == BACKWARD){
 		move_leg_backward(1, length);
 		move_leg_backward(4, length);
 		move_leg_backward(5, length);
@@ -250,105 +253,85 @@ void setup_first_step(uint16_t length, int direction){
 		move_leg_backward(4, length);
 		move_leg_forward(5, length);
 	}else if(direction == LEFT){
-		
+		move_leg_backward(1, length);
+		move_leg_forward(4, length);
+		move_leg_backward(5, length);
+	}*/
 	}
-	
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	put_down_leg(1);
 	put_down_leg(4);
 	put_down_leg(5);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 }
 
 //Make robot take "one" step. Need to run setup_first_step() first. 
 //Loop for walking
-void take_step(uint16_t length){
-	/*lift_leg(1);
-	lift_leg(4);
-	lift_leg(5);
-	SERVO_ACTION;
-	_delay_ms(1000);
-	
-	prepare_step_forward(1, length);
-	prepare_step_forward(4, length);
-	prepare_step_forward(5, length);
-	prepare_step_backward(2, length);
-	prepare_step_backward(3, length);
-	prepare_step_backward(6, length);
-	SERVO_ACTION;
-	_delay_ms(1000);
-	
-	put_down_leg(1);
-	put_down_leg(4);
-	put_down_leg(5);
-	SERVO_ACTION;
-	_delay_ms(1000);
-	
+void take_step(uint16_t length_r, uint16_t length_l, int direction){
 	lift_leg(2);
 	lift_leg(3);
 	lift_leg(6);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
-	prepare_step_forward(2, length);
-	prepare_step_forward(3, length);
-	prepare_step_forward(6, length);
-	prepare_step_backward(1, length);
-	prepare_step_backward(4, length);
-	prepare_step_backward(5, length);
+	if(direction == FORWARD){
+		move_leg_backward(1, length_l);
+		move_leg_backward(4, length_r);
+		move_leg_backward(5, length_l);
+		move_leg_forward(2, length_r);
+		move_leg_forward(3, length_l);
+		move_leg_forward(6, length_r);
+	}else if(direction == BACKWARD){
+		move_leg_forward(1, length_l);
+		move_leg_forward(4, length_r);
+		move_leg_forward(5, length_l);
+		move_leg_backward(2, length_r);
+		move_leg_backward(3, length_l);
+		move_leg_backward(6, length_r);
+	}
+	
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	put_down_leg(2);
 	put_down_leg(3);
 	put_down_leg(6);
 	SERVO_ACTION;
-	_delay_ms(1000);*/
-	
-	lift_leg(2);
-	lift_leg(3);
-	lift_leg(6);
-	SERVO_ACTION;
-	_delay_ms(1000);
-	
-	move_leg_backward(1, length);
-	move_leg_backward(4, length);
-	move_leg_backward(5, length);
-	move_leg_forward(2, length);
-	move_leg_forward(3, length);
-	move_leg_forward(6, length);
-	SERVO_ACTION;
-	_delay_ms(1000);
-	
-	put_down_leg(2);
-	put_down_leg(3);
-	put_down_leg(6);
-	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	lift_leg(1);
 	lift_leg(4);
 	lift_leg(5);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
-	move_leg_backward(2, length);
-	move_leg_backward(3, length);
-	move_leg_backward(6, length);
-	move_leg_forward(1, length);
-	move_leg_forward(4, length);
-	move_leg_forward(5, length);
+	if(direction == FORWARD){
+		move_leg_backward(2, length_r);
+		move_leg_backward(3, length_l);
+		move_leg_backward(6, length_r);
+		move_leg_forward(1, length_l);
+		move_leg_forward(4, length_r);
+		move_leg_forward(5, length_l);
+	}else if(direction == BACKWARD){
+		move_leg_forward(2, length_r);
+		move_leg_forward(3, length_l);
+		move_leg_forward(6, length_r);
+		move_leg_backward(1, length_l);
+		move_leg_backward(4, length_r);
+		move_leg_backward(5, length_l);
+	}
+	
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	put_down_leg(1);
 	put_down_leg(4);
 	put_down_leg(5);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 };
 
@@ -357,41 +340,60 @@ void rotate(uint16_t length, int direction){
 	lift_leg(3);
 	lift_leg(6);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
-	move_leg_backward(1, length);
-	move_leg_forward(4, length);
-	move_leg_backward(5, length);
-	move_leg_backward(2, length);
-	move_leg_forward(3, length);
-	move_leg_backward(6, length);
+	if(direction == RIGHT){
+		move_leg_backward(1, length);
+		move_leg_forward(4, length);
+		move_leg_backward(5, length);
+		move_leg_backward(2, length);
+		move_leg_forward(3, length);
+		move_leg_backward(6, length);
+	}else if(direction == LEFT){
+		move_leg_forward(1, length);
+		move_leg_backward(4, length);
+		move_leg_forward(5, length);
+		move_leg_forward(2, length);
+		move_leg_backward(3, length);
+		move_leg_forward(6, length);
+	}
+	
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	put_down_leg(2);
 	put_down_leg(3);
 	put_down_leg(6);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	lift_leg(1);
 	lift_leg(4);
 	lift_leg(5);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
-	move_leg_forward(2, length);
-	move_leg_backward(3, length);
-	move_leg_forward(6, length);
-	move_leg_forward(1, length);
-	move_leg_backward(4, length);
-	move_leg_forward(5, length);
+	if(direction == RIGHT){
+		move_leg_forward(2, length);
+		move_leg_backward(3, length);
+		move_leg_forward(6, length);
+		move_leg_forward(1, length);
+		move_leg_backward(4, length);
+		move_leg_forward(5, length);
+	}else if(direction == LEFT){
+		move_leg_backward(2, length);
+		move_leg_forward(3, length);
+		move_leg_backward(6, length);
+		move_leg_backward(1, length);
+		move_leg_forward(4, length);
+		move_leg_backward(5, length);
+	}
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 	
 	put_down_leg(1);
 	put_down_leg(4);
 	put_down_leg(5);
 	SERVO_ACTION;
-	_delay_ms(1000);
+	_delay_ms(200);
 }

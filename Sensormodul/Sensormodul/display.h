@@ -8,6 +8,8 @@
 #define F_CPU 8000000UL
 #include <avr/io.h>
 
+#include "ultraljud.h"
+
 #define DISP_RS PORTB0
 #define DISP_RW PORTB1
 #define DISP_E PORTB2
@@ -33,7 +35,10 @@ void set_display(int mode, int instr);
 void write_to_display(uint16_t value, int pos);
 void BOSSE();
 void distance_to_display(int id);
+void data_to_display(int DISTANCE);
+void write_to_display2(uint16_t value, int pos);
 
+void write_string(char* str);
 
 
 #endif /* DISPLAY_H_ */

@@ -6,8 +6,9 @@
  */ 
 #include "display.h"
 #include <util/delay.h>
-#include "UART.h"
-int wait_time = 40;
+//#include "UART.h"
+
+
 
 void wait(int n){
 	
@@ -52,29 +53,22 @@ void init_display()
     
     // Clear display
     clear_display();
-    toggle_enable();
-    //wait(1000);
     
     // Entry mode
     set_display(0x00, 0x06);
-    //_delay_us(1000);
     toggle_enable();
-    //wait(1000);
+
 	
-	//set_display(0x00, 0x02);
-	//toggle_enable();
-	
-	//write_to_display(2, 0);
-	//data_to_display(9);
-	//BOSSE();
-	//distance_to_display(120);
+
+	BOSSE();
+
 	
 }
 
 void clear_display()
 {
 	set_display(0x00, 0x01);
-	//toggle_enable();
+	toggle_enable();
 }
 
 void toggle_enable()
@@ -143,12 +137,34 @@ void BOSSE()
 		toggle_enable();
 		}
 }
+
+void write_string(char* str){
+	int i;
+	for (i = 0; str[i] != '\0' && i <= 32; ++i){
+		set_display(0x00, 0x80+i);
+		toggle_enable();
+	
+		set_display(0x02, str[i]);
+		toggle_enable();
+	}	
+}
 	
 void write_to_display(uint16_t value, int pos)
 {
 	uint16_t symbol = int_to_char(value);
 	
 	set_display(0x00, 0x95+pos);
+	toggle_enable();
+	
+	set_display(0x02, symbol);
+	toggle_enable();
+}
+
+void write_to_display2(uint16_t value, int pos)
+{
+	uint16_t symbol = int_to_char(value);
+	
+	set_display(0x00, 0x85+pos);
 	toggle_enable();
 	
 	set_display(0x02, symbol);
@@ -210,4 +226,30 @@ uint16_t int_to_char(uint16_t digit)
 {
 	uint16_t data = '0' + digit;
 	return data; 
+}
+
+
+
+void data_to_display(int DISTANCE)
+{
+	char name[] = "TEST";
+	
+	uint16_t FORTH = DISTANCE / 1000;
+	uint16_t THIRD = DISTANCE / 100 - (DISTANCE / 1000)*10;
+	uint16_t SECOND = (DISTANCE / 10) - (DISTANCE / 100)*10;
+	uint16_t FIRST = (DISTANCE / 1) - (DISTANCE / 10)*10;
+	
+	int i;
+	for (i = 0; i < 4; ++i){
+		set_display(0x00, 0x80+i);
+		toggle_enable();
+	
+		set_display(0x02, name[i]);
+		toggle_enable();
+		}
+	
+	write_to_display2(FORTH, 3);
+	write_to_display2(THIRD, 4);
+	write_to_display2(SECOND, 5);
+	write_to_display2(FIRST, 6);
 }

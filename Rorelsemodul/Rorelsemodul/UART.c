@@ -24,9 +24,7 @@ void check_rx() {
 }
 
 ISR(USART0_RX_vect){
-	cli();
 	check_rx();
-	sei();
 }
 
 char uart_read_char()
@@ -49,7 +47,7 @@ int uart_read_string(char *s, int size)
 	
 	while(i < size - 1){
 		c = uart_read_char();
-		if(c == '\0')
+		if(c == ';')
 			break;
 		else if(c == '#'){
 			i = 0;
@@ -88,11 +86,12 @@ uint8_t got_message(){
 }
 
 attribute create_attribute(char *string, int start, int end){
-	char str[end-start];
+	char str[end-start+1];
 	int i;
 	for(i = start; i < end; ++i){
 		str[i-start] = string[i];
 	}
+	str[end-start] = '\0';
 	
 	attribute attr;
 	attr.data = str;
@@ -102,6 +101,7 @@ attribute create_attribute(char *string, int start, int end){
 
 // DISABLE INTERRUPT?!
 uart_message get_message(){
+	cli();
 	uart_message message;
 	message.length = 0;
 	if(got_message() && buffer[0] == '#'){
@@ -111,12 +111,14 @@ uart_message get_message(){
 		for(i = start; i < buffer_size && buffer[i-1] != ';'; ++i){
 			if(buffer[i] == ':' || buffer[i] == ';'){
 				message.data[message.length++] = create_attribute(buffer, start, i);
-				start = i+1;
+				start = i + 1;
 			}
 		}
 		buffer_size = 0;
+		sei();
 		return message;
 	}
+	sei();
 	return message;
 }
 
@@ -126,6 +128,7 @@ void send_message(char name[], const char *attr[], uint8_t attr_length) {
 	//send_message("ROTATE", attr, 2)
 	
 	int i;
+	uart_send_char('#');
 	uart_send_string(name);
 	for(i = 0; i < attr_length; ++i){
 		uart_send_char(':');

@@ -1,6 +1,4 @@
 #include "UART.h"
-#include <stdio.h>
-
 
 char buffer[256];
 uint8_t buffer_size = 0;
@@ -21,29 +19,18 @@ void uart_init(uint16_t settings) // 0x0340
 
 void check_rx() {
 	if (bit_is_set(UCSR0A, RXC0)){
-	buffer_size = uart_read_string(buffer, 255);
-		
-	/*int i;
-	
-	for (i = 0; i < buffer_size+1; ++i){
-		set_display(0x00, 0x80+i);
-		toggle_enable();
-	
-		set_display(0x02, buffer[i]);
-		toggle_enable();
-	}*/
+		buffer_size = uart_read_string(buffer, 255);
 	}
 }
 
 ISR(USART0_RX_vect){
-	cli();
 	check_rx();
-	sei();
 }
 
 char uart_read_char()
 {
 	while(!bit_is_set(UCSR0A, RXC0));
+	
 	return UDR0;
 }
 
@@ -60,16 +47,15 @@ int uart_read_string(char *s, int size)
 	
 	while(i < size - 1){
 		c = uart_read_char();
-		if(c == ';'){
-			s[i] = c;
+		if(c == ';')
 			break;
-		}else if(c == '#'){
+		else if(c == '#'){
 			i = 0;
 		}
 		s[i++] = c;
 	}
 	
-	s[i + 1] = 0;
+	s[i] = 0;
 	
 	return i + 1;
 }
@@ -100,11 +86,12 @@ uint8_t got_message(){
 }
 
 attribute create_attribute(char *string, int start, int end){
-	char str[end-start];
+	char str[end-start+1];
 	int i;
 	for(i = start; i < end; ++i){
 		str[i-start] = string[i];
 	}
+	str[end-start] = '\0';
 	
 	attribute attr;
 	attr.data = str;
@@ -114,6 +101,7 @@ attribute create_attribute(char *string, int start, int end){
 
 // DISABLE INTERRUPT?!
 uart_message get_message(){
+	cli();
 	uart_message message;
 	message.length = 0;
 	if(got_message() && buffer[0] == '#'){
@@ -123,12 +111,14 @@ uart_message get_message(){
 		for(i = start; i < buffer_size && buffer[i-1] != ';'; ++i){
 			if(buffer[i] == ':' || buffer[i] == ';'){
 				message.data[message.length++] = create_attribute(buffer, start, i);
-				start = i+1;
+				start = i + 1;
 			}
 		}
 		buffer_size = 0;
+		sei();
 		return message;
 	}
+	sei();
 	return message;
 }
 
@@ -138,18 +128,11 @@ void send_message(char name[], const char *attr[], uint8_t attr_length) {
 	//send_message("ROTATE", attr, 2)
 	
 	int i;
+	uart_send_char('#');
 	uart_send_string(name);
 	for(i = 0; i < attr_length; ++i){
 		uart_send_char(':');
 		uart_send_string(attr[i]);
 	}
 	uart_send_char(';');
-}
-
-char* int_to_string(uint16_t digit)
-{
-	char dist[20];
-
-	sprintf(dist, "%u", digit);
-	return dist; 
 }

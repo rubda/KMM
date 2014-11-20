@@ -16,13 +16,13 @@
 #define POLL 0b10000000
 #define DEACTIVATE_ADC 0b10010000
 
-void activateADC();
-void startConversion();
-uint16_t getAngularRate();
-int adcToAngularRate(uint16_t data);
-int rotateTo(int angle);
-int getIsRotated();
-
+void activate_adc();
+void start_conversion();
+uint16_t get_angular_rate();
+int adc_to_angular_rate(uint16_t data);
+int rotate_to(int angle);
+int get_is_rotated();
+void has_rotated(int bit);
 
 
 #endif /* GYRO_H_ */

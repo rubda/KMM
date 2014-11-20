@@ -8,6 +8,7 @@
 #include "ultraljud.h"
 #include <avr/io.h>
 
+
 void init_sensors()
 {
 	
@@ -23,12 +24,12 @@ void init_sensors()
 	//B0 till ut
 	DDRB |= (1 << PORTB0);
 	
-	sensor_list[0] = (struct soundSensor) {0b00000000, 0};
+	sensor_list[2] = (struct soundSensor) {0b00000000, 0};
 	sensor_list[1] = (struct soundSensor) {0b00000100, 0};
-	sensor_list[2] = (struct soundSensor) {0b00001000, 0};
-	sensor_list[3] = (struct soundSensor) {0b00001100, 0};
+	sensor_list[0] = (struct soundSensor) {0b00001000, 0};
+	sensor_list[5] = (struct soundSensor) {0b00001100, 0};
 	sensor_list[4] = (struct soundSensor) {0b00010000, 0};
-	sensor_list[5] = (struct soundSensor) {0b00010100, 0};
+	sensor_list[3] = (struct soundSensor) {0b00010100, 0};
 }
 
 uint16_t get_data(uint8_t id)
@@ -67,4 +68,11 @@ uint16_t get_distance(struct soundSensor sensor)
 		
 	DISTANCE = TIME/40;
 	return DISTANCE;	
+}
+
+void get_sensors_distance(char** data){
+	int i;
+	for (i = 0; i < 6; ++i){
+		 data[i] = int_to_string(get_data(i));
+	}
 }

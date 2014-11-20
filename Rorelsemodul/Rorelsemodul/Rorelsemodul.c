@@ -10,21 +10,36 @@
 #include "hexapod_control.h"
 #include <avr/interrupt.h>
 #include "UART.h"
+#include <stdlib.h>
+#include <string.h>
 
 // BYT TAKTIK www.youtube.com/watch?v=Tsxe8AuSsUc
 // Position: 0x01 = 0.29 grader 
 // Speed: 0x01 = 0.111 rpm
 
+void *(func)(uint16_t *, int *);
+int direction;
+uint16_t step_len;
+
 int main(void)
 {	
 	sei();
-	uart_init(0x0010);
+	robot_init(0x0080);
+	uart_init(0x0067);
 	
-	_delay_ms(100);
-	uart_send_string("Hejsan");
-	
+	uart_message mess;
+	char *attr[] = {"true"};
+
 	while(1)
 	{
+		if(got_message()){
+			mess = get_message();
+			if(strcmp(mess.data[0].data, "accept") != 0){
+				send_message("accept", attr, 1);	
+			}
+		}
+		
+		_delay_ms(2000);
 	}	                                                               
 }
 

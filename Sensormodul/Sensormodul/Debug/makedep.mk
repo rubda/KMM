@@ -6,6 +6,8 @@ display.c
 
 gyro.c
 
+messages.c
+
 Sensormodul.c
 
 SPI.c
