@@ -94,7 +94,7 @@ void reset_leg(uint8_t leg_id);
 //	
 void setup_first_step(uint16_t length_l, uint16_t length_r, int direction);
 void take_step(uint16_t length_l, uint16_t length_r, int direction);
-void rotate(uint16_t length, int direction);
+void rotate(uint16_t length, uint16_t bla, int direction);
 
 void move_leg_forward(uint8_t leg_id, uint16_t length);
 void move_leg_backward(uint8_t leg_id, uint16_t length);
