@@ -20,7 +20,8 @@
 int main(void)
 {
 	int SENSOR_ID = 0;
-	_delay_ms(30);
+	uart_message message_in;
+
 	init_sensors();
 	init_display();
 	setup_spi();
@@ -28,27 +29,21 @@ int main(void)
 	uart_init(0x0033);
 	sei();
 	
-	
-	uart_message message_in;
-		
 	while(1)
     {
 		clear_display();
 		
+		//BOSSE();
 		get_distance(get_sensor(SENSOR_ID));
-		distance_to_display(SENSOR_ID);
-		
+		dist_to_display(0);
+		_delay_ms(1000);
 		
 		if (got_message()){
-
 			get_message(&message_in);
-			/*TMP = string_to_int(message_in.data[1].data);	
-			distance_to_display(TMP-1);*/
 			message_handler(&message_in);
-
 		}
 	
-		_delay_ms(1000);
+		//_delay_ms(1000);
 	
 		if (SENSOR_ID == 5){
 			SENSOR_ID = 0;

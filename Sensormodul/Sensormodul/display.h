@@ -38,7 +38,7 @@ void distance_to_display(int id);
 void data_to_display(int DISTANCE);
 void write_to_display2(uint16_t value, int pos);
 
-void write_string(char* str);
+void write_string(char* str, int pos);
 
 
 #endif /* DISPLAY_H_ */
