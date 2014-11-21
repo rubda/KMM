@@ -12,12 +12,9 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-extern char buffer[256];
-extern uint8_t buffer_size;
-
 struct attribute 
 {
-	char * data;
+	char data[20];
 	uint8_t length;
 };
 
@@ -33,7 +30,7 @@ typedef struct uart_message uart_message;
 void uart_init(uint16_t settings);
 
 uint8_t got_message();
-uart_message get_message();
+void get_message(uart_message *);
 void send_message(char name[], const char *attributes[], uint8_t attr_length);
 void uart_send_string(const char *s);
 void uart_send_char(uint8_t data);

@@ -87,7 +87,7 @@ int rotate_to(int angle)
 			start_conversion();
 			rate = get_angular_rate();
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			_delay_ms(1000); //behövs nog inte
+			_delay_ms(1000);
 		}
 		has_rotated(1);
 	}else{
@@ -96,7 +96,7 @@ int rotate_to(int angle)
 			start_conversion();
 			rate = get_angular_rate();
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			_delay_ms(1000); //behövs nog inte
+			_delay_ms(1000);
 		}
 		has_rotated(1);
 	}	

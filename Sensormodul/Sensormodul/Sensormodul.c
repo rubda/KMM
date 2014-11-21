@@ -20,9 +20,8 @@
 int main(void)
 {
 	int SENSOR_ID = 0;
-	int TEST = 0;
+	uart_message message_in;
 
-	_delay_ms(30);
 	init_sensors();
 	init_display();
 	setup_spi();
@@ -30,57 +29,36 @@ int main(void)
 	uart_init(0x0033);
 	sei();
 	
-	uart_message message_in;
-
-
 	while(1)
     {
+		clear_display();
 		
-	
+		//BOSSE();
 		get_distance(get_sensor(SENSOR_ID));
-		
-		distance_to_display(SENSOR_ID);
-		//_delay_ms(1000);
-		
-		//Kolla om styrmodulen har begärt något
-		
+		dist_to_display(0);
+		_delay_ms(1000);
 		
 		if (got_message()){
-		clear_display();
-			
-		//TEST = got_message();
-		
-		//data_to_display(TEST);
-
-		message_in = get_message();
-	
-		//int i;
-		//for (i = 0; i < message_in.data[0].length+1; ++i){
-			//set_display(0x00, 0x90+i);
-			//toggle_enable();
-	//
-			//set_display(0x02, message_in.data[0].data[i]);
-			//toggle_enable();
-			//}
-			//
-		message_handler(&message_in);
-		
-		_delay_ms(2000);
-			
+			get_message(&message_in);
+			message_handler(&message_in);
 		}
+	
+		//_delay_ms(1000);
 	
 		if (SENSOR_ID == 5){
 			SENSOR_ID = 0;
 		}else{
 			SENSOR_ID++;
 		}
-	
-		
-
 	}
+}	
 	
 	
 	
-	
-}
 
+
+		//send_message("distance", (const char**)SENSOR_DATA, 6);
+		//const char* t[1];
+		//t[1] = SENSOR_DATA[2];
+		//send_message("distance",t, 1);
+		//write_string(SENSOR_DATA[2]);

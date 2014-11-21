@@ -60,7 +60,7 @@ void init_display()
 
 	
 
-	BOSSE();
+	//BOSSE();
 
 	
 }
@@ -138,10 +138,10 @@ void BOSSE()
 		}
 }
 
-void write_string(char* str){
+void write_string(char* str, int pos){
 	int i;
 	for (i = 0; str[i] != '\0' && i <= 32; ++i){
-		set_display(0x00, 0x80+i);
+		set_display(0x00, 0x00+pos+i);
 		toggle_enable();
 	
 		set_display(0x02, str[i]);
@@ -171,12 +171,49 @@ void write_to_display2(uint16_t value, int pos)
 	toggle_enable();
 }
 
+void dist_to_display(int id)
+{
+	uint16_t  DISTANCE = get_sensor(id)->Distance;
+	char* dist[1];
+
+	itoa(DISTANCE, dist[0], 10);
+
+	switch(id){
+		case 0:
+			write_string("D1: ", 0x50); //D1: 000 D2: 000
+			write_string(dist[0], 0x84);
+			break;
+		case 1:
+			write_string("D2: ", 0x88);
+			write_string(dist[0], 0x92);
+			break;
+		case 2:
+			write_string("D3: ", 0x50);
+			write_string(dist[0], 0x54);
+			break;
+		case 3:
+			write_string("D4: ", 0x59);
+			write_string(dist[0], 0x5D);
+			break;
+		case 4:
+			write_string("D5: ", 0x60);
+			write_string(dist[0], 0x64);
+			break;
+		case 5:
+			write_string("D6: ", 0x69);
+			write_string(dist[0], 0x6D);
+			break;
+	}
+	
+	
+}
+
 void distance_to_display(int id)
 {
 	char name[] = "DIST";
 	char space[] = " ";
 	char col[] = ":";
-	uint16_t  DISTANCE = get_distance(get_sensor(id));
+	uint16_t  DISTANCE = get_sensor(id)->Distance;
 	
 	uint16_t FORTH = DISTANCE / 1000;
 	uint16_t THIRD = DISTANCE / 100 - (DISTANCE / 1000)*10;

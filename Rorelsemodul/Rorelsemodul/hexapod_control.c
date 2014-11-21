@@ -335,7 +335,7 @@ void take_step(uint16_t length_r, uint16_t length_l, int direction){
 	
 };
 
-void rotate(uint16_t length, int direction){
+void rotate(uint16_t length, uint16_t bla, int direction){
 	lift_leg(2);
 	lift_leg(3);
 	lift_leg(6);
