@@ -373,7 +373,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0xde2
+.text           0x00000000      0xe00
  *(.vectors)
  .vectors       0x00000000       0x8c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1284p.o
                 0x00000000                __vector_default
@@ -507,129 +507,129 @@ END GROUP
  .text.message_handler
                 0x00000560      0x148 messages.o
                 0x00000560                message_handler
- .text.main     0x000006a8       0x6e Sensormodul.o
+ .text.main     0x000006a8       0x8c Sensormodul.o
                 0x000006a8                main
  .text.setup_spi
-                0x00000716       0x32 SPI.o
-                0x00000716                setup_spi
+                0x00000734       0x32 SPI.o
+                0x00000734                setup_spi
  .text.send_spi
-                0x00000748        0xc SPI.o
-                0x00000748                send_spi
- .text.get_spi  0x00000754       0x24 SPI.o
-                0x00000754                get_spi
- .text.ss_low   0x00000778        0x4 SPI.o
-                0x00000778                ss_low
- .text.ss_high  0x0000077c        0x4 SPI.o
-                0x0000077c                ss_high
+                0x00000766        0xc SPI.o
+                0x00000766                send_spi
+ .text.get_spi  0x00000772       0x24 SPI.o
+                0x00000772                get_spi
+ .text.ss_low   0x00000796        0x4 SPI.o
+                0x00000796                ss_low
+ .text.ss_high  0x0000079a        0x4 SPI.o
+                0x0000079a                ss_high
  .text.uart_init
-                0x00000780       0x26 UART.o
-                0x00000780                uart_init
+                0x0000079e       0x26 UART.o
+                0x0000079e                uart_init
  .text.uart_read_char
-                0x000007a6       0x10 UART.o
-                0x000007a6                uart_read_char
+                0x000007c4       0x10 UART.o
+                0x000007c4                uart_read_char
  .text.uart_send_char
-                0x000007b6       0x10 UART.o
-                0x000007b6                uart_send_char
+                0x000007d4       0x10 UART.o
+                0x000007d4                uart_send_char
  .text.uart_read_string
-                0x000007c6       0x70 UART.o
-                0x000007c6                uart_read_string
+                0x000007e4       0x70 UART.o
+                0x000007e4                uart_read_string
  .text.check_rx
-                0x00000836       0x18 UART.o
-                0x00000836                check_rx
+                0x00000854       0x18 UART.o
+                0x00000854                check_rx
  .text.__vector_20
-                0x0000084e       0x4e UART.o
-                0x0000084e                __vector_20
+                0x0000086c       0x4e UART.o
+                0x0000086c                __vector_20
  .text.uart_send_string
-                0x0000089c       0x1c UART.o
-                0x0000089c                uart_send_string
+                0x000008ba       0x1c UART.o
+                0x000008ba                uart_send_string
  .text.got_message
-                0x000008b8        0x6 UART.o
-                0x000008b8                got_message
+                0x000008d6        0x6 UART.o
+                0x000008d6                got_message
  .text.create_attribute
-                0x000008be       0x34 UART.o
-                0x000008be                create_attribute
+                0x000008dc       0x34 UART.o
+                0x000008dc                create_attribute
  .text.get_message
-                0x000008f2       0xac UART.o
-                0x000008f2                get_message
+                0x00000910       0xac UART.o
+                0x00000910                get_message
  .text.send_message
-                0x0000099e       0x5c UART.o
-                0x0000099e                send_message
+                0x000009bc       0x5c UART.o
+                0x000009bc                send_message
  .text.init_sensors
-                0x000009fa       0x48 ultraljud.o
-                0x000009fa                init_sensors
+                0x00000a18       0x48 ultraljud.o
+                0x00000a18                init_sensors
  .text.get_sensor
-                0x00000a42        0xc ultraljud.o
-                0x00000a42                get_sensor
+                0x00000a60        0xc ultraljud.o
+                0x00000a60                get_sensor
  .text.get_distance
-                0x00000a4e       0x62 ultraljud.o
-                0x00000a4e                get_distance
+                0x00000a6c       0x62 ultraljud.o
+                0x00000a6c                get_distance
  .text.avr-libc.fplib
-                0x00000ab0        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(divsf3.o)
-                0x00000ab0                __divsf3
+                0x00000ace        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(divsf3.o)
+                0x00000ace                __divsf3
  .text.avr-libc.fplib
-                0x00000ab4       0xcc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(divsf3x.o)
-                0x00000aca                __divsf3x
-                0x00000ace                __divsf3_pse
+                0x00000ad2       0xcc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                0x00000ae8                __divsf3x
+                0x00000aec                __divsf3_pse
  .text.avr-libc.fplib
-                0x00000b80        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
-                0x00000b80                __fixsfsi
+                0x00000b9e        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+                0x00000b9e                __fixsfsi
  .text.avr-libc.fplib
-                0x00000b8a       0x58 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
-                0x00000b8a                __fixunssfsi
+                0x00000ba8       0x58 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+                0x00000ba8                __fixunssfsi
  .text.avr-libc.fplib
-                0x00000be2       0x7a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(floatsisf.o)
-                0x00000be2                __floatunsisf
-                0x00000be6                __floatsisf
+                0x00000c00       0x7a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+                0x00000c00                __floatunsisf
+                0x00000c04                __floatsisf
  .text.avr-libc.fplib
-                0x00000c5c        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_inf.o)
-                0x00000c5c                __fp_inf
+                0x00000c7a        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+                0x00000c7a                __fp_inf
  .text.avr-libc.fplib
-                0x00000c68        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_nan.o)
-                0x00000c68                __fp_nan
+                0x00000c86        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+                0x00000c86                __fp_nan
  .text.avr-libc.fplib
-                0x00000c6e        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
-                0x00000c6e                __fp_pscA
+                0x00000c8c        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+                0x00000c8c                __fp_pscA
  .text.avr-libc.fplib
-                0x00000c7c        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
-                0x00000c7c                __fp_pscB
+                0x00000c9a        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+                0x00000c9a                __fp_pscB
  .text.avr-libc.fplib
-                0x00000c8a       0x22 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_round.o)
-                0x00000c8a                __fp_round
+                0x00000ca8       0x22 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_round.o)
+                0x00000ca8                __fp_round
  .text.avr-libc.fplib
-                0x00000cac       0x44 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_split3.o)
-                0x00000cac                __fp_split3
-                0x00000cbc                __fp_splitA
+                0x00000cca       0x44 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+                0x00000cca                __fp_split3
+                0x00000cda                __fp_splitA
  .text.avr-libc.fplib
-                0x00000cf0        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_zero.o)
-                0x00000cf0                __fp_zero
-                0x00000cf2                __fp_szero
+                0x00000d0e        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+                0x00000d0e                __fp_zero
+                0x00000d10                __fp_szero
  .text.libgcc.mul
-                0x00000cfe       0x1e c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_umulhisi3.o)
-                0x00000cfe                __umulhisi3
+                0x00000d1c       0x1e c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_umulhisi3.o)
+                0x00000d1c                __umulhisi3
  .text.avr-libc
-                0x00000d1c       0x3a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(atoi.o)
-                0x00000d1c                atoi
+                0x00000d3a       0x3a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(atoi.o)
+                0x00000d3a                atoi
  .text.avr-libc
-                0x00000d56       0x12 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strcmp.o)
-                0x00000d56                strcmp
+                0x00000d74       0x12 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strcmp.o)
+                0x00000d74                strcmp
  .text.avr-libc
-                0x00000d68       0x14 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(itoa_ncheck.o)
-                0x00000d68                __itoa_ncheck
+                0x00000d86       0x14 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(itoa_ncheck.o)
+                0x00000d86                __itoa_ncheck
  .text.avr-libc
-                0x00000d7c       0x10 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(mul10.o)
-                0x00000d7c                __mulhi_const_10
+                0x00000d9a       0x10 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(mul10.o)
+                0x00000d9a                __mulhi_const_10
  .text.avr-libc
-                0x00000d8c       0x32 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(utoa_ncheck.o)
-                0x00000d8c                __utoa_ncheck
-                0x00000d8e                __utoa_common
+                0x00000daa       0x32 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(utoa_ncheck.o)
+                0x00000daa                __utoa_ncheck
+                0x00000dac                __utoa_common
  .text.avr-libc
-                0x00000dbe       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strrev.o)
-                0x00000dbe                strrev
-                0x00000dde                . = ALIGN (0x2)
+                0x00000ddc       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strrev.o)
+                0x00000ddc                strrev
+                0x00000dfc                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000dde        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                0x00000dde                _exit
-                0x00000dde                exit
+ .fini9         0x00000dfc        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000dfc                _exit
+                0x00000dfc                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -648,11 +648,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000dde        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000dfc        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000de2                _etext = .
+                0x00000e00                _etext = .
 
-.data           0x00800100       0x58 load address 0x00000de2
+.data           0x00800100       0x5a load address 0x00000e00
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -665,39 +665,40 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800106       0x2e display.o
+                0x00800106       0x32 display.o
  .rodata.str1.1
-                0x00800134       0x24 messages.o
+                0x00800138       0x22 messages.o
+                                 0x24 (size before relaxing)
  *(.gnu.linkonce.d*)
-                0x00800158                . = ALIGN (0x2)
-                0x00800158                _edata = .
-                0x00800158                PROVIDE (__data_end, .)
+                0x0080015a                . = ALIGN (0x2)
+                0x0080015a                _edata = .
+                0x0080015a                PROVIDE (__data_end, .)
 
-.bss            0x00800158      0x10f
-                0x00800158                PROVIDE (__bss_start, .)
+.bss            0x0080015a      0x10f
+                0x0080015a                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.IS_ROTATED
-                0x00800158        0x2 gyro.o
-                0x00800158                IS_ROTATED
+                0x0080015a        0x2 gyro.o
+                0x0080015a                IS_ROTATED
  .bss.buffer_size
-                0x0080015a        0x1 UART.o
-                0x0080015a                buffer_size
+                0x0080015c        0x1 UART.o
+                0x0080015c                buffer_size
  *(COMMON)
- COMMON         0x0080015b        0xc display.o
-                0x0080015b                sensor_list
- COMMON         0x00800167      0x100 UART.o
-                0x00800167                buffer
-                0x00800267                PROVIDE (__bss_end, .)
-                0x00000de2                __data_load_start = LOADADDR (.data)
-                0x00000e3a                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x0080015d        0xc display.o
+                0x0080015d                sensor_list
+ COMMON         0x00800169      0x100 UART.o
+                0x00800169                buffer
+                0x00800269                PROVIDE (__bss_end, .)
+                0x00000e00                __data_load_start = LOADADDR (.data)
+                0x00000e5a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800267        0x0
-                0x00800267                PROVIDE (__noinit_start, .)
+.noinit         0x00800269        0x0
+                0x00800269                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800267                PROVIDE (__noinit_end, .)
-                0x00800267                _end = .
-                0x00800267                PROVIDE (__heap_start, .)
+                0x00800269                PROVIDE (__noinit_end, .)
+                0x00800269                _end = .
+                0x00800269                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -782,35 +783,35 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x292f
+.debug_info     0x00000000     0x29c6
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0xe96 display.o
- .debug_info    0x00000e96      0x4e0 gyro.o
- .debug_info    0x00001376      0x835 messages.o
- .debug_info    0x00001bab      0x3af Sensormodul.o
- .debug_info    0x00001f5a      0x179 SPI.o
- .debug_info    0x000020d3      0x488 UART.o
- .debug_info    0x0000255b      0x3d4 ultraljud.o
+ .debug_info    0x00000000      0xeb5 display.o
+ .debug_info    0x00000eb5      0x4e0 gyro.o
+ .debug_info    0x00001395      0x835 messages.o
+ .debug_info    0x00001bca      0x427 Sensormodul.o
+ .debug_info    0x00001ff1      0x179 SPI.o
+ .debug_info    0x0000216a      0x488 UART.o
+ .debug_info    0x000025f2      0x3d4 ultraljud.o
 
-.debug_abbrev   0x00000000      0xe7d
+.debug_abbrev   0x00000000      0xe86
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x32c display.o
- .debug_abbrev  0x0000032c      0x23a gyro.o
- .debug_abbrev  0x00000566      0x238 messages.o
- .debug_abbrev  0x0000079e      0x1cc Sensormodul.o
- .debug_abbrev  0x0000096a       0xe7 SPI.o
- .debug_abbrev  0x00000a51      0x1bd UART.o
- .debug_abbrev  0x00000c0e      0x26f ultraljud.o
+ .debug_abbrev  0x00000000      0x335 display.o
+ .debug_abbrev  0x00000335      0x23a gyro.o
+ .debug_abbrev  0x0000056f      0x238 messages.o
+ .debug_abbrev  0x000007a7      0x1cc Sensormodul.o
+ .debug_abbrev  0x00000973       0xe7 SPI.o
+ .debug_abbrev  0x00000a5a      0x1bd UART.o
+ .debug_abbrev  0x00000c17      0x26f ultraljud.o
 
-.debug_line     0x00000000     0x13bb
+.debug_line     0x00000000     0x13d9
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x616 display.o
  .debug_line    0x00000616      0x29d gyro.o
  .debug_line    0x000008b3      0x217 messages.o
- .debug_line    0x00000aca      0x1d9 Sensormodul.o
- .debug_line    0x00000ca3      0x181 SPI.o
- .debug_line    0x00000e24      0x31f UART.o
- .debug_line    0x00001143      0x278 ultraljud.o
+ .debug_line    0x00000aca      0x1f7 Sensormodul.o
+ .debug_line    0x00000cc1      0x181 SPI.o
+ .debug_line    0x00000e42      0x31f UART.o
+ .debug_line    0x00001161      0x278 ultraljud.o
 
 .debug_frame    0x00000000      0x5fc
  *(.debug_frame)
@@ -839,15 +840,15 @@ END GROUP
  .debug_str     0x00000576       0x2b ultraljud.o
                                 0x26f (size before relaxing)
 
-.debug_loc      0x00000000     0x1abc
+.debug_loc      0x00000000     0x1aa8
  *(.debug_loc)
- .debug_loc     0x00000000      0x99b display.o
- .debug_loc     0x0000099b      0x36d gyro.o
- .debug_loc     0x00000d08      0x3bd messages.o
- .debug_loc     0x000010c5       0xe4 Sensormodul.o
- .debug_loc     0x000011a9      0x107 SPI.o
- .debug_loc     0x000012b0      0x628 UART.o
- .debug_loc     0x000018d8      0x1e4 ultraljud.o
+ .debug_loc     0x00000000      0x987 display.o
+ .debug_loc     0x00000987      0x36d gyro.o
+ .debug_loc     0x00000cf4      0x3bd messages.o
+ .debug_loc     0x000010b1       0xe4 Sensormodul.o
+ .debug_loc     0x00001195      0x107 SPI.o
+ .debug_loc     0x0000129c      0x628 UART.o
+ .debug_loc     0x000018c4      0x1e4 ultraljud.o
 
 .debug_macinfo
  *(.debug_macinfo)
