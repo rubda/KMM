@@ -22,12 +22,17 @@ public class ComputerCommunication extends Communication {
                 parts[0].equals("#speed")){
             MovementCommunication.send(inputString);
         }
-        else {
+        else if(parts[0].equals("#param")){
+            if(parts[1].equals("sensorstring")){
+
+                System.out.println("SEND: " +parts[2]+":"+parts[3]);
+                SensorCommunication.send(parts[2]+":"+parts[3]);
+            }
+        }
+        else {   //SÅ länge!
             SensorCommunication.send(inputString);
         }
-        //else if (parts[0].equals("#param")){
-            //sätt parametrar
-        //}
+
     }
 
     public static void send(String message) {

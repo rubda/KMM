@@ -29,6 +29,7 @@ public class MovementCommunication extends Communication {
 
             }
             else{
+                System.out.println("FALSE: "+ inputString);
                 send("#accept:false;");
             }
 
@@ -44,10 +45,12 @@ public class MovementCommunication extends Communication {
 
             }
             else{
+                System.out.println("FALSE: "+ inputString);
                 send("#accept:false;");
             }
         }
         else{
+            System.out.println("FALSE: "+ inputString);
             send("#accept:false;");
         }
     }

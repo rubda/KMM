@@ -35,19 +35,37 @@ public class SensorCommunication extends Communication {
 
         if(parts[0].equals("#rotate")){
             //nånting
+
+
+
+            //skicka sensordata till dator
+            ComputerCommunication.send(inputString+";");
             send("#accept:true;");
 
         }
         else if(parts[0].equals("#distance")){
+
             try {
                 sensorSemaphore.acquire();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            for (int i = 1; i < parts.length; i=i+2) {
-                sensors[Integer.parseInt(parts[i])] = (Integer.parseInt(parts[i+1]));
+
+
+            if(parts.length>3){
+                for (int i = 1; i < parts.length; i++) {
+                 sensors[i] = (Integer.parseInt(parts[i]));
+                }
             }
+            else{
+                sensors[Integer.parseInt(parts[1])] = Integer.parseInt(parts[2]);
+            }
+
             sensorSemaphore.release();
+
+            //skicka sensordata till dator
+            ComputerCommunication.send(inputString+";");
+
             send("#accept:true;");
         }
         else if(parts[0].equals("#accept")){
@@ -60,10 +78,12 @@ public class SensorCommunication extends Communication {
 
             }
             else{
+                System.out.println("FALSE: "+ inputString);
                 send("#accept:false;");
             }
         }
         else{
+            System.out.println("FALSE: "+ inputString);
             send("#accept:false;");
         }
 
