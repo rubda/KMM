@@ -9,7 +9,7 @@ public class FrameWork extends JFrame
     private final MainComponent mainPanel;
     public static SensorComponent[] sensors; // Sensors
     public static SensorComponent gyro, mode; // Sensors
-    private final ParameterComponent KP, KD, sensorstring;  // Parameters
+    private final ParameterComponent KP, KD, sensorstring, speed, upperBound, lowerBound, goalBound, stopBound, walkToDistance, rotateLeft, rotateRight;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
 
@@ -43,12 +43,29 @@ public class FrameWork extends JFrame
         // Initialize parameters
         KP = new ParameterComponent("KP");
         KD = new ParameterComponent("KD");
-        sensorstring = new ParameterComponent(("sensorstring"));
+        sensorstring = new ParameterComponent("sensorstring");
+        speed = new ParameterComponent("speed");
+        upperBound = new ParameterComponent("upperBound");
+        lowerBound = new ParameterComponent("lowerBound");
+        goalBound = new ParameterComponent("goalBound");
+        stopBound = new ParameterComponent("stopBound");
+        walkToDistance = new ParameterComponent("walkToDistance");
+        rotateLeft = new ParameterComponent("rotateLeft");
+        rotateRight = new ParameterComponent("rotateRight");
 
         // Add parameters
         parameterPanel.add(KP);
         parameterPanel.add(KD);
+        parameterPanel.add(speed);
+        parameterPanel.add(upperBound);
+        parameterPanel.add(lowerBound);
+        parameterPanel.add(goalBound);
+        parameterPanel.add(stopBound);
         parameterPanel.add(sensorstring);
+        parameterPanel.add(walkToDistance);
+        parameterPanel.add(rotateLeft);
+        parameterPanel.add(rotateRight);
+
 
         // Add sensors
         sensorPanel.add(mode);
@@ -75,12 +92,12 @@ public class FrameWork extends JFrame
 
 
         // Testing the receive functions
-        Communication.receive("#time:1;");
-        Communication.receive("#distance:2:23;");
-        Communication.receive("#mode:auto;");
-        Communication.receive("#action:SF;");
-        Communication.receive("#distance:10:20:40:3:6:23;");
-        Communication.receive("#rotate:84;");
+        //Communication.receive("#time:1;");
+        //Communication.receive("#distance:2:23;");
+        //Communication.receive("#mode:auto;");
+        //Communication.receive("#action:SF;");
+        //Communication.receive("#distance:10:20:40:3:6:23;");
+        //Communication.receive("#rotate:84;");
 
 
     }

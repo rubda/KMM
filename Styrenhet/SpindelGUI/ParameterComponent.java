@@ -13,7 +13,6 @@ JTextField field = new JTextField(10);
         JLabel jlabel = new JLabel(name);
         add(jlabel);
 
-
         final String[] textString = new String[2];
         textString[0] = name;
         field.addActionListener(new ActionListener()

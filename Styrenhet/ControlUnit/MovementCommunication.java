@@ -38,7 +38,6 @@ public class MovementCommunication extends Communication {
             if(parts[1].equals("true")){
                 //nånting
 
-
             }
             else if(parts[1].equals("false")){
                 //nånting
@@ -63,3 +62,4 @@ public class MovementCommunication extends Communication {
         }
     }
 }
+

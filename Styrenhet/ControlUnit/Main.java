@@ -1,5 +1,3 @@
-import com.sun.corba.se.spi.activation._InitialNameServiceStub;
-
 import java.util.TooManyListenersException;
 
 public class Main {
@@ -10,6 +8,12 @@ public class Main {
     static MovementCommunication MovementCommunication;
 
     static Boolean robotReady = false;
+
+    static Boolean rotating = false;
+    static int upperBound = 120;
+    static int lowerBound = 110;
+    static int goalBound = 150;
+    static int stopBound = 10;
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -58,11 +62,6 @@ public class Main {
         }
 
 
-
-
-
-
-
         //checkDisconnect(serialHelper);
         // while(true){
         // }
@@ -102,35 +101,6 @@ public class Main {
         }
     }
 
-/*    private static void checkAddDataAvailableListener(SerialHelper serialHelper, String data) {
-        System.out.println("Check data available listener");
-
-        ComputerCommunication tester =
-                new ComputerCommunication(serialHelper.getSerialInputStream(),
-                        serialHelper.getSerialOutputStream());
-
-        try {
-            serialHelper.addDataAvailableListener(tester);
-
-        } catch (TooManyListenersException ex) {
-            System.err.println(ex.getMessage());
-        }*/
-
-/*      OutputStream outStream = serialHelper.getSerialOutputStream();
-        data = data + "\r";
-        try {
-            outStream.write(data.getBytes());
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-
-        try {
-            // Sleep for 10-secs
-            Thread.sleep(10000);
-        } catch (InterruptedException ex) {
-        }
-    }*/
-
     private static void checkDisconnect(SerialHelper serialHelper) {
         System.out.println("Disconnect from serial port");
         serialHelper.disconnect();
@@ -140,7 +110,9 @@ public class Main {
     public static void setRobotReady(Boolean robotReady) {
         Main.robotReady = robotReady;
     }
-    void auto(){
+
+
+    public void auto(){
         boolean goal = false;
 
         MovementCommunication.send("#init:0;");
@@ -148,15 +120,21 @@ public class Main {
         while(!robotReady){}
 
         while (!goal){
-            updateSensorArray();
+            updateSensors(0);
 
 
-            if(SensorCommunication.getSensorValue(2) >= 120){
+            if(SensorCommunication.getSensorValue(2) >= upperBound){
                      //kör fram
                 MovementCommunication.send("#walk:f;");
             }
-            else if(SensorCommunication.getSensorValue(2) <= 110){
+            else if(SensorCommunication.getSensorValue(2) <= lowerBound){
+
                 //Gå fram till avstånd  ungefär 10 cm
+                //såhär kan man göra men inte så snyggt...
+                walkToDistance(stopBound);
+
+                //Vad händer efter detta? Kolla upp!
+
             }
             else{
                 //bättre väg åt sidan?
@@ -164,10 +142,15 @@ public class Main {
                 //vänster > rakt fram
                 if(SensorCommunication.getSensorValue(1)>SensorCommunication.getSensorValue(2)){
                     //Rotera vänster
+
+                    rotate(90, "left");
+
                 }
                 //höger > rakt fram
                 else if(SensorCommunication.getSensorValue(3)>SensorCommunication.getSensorValue(2)){
                     //Rotera höger
+
+                    rotate(90, "right");
                 }
                 //Om inte bättre väg
                 else{
@@ -177,9 +160,9 @@ public class Main {
             }
 
             //Om avstånd > 150. framåt, vänster, höger
-            if(SensorCommunication.getSensorValue(1) < 150 &&
-                    SensorCommunication.getSensorValue(2) < 150 &&
-                    SensorCommunication.getSensorValue(3) < 150){
+            if(SensorCommunication.getSensorValue(1) < goalBound &&
+                    SensorCommunication.getSensorValue(2) < goalBound &&
+                    SensorCommunication.getSensorValue(3) < goalBound){
                 //Mål!
                 goal = true;
                 MovementCommunication.send("#stop:after;");
@@ -189,7 +172,41 @@ public class Main {
         }
     }
 
-    private void updateSensorArray(){
-        SensorCommunication.send("#distance:0;");
+    public static void walkToDistance(int stopBound){
+        ComputerCommunication.send("info:walkToDistance "+stopBound+";");
+        MovementCommunication.send("#walk:f;");
+        while(SensorCommunication.getSensorValue(1)>stopBound){    //10 är nog för lite!
+            updateSensors(1);
+        }
+        MovementCommunication.send("#stop.after;");
+        ComputerCommunication.send("info:stop;");
+
+    }
+
+    public static void rotate(int degrees, String direction){
+        if(direction.equals("left")){
+            ComputerCommunication.send("info:rotate left "+degrees+";");
+
+            SensorCommunication.send("#rotate:"+degrees+";");
+            MovementCommunication.send("#rotate:l;");
+            rotating = true; //vänta på accept?
+            while(rotating){}
+            MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
+        }
+        else if(direction.equals("right")){
+            ComputerCommunication.send("info:rotate right "+degrees+";");
+
+            SensorCommunication.send("#rotate:-"+degrees+";");
+            MovementCommunication.send("#rotate:r;");
+            rotating = true; //vänta på accept?
+            while(rotating){}
+            MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
+        }
+        ComputerCommunication.send("info:stop;");
+    }
+
+    //update sensors. id 0 = all.
+    private static void updateSensors(int id){             //INTE TESTAD
+        SensorCommunication.send("#distance:" +id+";");
     }
 }

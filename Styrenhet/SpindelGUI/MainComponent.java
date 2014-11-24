@@ -18,6 +18,7 @@ public class MainComponent extends JComponent {
 
     private void addBindings(){
 
+        //InputMap map = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         InputMap map = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 
@@ -25,7 +26,7 @@ public class MainComponent extends JComponent {
         map.put(KeyStroke.getKeyStroke("pressed RIGHT"), "rotateRight");
         map.put(KeyStroke.getKeyStroke("pressed UP"), "walkForward");
         map.put(KeyStroke.getKeyStroke("pressed DOWN"), "walkBackwards");
-
+        map.put(KeyStroke.getKeyStroke("pressed R"), "reset");
 
         map.put(KeyStroke.getKeyStroke("released LEFT"), "stopRotateLeft");
         map.put(KeyStroke.getKeyStroke("released RIGHT"), "stopRotateRight");
@@ -33,6 +34,13 @@ public class MainComponent extends JComponent {
         map.put(KeyStroke.getKeyStroke("released DOWN"), "stopWalkingBackwards");
 
 
+        Action reset = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println("reset");
+                requestFocus();
+            }
+        };
 
         Action rotateLeft = new AbstractAction(){
             public void actionPerformed(final ActionEvent e) {
@@ -113,7 +121,7 @@ public class MainComponent extends JComponent {
                 }
             }
         };
-
+        getActionMap().put("reset", reset);
         getActionMap().put("rotateLeft", rotateLeft);
         getActionMap().put("rotateRight", rotateRight);
         getActionMap().put("walkForward", walkForward);
