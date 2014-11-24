@@ -174,36 +174,43 @@ void write_to_display2(uint16_t value, int pos)
 void dist_to_display(int id)
 {
 	uint16_t  DISTANCE = get_sensor(id)->Distance;
-	char* dist[]={"000"};
+	char* dist = "000";
 
-	itoa(DISTANCE, dist[0], 10);
+	itoa(DISTANCE, dist, 10);
+	if(DISTANCE < 100){
+		dist[2] = ' ';
+	}
+	if(DISTANCE < 10){
+		dist[1] = ' ';
+	}
 
 	switch(id){
 		case 0:
 			write_string("D1: ", 0xC0); //D1: 000 D2: 000
-			write_string(dist[0], 0xC4);
+			write_string(dist, 0xC4);
 			break;
 		case 1:
 			write_string("D2: ", 0xC9);
-			write_string(dist[0], 0xCD);
+			write_string(dist, 0xCD);
 			break;
 		case 2:
 			write_string("D3: ", 0x90);
-			write_string(dist[0], 0x94);
+			write_string(dist, 0x94);
 			break;
 		case 3:
 			write_string("D4: ", 0x99);
-			write_string(dist[0], 0x9D);
+			write_string(dist, 0x9D);
 			break;
 		case 4:
 			write_string("D5: ", 0xD0);
-			write_string(dist[0], 0xD4);
+			write_string(dist, 0xD4);
 			break;
 		case 5:
 			write_string("D6: ", 0xD9);
-			write_string(dist[0], 0xDD);
+			write_string(dist, 0xDD);
 			break;
 	}
+	
 	
 	
 }

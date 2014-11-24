@@ -31,18 +31,13 @@ int main(void)
 	
 	while(1)
     {
-		clear_display();
+		//clear_display();
 		
 		//BOSSE();
 		get_distance(get_sensor(SENSOR_ID));
 		//distance_to_display(SENSOR_ID);
-		//dist_to_display(SENSOR_ID);
-		dist_to_display(0);
-		dist_to_display(1);
-		dist_to_display(2);
-		dist_to_display(3);
-		dist_to_display(4);
-		dist_to_display(5);
+		dist_to_display(SENSOR_ID);
+
 		_delay_ms(1000);
 		
 		if (got_message()){
