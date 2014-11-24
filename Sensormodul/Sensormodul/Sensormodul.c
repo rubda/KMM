@@ -11,7 +11,6 @@
 #include "gyro.h"
 #include <util/delay.h>
 #include "ultraljud.h"
-//#include "UART.h"
 #include "display.h"
 #include "SPI.h"
 #include "messages.h"
@@ -25,6 +24,7 @@ int main(void)
 	init_sensors();
 	init_display();
 	setup_spi();
+	ss_high();
 	activate_adc();
 	uart_init(0x0033);
 	sei();		
@@ -51,11 +51,3 @@ int main(void)
 }	
 	
 	
-	
-
-
-		//send_message("distance", (const char**)SENSOR_DATA, 6);
-		//const char* t[1];
-		//t[1] = SENSOR_DATA[2];
-		//send_message("distance",t, 1);
-		//write_string(SENSOR_DATA[2]);

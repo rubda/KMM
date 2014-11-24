@@ -67,7 +67,6 @@ void message_handler(uart_message *message_in){
 	
 	int ANGLE = 0;
 	int CALC_ANGLE = 0;
-	char test[20];
 	uint8_t c;
 	
 	switch (get_cmd(message_in)){

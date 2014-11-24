@@ -67,7 +67,7 @@ uint16_t get_angular_rate()
 
 int adc_to_angular_rate(uint16_t data)
 	{
-		int OFFSET = 0; //2500
+		int OFFSET = 2500; //2500
 		
 		int vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
 		
@@ -88,8 +88,8 @@ int rotate_to(int angle)
 		{		
 			start_conversion();
 			rate = get_angular_rate();
-			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			//_delay_ms(1000);
+			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
+			_delay_ms(10);
 		}
 		has_rotated(1);
 	}else if (angle < 0){
@@ -97,8 +97,8 @@ int rotate_to(int angle)
 		{
 			start_conversion();
 			rate = get_angular_rate();
-			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			//_delay_ms(1000);
+			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
+			_delay_ms(10);
 		}
 		has_rotated(1);
 	}	
