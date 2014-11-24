@@ -25,9 +25,34 @@ public class ComputerCommunication extends Communication {
         else if(parts[0].equals("#param")){
             if(parts[1].equals("sensorstring")){
 
-                System.out.println("SEND: " +parts[2]+":"+parts[3]);
-                SensorCommunication.send(parts[2]+":"+parts[3]);
+                    System.out.println("SEND: " +parts[2]+":"+parts[3]);
+                    SensorCommunication.send(parts[2]+":"+parts[3]);
             }
+            else if(parts[1].equals("speed")){     //INTE TESTAD
+                MovementCommunication.send("#"+parts[1]+":"+parts[2]);
+            }
+            else if(parts[1].equals("upperBound")){
+                Main.upperBound = Integer.parseInt(parts[2]);
+            }
+            else if(parts[1].equals("lowerBound")){
+                Main.lowerBound = Integer.parseInt(parts[2]);
+            }
+            else if(parts[1].equals("goalBound")){
+                Main.goalBound = Integer.parseInt(parts[2]);
+            }
+            else if(parts[1].equals("stopBound")){
+                Main.stopBound = Integer.parseInt(parts[2]);
+            }
+            else if(parts[1].equals("walkToDistance")){
+                Main.walkToDistance(Integer.parseInt(parts[2]));
+            }
+            else if(parts[1].equals("rotateLeft")){
+                Main.rotate(Integer.parseInt(parts[2]), "left");
+            }
+            else if(parts[1].equals("rotateRight")){
+                Main.rotate(Integer.parseInt(parts[2]), "right");
+            }
+
         }
         else {   //SÅ länge!
             SensorCommunication.send(inputString);

@@ -21,13 +21,12 @@ public abstract class Communication implements SerialPortEventListener {
 
     private void readSerial() {
         try {
-            System.out.println("readSerial");
-            System.out.println(new String(readBuffer, Charset.defaultCharset()));
-            System.out.println(inStream.available());
+            //System.out.println("readSerial");
+            //System.out.println(new String(readBuffer, Charset.defaultCharset()));
+            //System.out.println(inStream.available());
 
             int availableBytes = inStream.available();
             if (availableBytes > 0) {
-                System.out.println("availableBytes");
                 // Read the serial port
                 inStream.read(readBuffer, 0, availableBytes);
                 // Print it out
@@ -59,7 +58,6 @@ public abstract class Communication implements SerialPortEventListener {
             case SerialPortEvent.DATA_AVAILABLE:
                 readSerial();
             default:
-                System.out.println("Event");
         }
     }
 

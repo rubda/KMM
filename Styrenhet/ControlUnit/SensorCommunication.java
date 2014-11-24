@@ -34,9 +34,8 @@ public class SensorCommunication extends Communication {
         String parts[] = inputString.split(":");
 
         if(parts[0].equals("#rotate")){
-            //nånting
 
-
+            Main.rotating = false;
 
             //skicka sensordata till dator
             ComputerCommunication.send(inputString+";");
