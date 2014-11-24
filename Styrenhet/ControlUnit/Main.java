@@ -1,3 +1,5 @@
+import com.sun.corba.se.spi.activation._InitialNameServiceStub;
+
 import java.util.TooManyListenersException;
 
 public class Main {
@@ -9,10 +11,10 @@ public class Main {
 
     static Boolean robotReady = false;
 
-
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Wrong arguments!");
+
             System.exit(1);
         }
 
@@ -64,6 +66,18 @@ public class Main {
         //checkDisconnect(serialHelper);
         // while(true){
         // }
+    }
+
+    private static String bla(String message){
+        String messages[] = message.split(";", 2);
+       // if(messages[0].charAt(messages[0].length() - 1) == (';')){
+        if(messages.length == 2){
+            System.out.println((messages[0]));
+
+            return bla(messages[1]);
+        }
+
+        return message;
     }
 
     private static void checkListSerialPorts(SerialHelper serialHelper) {
@@ -145,16 +159,31 @@ public class Main {
                 //Gå fram till avstånd  ungefär 10 cm
             }
             else{
-                //bättre väg åt sidan
+                //bättre väg åt sidan?
+
+                //vänster > rakt fram
                 if(SensorCommunication.getSensorValue(1)>SensorCommunication.getSensorValue(2)){
-
+                    //Rotera vänster
                 }
+                //höger > rakt fram
                 else if(SensorCommunication.getSensorValue(3)>SensorCommunication.getSensorValue(2)){
-
+                    //Rotera höger
                 }
+                //Om inte bättre väg
                 else{
-
+                    //Kör fram
+                    MovementCommunication.send("#walk:f;");
                 }
+            }
+
+            //Om avstånd > 150. framåt, vänster, höger
+            if(SensorCommunication.getSensorValue(1) < 150 &&
+                    SensorCommunication.getSensorValue(2) < 150 &&
+                    SensorCommunication.getSensorValue(3) < 150){
+                //Mål!
+                goal = true;
+                MovementCommunication.send("#stop:after;");
+
             }
 
         }

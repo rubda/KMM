@@ -9,7 +9,7 @@ public class FrameWork extends JFrame
     private final MainComponent mainPanel;
     public static SensorComponent[] sensors; // Sensors
     public static SensorComponent gyro, mode; // Sensors
-    private final ParameterComponent KP, KD;  // Parameters
+    private final ParameterComponent KP, KD, sensorstring;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
 
@@ -43,10 +43,12 @@ public class FrameWork extends JFrame
         // Initialize parameters
         KP = new ParameterComponent("KP");
         KD = new ParameterComponent("KD");
+        sensorstring = new ParameterComponent(("sensorstring"));
 
         // Add parameters
         parameterPanel.add(KP);
         parameterPanel.add(KD);
+        parameterPanel.add(sensorstring);
 
         // Add sensors
         sensorPanel.add(mode);
@@ -77,6 +79,8 @@ public class FrameWork extends JFrame
         Communication.receive("#distance:2:23;");
         Communication.receive("#mode:auto;");
         Communication.receive("#action:SF;");
+        Communication.receive("#distance:10:20:40:3:6:23;");
+        Communication.receive("#rotate:84;");
 
 
     }
