@@ -55,7 +55,7 @@ uint16_t get_angular_rate()
 	send_spi(POLL);
 	_delay_us(200);
 	
-	if (REG & (1 << 16)) get_angular_rate();
+	//if (REG & (1 << 16)) get_angular_rate();
 	REG = get_spi(0xFF);
 	ss_high();
 	
@@ -67,7 +67,7 @@ uint16_t get_angular_rate()
 
 int adc_to_angular_rate(uint16_t data)
 	{
-		int OFFSET = 2500;
+		int OFFSET = 0; //2500
 		
 		int vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
 		
@@ -79,24 +79,26 @@ int rotate_to(int angle)
 {
 	uint16_t rate;
 	int ACHIEVED_ANGLE = 0;
-	int OFFSET = 10;
+	int OFFSET = 0;
+	int LEFT_ANGLE = angle - OFFSET;
+	int RIGHT_ANGLE = angle + OFFSET;
 		
-	if (angle >= 0){
-		while(angle-OFFSET > ACHIEVED_ANGLE)
+	if (angle > 0){
+		while(LEFT_ANGLE > ACHIEVED_ANGLE)
 		{		
 			start_conversion();
 			rate = get_angular_rate();
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			_delay_ms(1000);
+			//_delay_ms(1000);
 		}
 		has_rotated(1);
-	}else{
-		while(ACHIEVED_ANGLE > angle+OFFSET)
+	}else if (angle < 0){
+		while(ACHIEVED_ANGLE > RIGHT_ANGLE)
 		{
 			start_conversion();
 			rate = get_angular_rate();
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			_delay_ms(1000);
+			//_delay_ms(1000);
 		}
 		has_rotated(1);
 	}	

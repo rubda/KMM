@@ -27,25 +27,20 @@ int main(void)
 	setup_spi();
 	activate_adc();
 	uart_init(0x0033);
-	sei();
+	sei();		
+	BOSSE();
 	
 	while(1)
     {
-		//clear_display();
-		
-		//BOSSE();
 		get_distance(get_sensor(SENSOR_ID));
+		//dist_to_display(SENSOR_ID);
 		//distance_to_display(SENSOR_ID);
-		dist_to_display(SENSOR_ID);
-
-		_delay_ms(1000);
 		
 		if (got_message()){
 			get_message(&message_in);
 			message_handler(&message_in);
 		}
 	
-		//_delay_ms(1000);
 	
 		if (SENSOR_ID == 5){
 			SENSOR_ID = 0;

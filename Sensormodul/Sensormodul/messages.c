@@ -5,6 +5,8 @@
  *  Author: jakbi869
  */ 
 #include "messages.h"
+#include "display.h"
+#include <stdlib.h>
 
 const char *true[] = {"true"};
 const char *false[] = {"false"};
@@ -65,6 +67,7 @@ void message_handler(uart_message *message_in){
 	
 	int ANGLE = 0;
 	int CALC_ANGLE = 0;
+	char test[20];
 	uint8_t c;
 	
 	switch (get_cmd(message_in)){
