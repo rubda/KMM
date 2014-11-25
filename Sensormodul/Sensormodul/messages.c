@@ -6,6 +6,7 @@
  */ 
 #include "messages.h"
 #include "display.h"
+#include "gyro.h"
 #include <stdlib.h>
 
 const char *true[] = {"true"};
@@ -71,12 +72,13 @@ void message_handler(uart_message *message_in){
 		case 1:	//rotate
 			{
 				char *rot[1];
-				rot[0] = malloc(2);
+				rot[0] = malloc(4);
 				send_message("accept", true, 1);
 				ANGLE = atoi((*message_in).data[1].data);
 				CALC_ANGLE = rotate_to(ANGLE);
-				//itoa(CALC_ANGLE, rot[0], 10);
-				snprintf(rot[0], 2, "%u", CALC_ANGLE);
+				//itoa((int)(CALC_ANGLE+0.5), rot[0], 10);
+				data_to_display((int)(CALC_ANGLE+0.5));
+				snprintf(rot[0], 4, "%d", CALC_ANGLE);
 				send_message("rotate", rot, 1);
 				free(rot[0]);
 			}
@@ -103,14 +105,14 @@ void message_handler(uart_message *message_in){
 				snprintf(attr[0], 2, "%u", c);
 				//itoa(c, attr[0], 10);
 				//itoa(get_sensor(c-1)->Distance, attr[1], 10);
-				snprintf(attr[1], 4, "%u", get_sensor(1)->Distance);
+				snprintf(attr[1], 4, "%u", get_sensor(c-1)->Distance);
 				//sprintf(attr[i], "%u", get_sensor(i)->Distance);
 				send_message("distance", attr, 2);
 				
 				free(attr[0]);
 				free(attr[1]);
 			}else{
-				send_message("accept", false, 1);uiy 
+				send_message("accept", false, 1);
 			}
 			break;
 		case 3: //accept
