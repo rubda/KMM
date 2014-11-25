@@ -1,6 +1,6 @@
 #include "UART.h"
 
-char buffer[256];
+char buffer[MAX_BUFFER];
 uint8_t buffer_size = 0;
 
 int uart_read_string(char *s, int size);
@@ -19,7 +19,7 @@ void uart_init(uint16_t settings) // 0x0340
 
 void check_rx() {
 	if (bit_is_set(UCSR0A, RXC0)){
-		buffer_size = uart_read_string(buffer, 255);
+		buffer_size = uart_read_string(buffer, MAX_BUFFER);
 	}
 }
 

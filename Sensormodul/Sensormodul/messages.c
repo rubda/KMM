@@ -10,9 +10,8 @@
 
 const char *true[] = {"true"};
 const char *false[] = {"false"};
-char *rot[] = {"0"};
 
-char *distance_data[1];
+
 
 /*char* int_to_string(uint16_t digit)
 {
@@ -68,14 +67,19 @@ void message_handler(uart_message *message_in){
 	int ANGLE = 0;
 	int CALC_ANGLE = 0;
 	uint8_t c;
-	
 	switch (get_cmd(message_in)){
 		case 1:	//rotate
-			send_message("accept", true, 1);
-			ANGLE = atoi((*message_in).data[1].data);
-			CALC_ANGLE = rotate_to(ANGLE);
-			itoa(CALC_ANGLE, rot[0], 10);
-			send_message("rotate", rot, 1);
+			{
+				char *rot[1];
+				rot[0] = malloc(2);
+				send_message("accept", true, 1);
+				ANGLE = atoi((*message_in).data[1].data);
+				CALC_ANGLE = rotate_to(ANGLE);
+				//itoa(CALC_ANGLE, rot[0], 10);
+				snprintf(rot[0], 2, "%u", CALC_ANGLE);
+				send_message("rotate", rot, 1);
+				free(rot[0]);
+			}
 			break;
 		case 2:	//distance
 			c = atoi((*message_in).data[1].data);
@@ -83,17 +87,30 @@ void message_handler(uart_message *message_in){
 				send_message("accept", true, 1);
 				char* attr[6];
 				int i; for(i = 0; i < 6; ++i){
-					itoa(get_sensor(i)->Distance, attr[i], 10);
+					attr[i] = malloc(4);
+					//itoa(get_sensor(i)->Distance, attr[i], 10);
+					snprintf(attr[i], 4, "%u", get_sensor(i)->Distance);
 				}
 				send_message("distance", attr, 6);
+				for(i = 0; i < 6; ++i){
+					free(attr[i]);	
+				}
 			}else if(c > 0 && c <= 6){
 				send_message("accept", true, 1);
 				char* attr[2];
-				itoa(c, attr[0], 10);
-				itoa(get_sensor(c-1)->Distance, attr[1], 10);
+				attr[0] = malloc(2);
+				attr[1] = malloc(4);
+				snprintf(attr[0], 2, "%u", c);
+				//itoa(c, attr[0], 10);
+				//itoa(get_sensor(c-1)->Distance, attr[1], 10);
+				snprintf(attr[1], 4, "%u", get_sensor(1)->Distance);
+				//sprintf(attr[i], "%u", get_sensor(i)->Distance);
 				send_message("distance", attr, 2);
+				
+				free(attr[0]);
+				free(attr[1]);
 			}else{
-				send_message("accept", false, 1);
+				send_message("accept", false, 1);uiy 
 			}
 			break;
 		case 3: //accept
@@ -111,5 +128,4 @@ void message_handler(uart_message *message_in){
 			send_message("accept", false, 1);
 			break;
 	}
-
 }

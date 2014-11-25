@@ -2,6 +2,7 @@
 #define UART_H_
 
 #define F_CPU 8000000UL
+#define MAX_BUFFER 256
 
 #define BV(bit)               (1 << bit)
 #define set_bit(byte, bit)    (byte |= BV(bit))  // old sbi()

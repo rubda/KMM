@@ -71,9 +71,9 @@ void get_distance(struct soundSensor* sensor)
 	sensor->Distance = DISTANCE;
 }
 
-void get_sensors_distance(char* data[]){
+/*void get_sensors_distance(char* data[]){
 	int i;
 	for (i = 0; i < 6; ++i){
 		itoa(get_sensor(i)->Distance, data[i], 10);
 	}
-}
+}*/

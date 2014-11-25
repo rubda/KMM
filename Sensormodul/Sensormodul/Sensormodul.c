@@ -25,16 +25,16 @@ int main(void)
 	init_display();
 	setup_spi();
 	ss_high();
-	activate_adc();
+	//activate_adc();
 	uart_init(0x0033);
 	sei();		
-	BOSSE();
+	//BOSSE();
 	
 	while(1)
     {
 		get_distance(get_sensor(SENSOR_ID));
 		//dist_to_display(SENSOR_ID);
-		//distance_to_display(SENSOR_ID);
+		//distance_to_display(1);
 		
 		if (got_message()){
 			get_message(&message_in);

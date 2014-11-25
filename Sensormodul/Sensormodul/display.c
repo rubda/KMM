@@ -173,8 +173,8 @@ void write_to_display2(uint16_t value, int pos)
 
 void dist_to_display(int id)
 {
-	uint16_t  DISTANCE = get_sensor(id)->Distance;
-	char* dist = "000";
+	uint8_t  DISTANCE = get_sensor(id)->Distance;
+	char dist[5]; dist[4] = '\0'; dist[5] = '\0';
 
 	itoa(DISTANCE, dist, 10);
 	if(DISTANCE < 100){
@@ -211,8 +211,6 @@ void dist_to_display(int id)
 			break;
 	}
 	
-	
-	
 }
 
 void distance_to_display(int id)
@@ -244,7 +242,7 @@ void distance_to_display(int id)
 	toggle_enable();	
 	
 	//Id
-	write_to_display(id, 0);
+	write_to_display(id+1, 0);
 	
 	//Ett kolon
 	set_display(0x00, 0x96);
