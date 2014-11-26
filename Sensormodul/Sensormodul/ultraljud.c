@@ -58,15 +58,18 @@ void get_distance(struct soundSensor* sensor)
  	_delay_us(15);
  	PORTA &= ~(1 << PORTA0);
 
-	while (!(PINA & (1 << PINA1)));
+	while (!(PINA & (1 << PINA1)) && TIME++ < 36000)_delay_us(1);
+	TIME = 0;
+	cli();
 	while ((PINA & (1 << PINA1)) && TIME < 36000)
 		{	
 			_delay_us(1);
 			TIME++;
 		}
+	sei();
 	_delay_ms(15); //för test?
 		
-	DISTANCE = TIME/29;
+	DISTANCE = TIME/40;
 	
 	sensor->Distance = DISTANCE;
 }

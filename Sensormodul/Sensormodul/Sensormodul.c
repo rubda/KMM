@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 16000000UL
 
 #include <avr/io.h>
 #include "gyro.h"
@@ -25,7 +25,7 @@ int main(void)
 	init_display();
 	setup_spi();
 	ss_high();
-	uart_init(0x0033);
+	uart_init(0x0067);
 	sei();		
 	
 	while(1)
@@ -33,15 +33,12 @@ int main(void)
 		get_distance(get_sensor(SENSOR_ID));
 		dist_to_display(SENSOR_ID);
 		
-		//cli();
 		if (got_message()){
-			_delay_ms(250);
-			//clear_display();
 			get_message(&message_in);
 			message_handler(&message_in);
+			//_delay_ms(250);
 		}
-		//sei();
-	
+
 		if (SENSOR_ID == 5){
 			SENSOR_ID = 0;
 		}else{

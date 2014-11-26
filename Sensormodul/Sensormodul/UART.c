@@ -70,6 +70,11 @@ void uart_send_string(const char *s){
 }
 
 uint8_t got_message(){
+	cli();
+	if(buffer_size == 0){
+		while(bit_is_set(UCSR0A, RXC0)) uart_read_char(); //FLUSH Buffer.
+	}
+	sei();
 	return buffer_size;
 }
 

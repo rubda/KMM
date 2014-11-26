@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 16000000UL
 
 #include "gyro.h"
 #include "SPI.h"
