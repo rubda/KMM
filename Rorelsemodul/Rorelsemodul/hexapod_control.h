@@ -1,5 +1,6 @@
 #include "servo_uart.h"
 #include <util/delay.h>
+#include <math.h>
 
 #define BROADCAST_ID 0xFE //Broadcast ID for servos
 
@@ -104,3 +105,8 @@ void move_front_leg(uint8_t leg_id, uint16_t length);
 void move_back_leg(uint8_t leg_id);
 uint16_t get_relative_speed(float multiplier);
 void move_middle_leg(uint8_t leg_id);*/
+
+void star_wars_mode();
+
+void ik(double x, double y, double z, int leg);
+void robot_reset();
