@@ -10,11 +10,14 @@ uint8_t leg4[] = {14, 16 ,18};
 uint8_t leg5[] = {7, 9, 11};
 uint8_t leg6[] = {8, 10, 12};
 	
-uint8_t R_MIDDLE_SERVO_START[] = {0xC0, 0x02};	
-uint8_t R_OUTER_SERVO_START[] = {0xC0, 0x00};
-uint8_t L_MIDDLE_SERVO_START[] = {0x3F, 0x01};
-uint8_t L_OUTER_SERVO_START[] = {0x3F, 0x03};
-uint8_t INNER_SERVO_START[] = {0xFF, 0x01};
+uint8_t R_MIDDLE_SERVO_START[] = {0x60, 0x02};	
+uint8_t R_OUTER_SERVO_START[] = {0x00, 0x01};
+uint8_t L_MIDDLE_SERVO_START[] = {0x9F, 0x01};
+uint8_t L_OUTER_SERVO_START[] = {0xFF, 0x02};
+uint8_t INNER_SERVO_START_R[] = {0x00, 0x02};
+uint8_t INNER_SERVO_START_L[] = {0x00, 0x02};
+uint8_t INNER_SERVO_START_M[] = {0xFF, 0x01};
+uint8_t INNER_SERVO_START[] = {0x00, 0x02};
 
 //Init robot and UART communication
 void robot_init(uint16_t speed){
@@ -80,7 +83,12 @@ void robot_start_position(){
 	_delay_us(300);
 	
 	for(i = 1; i < 7; ++i){
-		move_servo_reg(inner_servo(i), INNER_SERVO_START);
+		if(i == 2 || i == 5)
+			move_servo_reg(inner_servo(i), INNER_SERVO_START_R);
+		else if(i == 1 || i == 6)
+			move_servo_reg(inner_servo(i), INNER_SERVO_START_L);
+		else
+			move_servo_reg(inner_servo(i), INNER_SERVO_START_M);
 		_delay_ms(1);
 	}
 	
@@ -159,42 +167,23 @@ void reset_leg(uint8_t leg_id){
 	}
 }
 
-/*void prepare_step_forward(int8_t leg_id, uint16_t length){
-	prepare_step_backward(leg_id, length);
-}
-
-void prepare_step_backward(int8_t leg_id, uint16_t length){
-	uint16_t pos = 0x01FF;
-	if(leg_id == 3 || leg_id == 4){
-		//length = length >> 2;
-	}
-	
-	if(leg_id % 2 == 0){
-		pos += length;
-	}else{
-		pos -= length;
-	}
-	
-	uint8_t pos2[] = {pos, pos >> 8};
-	//move_servo_reg(inner_servo(leg_id), pos2);
-}*/
-
-
 // TODO: Kolla plus och minus för benen
 void move_leg_forward(uint8_t leg_id, uint16_t length){
 	uint8_t start_pos[] = {0xFF, 0x01};
 	uint16_t ml = 0x01FF - (length / 2);
 	uint16_t mr = 0x01FF + (length / 2);	
-	uint16_t bl = 0x01FF - length;
-	uint16_t br = 0x01FF + length;	
+	uint16_t bl = 0x01BF - length;
+	uint16_t br = 0x024F + length;	
 	
 	uint8_t middle_l[] = {ml, ml >> 8};
 	uint8_t back_l[] = {bl, bl >> 8};
 	uint8_t middle_r[] = {mr, mr >> 8};
 	uint8_t back_r[] = {br, br >> 8};
 	
-	if(leg_id == 1 || leg_id == 2){
-		move_servo_reg(inner_servo(leg_id), start_pos);
+	if(leg_id == 1){
+		move_servo_reg(inner_servo(leg_id), INNER_SERVO_START_L);
+	}else if(leg_id == 2){
+		move_servo_reg(inner_servo(leg_id), INNER_SERVO_START_R);
 	}else if(leg_id == 3){
 		move_servo_reg(inner_servo(leg_id), middle_l);
 	}else if(leg_id == 4){
@@ -211,8 +200,8 @@ void move_leg_backward(uint8_t leg_id, uint16_t length){
 	uint8_t start_pos[] = {0xFF, 0x01};
 	uint16_t mr = 0x01FF - (length / 2);
 	uint16_t ml = 0x01FF + (length / 2);
-	uint16_t fl = 0x01FF + length;
-	uint16_t fr = 0x01FF - length;
+	uint16_t fl = 0x024F + length;
+	uint16_t fr = 0x01BF - length;
 	
 	uint8_t middle_r[] = {mr, mr >> 8};
 	uint8_t front_r[] = {fr, fr >> 8};
@@ -227,8 +216,10 @@ void move_leg_backward(uint8_t leg_id, uint16_t length){
 		move_servo_reg(inner_servo(leg_id), middle_l);
 	}else if(leg_id == 4){
 		move_servo_reg(inner_servo(leg_id), middle_r);
-	}else{
-		move_servo_reg(inner_servo(leg_id), start_pos);
+	}else if(leg_id == 5){
+		move_servo_reg(inner_servo(leg_id), INNER_SERVO_START_R);
+	}else if(leg_id == 6){
+		move_servo_reg(inner_servo(leg_id), INNER_SERVO_START_L);
 	}
 }
 
@@ -268,79 +259,105 @@ void setup_first_step(uint16_t length_l, uint16_t   length_r, int direction){
 	_delay_ms(200);
 }
 
+void robot_delay_ms(uint16_t ms){
+	while(ms-- > 0){
+		_delay_ms(1);
+	}
+}
+
+void robot_delay(uint16_t length_r, uint16_t length_l){
+	double length = length_r > length_l ? length_r : length_l;
+	double speed_d = speed[0] + (speed[1] << 8);
+	
+	length = (double)(length*0.29 + 0.5);
+	speed_d = (double)(speed_d*0.666 + 0.5);
+	
+	robot_delay_ms((uint16_t)((length*1000)/speed_d));
+}
+
+void take_step_1(uint16_t length_r, uint16_t length_l, int direction){
+	lift_leg(2);
+	lift_leg(3);
+	lift_leg(6);
+	SERVO_ACTION;
+	robot_delay(0x003F, 0x003F);
+	
+	if(direction == FORWARD){
+		move_leg_backward(1, length_l);
+		move_leg_backward(4, length_r);
+		move_leg_backward(5, length_l);
+		move_leg_forward(2, length_r);
+		move_leg_forward(3, length_l);
+		move_leg_forward(6, length_r);
+	}else if(direction == BACKWARD){
+		move_leg_forward(1, length_l);
+		move_leg_forward(4, length_r);
+		move_leg_forward(5, length_l);
+		move_leg_backward(2, length_r);
+		move_leg_backward(3, length_l);
+		move_leg_backward(6, length_r);
+	}
+	
+	SERVO_ACTION;
+	robot_delay(length_r, length_l);
+	
+	put_down_leg(2);
+	put_down_leg(3);
+	put_down_leg(6);
+	SERVO_ACTION;
+	robot_delay(0x003F, 0x003F);
+}
+
+void take_step_2(uint16_t length_r, uint16_t length_l, int direction){
+	lift_leg(1);
+	lift_leg(4);
+	lift_leg(5);
+	SERVO_ACTION;
+	robot_delay(0x003F, 0x003F);
+	
+	if(direction == FORWARD){
+		move_leg_backward(2, length_r);
+		move_leg_backward(3, length_l);
+		move_leg_backward(6, length_r);
+		move_leg_forward(1, length_l);
+		move_leg_forward(4, length_r);
+		move_leg_forward(5, length_l);
+	}else if(direction == BACKWARD){
+		move_leg_forward(2, length_r);
+		move_leg_forward(3, length_l);
+		move_leg_forward(6, length_r);
+		move_leg_backward(1, length_l);
+		move_leg_backward(4, length_r);
+		move_leg_backward(5, length_l);
+	}
+	
+	SERVO_ACTION;
+	robot_delay(length_r, length_l);
+	
+	put_down_leg(1);
+	put_down_leg(4);
+	put_down_leg(5);
+	SERVO_ACTION;
+	robot_delay(0x003F, 0x003F);
+}
+
 //Make robot take "one" step. Need to run setup_first_step() first. 
 //Loop for walking
+uint8_t last_step = 0;
 void take_step(uint16_t length_r, uint16_t length_l, int direction){
-	lift_leg(2);
-	lift_leg(3);
-	lift_leg(6);
-	SERVO_ACTION;
-	_delay_ms(200);
-	
-	if(direction == FORWARD){
-		move_leg_backward(1, length_l);
-		move_leg_backward(4, length_r);
-		move_leg_backward(5, length_l);
-		move_leg_forward(2, length_r);
-		move_leg_forward(3, length_l);
-		move_leg_forward(6, length_r);
-	}else if(direction == BACKWARD){
-		move_leg_forward(1, length_l);
-		move_leg_forward(4, length_r);
-		move_leg_forward(5, length_l);
-		move_leg_backward(2, length_r);
-		move_leg_backward(3, length_l);
-		move_leg_backward(6, length_r);
+	if(last_step++ % 2 == 0){
+		take_step_1(length_r, length_l, direction);
+	}else{
+		take_step_2(length_r, length_l, direction);
 	}
-	
-	SERVO_ACTION;
-	_delay_ms(200);
-	
-	put_down_leg(2);
-	put_down_leg(3);
-	put_down_leg(6);
-	SERVO_ACTION;
-	_delay_ms(200);
-	
-	lift_leg(1);
-	lift_leg(4);
-	lift_leg(5);
-	SERVO_ACTION;
-	_delay_ms(200);
-	
-	if(direction == FORWARD){
-		move_leg_backward(2, length_r);
-		move_leg_backward(3, length_l);
-		move_leg_backward(6, length_r);
-		move_leg_forward(1, length_l);
-		move_leg_forward(4, length_r);
-		move_leg_forward(5, length_l);
-	}else if(direction == BACKWARD){
-		move_leg_forward(2, length_r);
-		move_leg_forward(3, length_l);
-		move_leg_forward(6, length_r);
-		move_leg_backward(1, length_l);
-		move_leg_backward(4, length_r);
-		move_leg_backward(5, length_l);
-	}
-	
-	SERVO_ACTION;
-	_delay_ms(200);
-	
-	put_down_leg(1);
-	put_down_leg(4);
-	put_down_leg(5);
-	SERVO_ACTION;
-	_delay_ms(200);
-	
 };
 
-void rotate(uint16_t length, uint16_t bla, int direction){
+void rotate_1(uint16_t length, int direction){
 	lift_leg(2);
 	lift_leg(3);
 	lift_leg(6);
 	SERVO_ACTION;
-	_delay_ms(200);
+	robot_delay(0x003F, 0x003F);
 	
 	if(direction == RIGHT){
 		move_leg_backward(1, length);
@@ -359,19 +376,21 @@ void rotate(uint16_t length, uint16_t bla, int direction){
 	}
 	
 	SERVO_ACTION;
-	_delay_ms(200);
+	robot_delay(length, length);
 	
 	put_down_leg(2);
 	put_down_leg(3);
 	put_down_leg(6);
 	SERVO_ACTION;
-	_delay_ms(200);
-	
+	robot_delay(0x003F, 0x003F);
+}
+
+void rotate_2(uint16_t length, int direction){
 	lift_leg(1);
 	lift_leg(4);
 	lift_leg(5);
 	SERVO_ACTION;
-	_delay_ms(200);
+	robot_delay(0x003F, 0x003F);
 	
 	if(direction == RIGHT){
 		move_leg_forward(2, length);
@@ -389,11 +408,127 @@ void rotate(uint16_t length, uint16_t bla, int direction){
 		move_leg_backward(5, length);
 	}
 	SERVO_ACTION;
-	_delay_ms(200);
+	robot_delay(length, length);
 	
 	put_down_leg(1);
 	put_down_leg(4);
 	put_down_leg(5);
 	SERVO_ACTION;
-	_delay_ms(200);
+	robot_delay(0x003F, 0x003F);
+}
+
+void rotate(uint16_t length, uint16_t bla, int direction){
+	if(last_step++ % 2 == 0){
+		rotate_1(length, direction);
+	}else{
+		rotate_2(length, direction);
+	}
+}
+
+void star_wars_mode(){
+	int i;
+	
+	for(i = 1; i < 7; ++i){
+		move_servo_reg(inner_servo(i), INNER_SERVO_START);
+		
+		_delay_ms(200);
+			
+	}
+	
+	SERVO_ACTION;
+	_delay_ms(1000);
+		
+	for(i = 1; i < 7; ++i){
+		if(i % 2 == 1){
+			move_servo_reg(middle_servo(i), (uint8_t[2]){0x2F, 0x03}); //rm
+			move_servo_reg(outer_servo(i), (uint8_t[2]){0x5F, 0x01});
+		}else{
+			move_servo_reg(middle_servo(i), (uint8_t[2]){0xD0, 0x00}); //rm
+			move_servo_reg(outer_servo(i), (uint8_t[2]){0xA0, 0x02});
+		}
+		
+	}
+	
+	SERVO_ACTION;
+}
+
+double calc_gamma(double x, double y){
+	double gamma = atan(x / y);
+	
+	//return 0x0160 + (uint16_t) (gamma * 57.2957795 / 0.29);
+	return gamma;
+}
+
+uint16_t gamma_to_hex(double g, int leg){
+	if(leg == 5)
+		return 0x0160 - (long) (g * 57.2957795 / 0.29);
+	else if(leg == 2)
+		return 0x0160 + (long) (g * 57.2957795 / 0.29);
+	else if(leg == 1)
+		return 0x029F - (long) (g * 57.2957795 / 0.29);
+	else if(leg == 6)
+		return 0x029F + (long) (g * 57.2957795 / 0.29); 
+	else if(leg == 4)
+		return 0x0200 + (long) (g * 57.2957795 / 0.29);
+	else
+		return 0x0200 - (long) (g * 57.2957795 / 0.29);
+}	
+
+uint16_t calc_alpha(double x, double y, double z, int leg){
+	double L = sqrt(pow(y-5.0, 2) + pow(z, 2));
+	
+	double a1 = acos(z/L);
+	
+	double a2_t = pow(13.0, 2) - pow(6.5, 2) - pow(L, 2);
+	double a2_n = -2.0 * 6.5 * L;
+	double arg = a2_t/a2_n;
+	
+	double a2 = acos(arg);
+	
+	double alpha = a1 + a2;
+	
+	if(leg % 2 == 1)
+		return 0x0300 - (int)(alpha * 57.2957795 / 0.29); 
+	else
+		return 0x0100 + (int)((alpha * 57.2957795) / 0.29); 
+}
+
+uint16_t calc_beta(double y, double z, double z_offs, int leg){
+	double beta;
+	double a, b, l, l1;
+	
+	l1 = y - 5.0;
+	l = sqrt(pow(l1, 2.0) + pow(z_offs, 2.0));
+	
+	a = pow(l, 2) - pow(13.0, 2.0) - pow(6.5, 2.0);
+	b = -2 * 13.0 * 6.5;
+	
+	beta = acos(a / b);
+	
+	if(leg % 2 == 1)
+		return 0x0338 - (long) ((beta * 57.2957795 - 90 )/ 0.29);
+	else
+		return 0x00C7 + (long) ((beta * 57.2957795 - 90 )/ 0.29);
+
+}
+
+void ik(double x, double y, double z, int leg){
+	double l1, l2;
+	uint16_t alpha, beta, gamma_hex;
+	double alpha1, alpha2;
+	double z_offs = 4.0 - z;
+	double y_proj;
+	double gamma;
+	
+	gamma = calc_gamma(x, y); gamma_hex = gamma_to_hex(gamma, leg);
+	y_proj = y / cos(gamma);
+	beta = calc_beta(y_proj, z, z_offs, leg);
+	l1 = y_proj-6.0;//sqrt(pow(x,2) + pow(y,2));
+	alpha = calc_alpha(x, y_proj, z_offs, leg);
+
+	move_servo_dir(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
+	_delay_ms(500);
+	move_servo_dir(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
+	_delay_ms(500);
+	move_servo_dir(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
 }

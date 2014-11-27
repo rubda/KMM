@@ -17,6 +17,7 @@ public class Main {
             }
         }
 
+
         Communication communication =
                 new Communication(serialPortHandler.getSerialInputStream(),
                         serialPortHandler.getSerialOutputStream());
