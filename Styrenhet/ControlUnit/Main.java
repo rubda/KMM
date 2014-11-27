@@ -14,6 +14,14 @@ public class Main {
     static int lowerBound = 110;
     static int goalBound = 150;
     static int stopBound = 10;
+    static int sensorDelay = 1000;
+    static int Kp;
+    static int Kd;
+    static int Dt = 1000;
+    int error;
+    static int olderror = 0;
+    static int steeringValue = 0;
+
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -107,25 +115,28 @@ public class Main {
         System.out.println("Disconnected");
     }
 
-    public static void setRobotReady(Boolean robotReady) {
-        Main.robotReady = robotReady;
-    }
 
 
-    public void auto(){
+
+    public static void auto(){
+        ComputerCommunication.send("#info:autoStart;");
+
         boolean goal = false;
+        setRobotReady(false);
 
         MovementCommunication.send("#init:0;");
         //lås här och vänta på klartecken
         while(!robotReady){}
+        ComputerCommunication.send("#info:Robot ready;");
 
         while (!goal){
+            ComputerCommunication.send("#info:Check forward distance;");
             updateSensors(0);
 
 
             if(SensorCommunication.getSensorValue(2) >= upperBound){
                      //kör fram
-                MovementCommunication.send("#walk:f;");
+                walk();
             }
             else if(SensorCommunication.getSensorValue(2) <= lowerBound){
 
@@ -133,7 +144,16 @@ public class Main {
                 //såhär kan man göra men inte så snyggt...
                 walkToDistance(stopBound);
 
-                //Vad händer efter detta? Kolla upp!
+                //avstånd
+                //vänster > höger
+                if(SensorCommunication.getSensorValue(1)>SensorCommunication.getSensorValue(3)){
+                    //Rotera vänster
+                    rotate(90, "left");
+                }
+                else{
+                    //Rotera höger
+                    rotate(90, "right");
+                }
 
             }
             else{
@@ -155,7 +175,7 @@ public class Main {
                 //Om inte bättre väg
                 else{
                     //Kör fram
-                    MovementCommunication.send("#walk:f;");
+                    walk();
                 }
             }
 
@@ -164,6 +184,8 @@ public class Main {
                     SensorCommunication.getSensorValue(2) < goalBound &&
                     SensorCommunication.getSensorValue(3) < goalBound){
                 //Mål!
+                ComputerCommunication.send("#info:Goal!;");
+
                 goal = true;
                 MovementCommunication.send("#stop:after;");
 
@@ -172,20 +194,42 @@ public class Main {
         }
     }
 
+    public static void setRobotReady(Boolean robotReady) {
+        Main.robotReady = robotReady;
+    }
+
     public static void walkToDistance(int stopBound){
-        ComputerCommunication.send("info:walkToDistance "+stopBound+";");
+        System.out.println("walkToDistance "+stopBound);
+        ComputerCommunication.send("#info:walkToDistance "+stopBound+";");
         MovementCommunication.send("#walk:f;");
-        while(SensorCommunication.getSensorValue(1)>stopBound){    //10 är nog för lite!
-            updateSensors(1);
+        while(SensorCommunication.getSensorValue(2)>stopBound){
+            updateSensors(2);
+
+            try {
+                Thread.sleep(sensorDelay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
         MovementCommunication.send("#stop.after;");
-        ComputerCommunication.send("info:stop;");
+        ComputerCommunication.send("#info:stop;");
+
+    }
+
+    private static void walk(){
+
+        //Här kan vi ha ett intervall på steeringValue och ge olika styrning beroende på värde...
+        if(steeringValue == 0){
+        MovementCommunication.send("#walk:f;");
+        }
+
 
     }
 
     public static void rotate(int degrees, String direction){
         if(direction.equals("left")){
-            ComputerCommunication.send("info:rotate left "+degrees+";");
+            ComputerCommunication.send("#info:rotate left "+degrees+";");
 
             SensorCommunication.send("#rotate:"+degrees+";");
             MovementCommunication.send("#rotate:l;");
@@ -194,7 +238,7 @@ public class Main {
             MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
         }
         else if(direction.equals("right")){
-            ComputerCommunication.send("info:rotate right "+degrees+";");
+            ComputerCommunication.send("#info:rotate right "+degrees+";");
 
             SensorCommunication.send("#rotate:-"+degrees+";");
             MovementCommunication.send("#rotate:r;");
@@ -202,11 +246,33 @@ public class Main {
             while(rotating){}
             MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
         }
-        ComputerCommunication.send("info:stop;");
+        ComputerCommunication.send("#info:stop;");
     }
 
     //update sensors. id 0 = all.
     private static void updateSensors(int id){             //INTE TESTAD
         SensorCommunication.send("#distance:" +id+";");
     }
+
+
+
+    public static int getError(){
+        return SensorCommunication.getSensorValue(3)-SensorCommunication.getSensorValue(1);
+    }
+
+
+    public static int regulate(int error, int olderror){
+
+
+        steeringValue = Kp*error+(Kd/Dt)*(error-olderror);
+
+        ComputerCommunication.send("#info:Regulation;");
+        ComputerCommunication.send("#info:Error "+error+";");
+        ComputerCommunication.send("#info:SteeringValue "+steeringValue+";");
+
+        return steeringValue;
+    }
+
+
+
 }
