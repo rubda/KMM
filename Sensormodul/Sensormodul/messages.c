@@ -16,33 +16,10 @@ const char *distance[] = {"distance"};
 char *returnMessage[1];
 
 
-/*char* int_to_string(uint16_t digit)
-{
-	char dist[20];
-
-	//sprintf(dist, "%u", digit);
-	itoa(digit, dist, 10);
-	return dist; 
-}
-
-
-int string_to_int(char *string)
-{
-	int val;
-	char str[20];
-	
-	strcpy(str, string);
-	val = atoi(str);
-	
-	return val;
-}*/
 	
 int get_cmd(uart_message *message){
 	
 	char *cmd = (*message).data[0].data;
-	
-	//clear_display();
-	//write_string((*message).data[0].data, 0x80);
 	
 	if(strcmp(cmd,"rotate") == 0){
 		return 1;
@@ -71,7 +48,7 @@ int get_validation(uart_message *message){
 void message_handler(uart_message *message_in){
 
 	int ANGLE = 0;
-	int CALC_ANGLE = 0;
+	double CALC_ANGLE = 0;
 	uint8_t c;
 
 	switch (get_cmd(message_in)){
@@ -82,7 +59,7 @@ void message_handler(uart_message *message_in){
 				send_message("accept", rotate, 1);
 				ANGLE = (int) strtol((*message_in).data[1].data, (char **)NULL, 10);
 				CALC_ANGLE = rotate_to(ANGLE);
-				snprintf(rot[0], 4, "%d", CALC_ANGLE);
+				snprintf(rot[0], 4, "%d", (int) CALC_ANGLE);
 				send_message("rotate", rot, 1);
 				free(rot[0]);
 			}

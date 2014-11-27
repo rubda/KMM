@@ -59,7 +59,7 @@ void init_display()
 	
 	BOSSE();
 
-	write_param();
+	write_params();
 	
 }
 
@@ -72,7 +72,7 @@ void clear_display()
 void toggle_enable()
 {
 	PORTB |= (1 << DISP_E);
-	_delay_us(250);
+	_delay_us (250);
 	PORTB &= ~(1 << DISP_E);
 	_delay_us(250);
 
@@ -147,7 +147,7 @@ void write_to_display2(uint16_t value, int pos)
 	toggle_enable();
 }
 
-void write_param()
+void write_params()
 {
 	write_string("D1: ", 0xC0); //D1: 000 D2: 000
 	write_string("D2: ", 0xC9);

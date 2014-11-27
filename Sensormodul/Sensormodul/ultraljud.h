@@ -26,8 +26,7 @@ struct soundSensor sensor_list[6];
 void init_sensors();
 struct soundSensor* get_sensor(uint8_t id);
 void get_distance(struct soundSensor*);
-//uint16_t get_data(uint8_t id);
-//void get_sensors_distance(char* data[]);
+
 
 
 	

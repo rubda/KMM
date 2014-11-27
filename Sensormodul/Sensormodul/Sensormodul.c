@@ -6,7 +6,7 @@
  */ 
 
 #define F_CPU 16000000UL
-
+ 
 #include <avr/io.h>
 #include "gyro.h"
 #include <util/delay.h>
@@ -25,7 +25,6 @@ int main(void)
 	init_display();
 	setup_spi();
 	ss_high();
-	activate_adc();
 	uart_init(0x0067);
 	sei();		
 	
