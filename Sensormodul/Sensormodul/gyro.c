@@ -9,12 +9,10 @@
 
 #include "gyro.h"
 #include "SPI.h"
-
+#include "UART.h"
 
 #include <util/delay.h>
 int IS_ROTATED = 0; 
-
-
 
 void activate_adc()
 {
@@ -91,7 +89,8 @@ int adc_to_angular_rate(uint16_t data)
 	
 int rotate_to(int angle)
 {
-	activate_adc();
+	//cli();
+	//activate_adc();
 	uint16_t rate;
 	int ACHIEVED_ANGLE = 0;
 	int OFFSET = 0;
@@ -117,7 +116,8 @@ int rotate_to(int angle)
 		}
 		has_rotated(1);
 	}
-	deactivate_adc();	
+	//deactivate_adc();
+	//sei();	
 	return ACHIEVED_ANGLE*2;
 }
 

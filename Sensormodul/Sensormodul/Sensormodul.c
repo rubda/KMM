@@ -25,6 +25,7 @@ int main(void)
 	init_display();
 	setup_spi();
 	ss_high();
+	activate_adc();
 	uart_init(0x0067);
 	sei();		
 	
@@ -36,7 +37,6 @@ int main(void)
 		if (got_message()){
 			get_message(&message_in);
 			message_handler(&message_in);
-			//_delay_ms(250);
 		}
 
 		if (SENSOR_ID == 5){

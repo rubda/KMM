@@ -9,7 +9,6 @@
 //#include "UART.h"
 
 
-
 void wait(int n){
 	
 	volatile int a = 0;
@@ -112,16 +111,7 @@ void set_display(int mode, int instr)
 
 void BOSSE()
 {
-	int i;
-	char name[] = "BOSSE";
-	
-	for (i = 0; i < 5; ++i){
-		set_display(0x00, 0x85+i);
-		toggle_enable();
-	
-		set_display(0x02, name[i]);
-		toggle_enable();
-		}
+	write_string("BOSSE", 0x85);	
 }
 
 void write_string(char* str, int pos){
@@ -169,16 +159,6 @@ void write_param()
 
 void dist_to_display(int id)
 {
-	//uint8_t  DISTANCE = get_sensor(id)->Distance;
-/*	char dist[5]; dist[4] = '\0'; dist[5] = '\0';
-
-	itoa(DISTANCE, dist, 10);
-	if(DISTANCE < 100){
-		dist[2] = ' ';
-	}
-	if(DISTANCE < 10){
-		dist[1] = ' ';
-	}*/
 
 	switch(id){
 		case 0:
@@ -205,50 +185,13 @@ void dist_to_display(int id)
 
 void distance_to_display(int id, int pos)
 {
-	//char name[] = "DIST";
-	//char space[] = " ";
-	//char col[] = ":";
 	uint16_t  DISTANCE = get_sensor(id)->Distance;
 	
 	//uint16_t FORTH = DISTANCE / 1000;
 	uint16_t THIRD = DISTANCE / 100;
 	uint16_t SECOND = (DISTANCE / 10) - (DISTANCE / 100)*10;
 	uint16_t FIRST = (DISTANCE / 1) - (DISTANCE / 10)*10;
-	
-	/*int i;
-	for (i = 0; i < 4; ++i){
-		set_display(0x00, 0x90+i);
-		toggle_enable();
-	
-		set_display(0x02, name[i]);
-		toggle_enable();
-		}
-	
-	//Ett mellanslag
-	set_display(0x00, 0x94);
-	toggle_enable();
-	
-	set_display(0x02, space[0]);
-	toggle_enable();	
-	
-	//Id
-	write_to_display(id+1, 0);
-	
-	//Ett kolon
-	set_display(0x00, 0x96);
-	toggle_enable();
-	
-	set_display(0x02, col[0]);
-	toggle_enable();
-	
-	//Ett mellanslag
-	set_display(0x00, 0x97);
-	toggle_enable();
-	
-	set_display(0x02, space[0]);
-	toggle_enable();*/		
-		
-	//write_to_display(FORTH, pos);
+
 	write_to_display(THIRD, pos);
 	write_to_display(SECOND,pos+1);
 	write_to_display(FIRST, pos+2);
