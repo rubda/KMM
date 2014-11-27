@@ -5,7 +5,7 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 16000000UL
 
 #include "gyro.h"
 #include "SPI.h"
@@ -26,9 +26,23 @@ void activate_adc()
 	REG = get_spi(0xFF);
 	ss_high();
 	
-	if (REG & (1 << 16)) activate_adc();
+	if (REG & (1 << 15)) activate_adc();
 	REG = 0;
 	_delay_us(200);
+}
+
+void deactivate_adc()
+{
+	uint16_t REG = 0;
+	
+	//Avaktivera adc omvandlingen
+	ss_low();
+	send_spi(DEACTIVATE_ADC);
+	REG = get_spi(0xFF);
+	ss_high();
+	
+	if (REG & (1 << 15)) deactivate_adc();
+	REG = 0;
 }
 
 void start_conversion()
@@ -40,7 +54,7 @@ void start_conversion()
 	send_spi(START_CONVERSION);
 	REG = get_spi(0xFF);
 	ss_high();
-	if (REG & (1 << 16)) start_conversion();
+	if (REG & (1 << 15)) start_conversion();
 	REG = 0;
 }
 
@@ -55,7 +69,7 @@ uint16_t get_angular_rate()
 	send_spi(POLL);
 	_delay_us(200);
 	
-	if (REG & (1 << 16)) get_angular_rate();
+	//if (REG & (1 << 16)) get_angular_rate();
 	REG = get_spi(0xFF);
 	ss_high();
 	
@@ -67,7 +81,7 @@ uint16_t get_angular_rate()
 
 int adc_to_angular_rate(uint16_t data)
 	{
-		int OFFSET = 2500;
+		int OFFSET = 2500; //2500
 		
 		int vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
 		
@@ -77,30 +91,34 @@ int adc_to_angular_rate(uint16_t data)
 	
 int rotate_to(int angle)
 {
+	activate_adc();
 	uint16_t rate;
 	int ACHIEVED_ANGLE = 0;
-	int OFFSET = 10;
+	int OFFSET = 0;
+	int LEFT_ANGLE = (angle - OFFSET)/2;
+	int RIGHT_ANGLE = (angle + OFFSET)/2;
 		
-	if (angle >= 0){
-		while(angle-OFFSET > ACHIEVED_ANGLE)
+	if (angle > 0){
+		while(LEFT_ANGLE > ACHIEVED_ANGLE)
 		{		
 			start_conversion();
 			rate = get_angular_rate();
-			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			_delay_ms(1000);
+			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
+			_delay_ms(10);
 		}
 		has_rotated(1);
-	}else{
-		while(ACHIEVED_ANGLE > angle+OFFSET)
+	}else if (angle < 0){
+		while(ACHIEVED_ANGLE > RIGHT_ANGLE)
 		{
 			start_conversion();
 			rate = get_angular_rate();
-			ACHIEVED_ANGLE += adc_to_angular_rate(rate);
-			_delay_ms(1000);
+			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
+			_delay_ms(10);
 		}
 		has_rotated(1);
-	}	
-	return ACHIEVED_ANGLE;
+	}
+	deactivate_adc();	
+	return ACHIEVED_ANGLE*2;
 }
 
 void has_rotated(int bit)

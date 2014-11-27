@@ -53,16 +53,16 @@ void handle_message(uart_message *mess){
 	}else if(is_command(mess, "stop")){
 		func = do_nothing;
 	}else{
-		func = do_nothing;
 		send_message("accept", false, 1);
+		func = do_nothing;
 		return;
 	}
 	direction = get_direction(mess);
 	if(direction != -1){
 		send_message("accept", true, 1);
 	}else{
-		func = do_nothing;
 		send_message("accept", false, 1);
+		func = do_nothing;
 	}
 }
 

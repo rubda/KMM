@@ -5,13 +5,12 @@
  *  Author: RubenDas
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 16000000UL
 
 #include <avr/io.h>
 #include "gyro.h"
 #include <util/delay.h>
 #include "ultraljud.h"
-//#include "UART.h"
 #include "display.h"
 #include "SPI.h"
 #include "messages.h"
@@ -25,28 +24,21 @@ int main(void)
 	init_sensors();
 	init_display();
 	setup_spi();
-	activate_adc();
-	uart_init(0x0033);
-	sei();
+	ss_high();
+	uart_init(0x0067);
+	sei();		
 	
 	while(1)
     {
-		//clear_display();
-		
-		//BOSSE();
 		get_distance(get_sensor(SENSOR_ID));
-		//distance_to_display(SENSOR_ID);
 		dist_to_display(SENSOR_ID);
-
-		_delay_ms(1000);
 		
 		if (got_message()){
 			get_message(&message_in);
 			message_handler(&message_in);
+			//_delay_ms(250);
 		}
-	
-		//_delay_ms(1000);
-	
+
 		if (SENSOR_ID == 5){
 			SENSOR_ID = 0;
 		}else{
@@ -56,11 +48,3 @@ int main(void)
 }	
 	
 	
-	
-
-
-		//send_message("distance", (const char**)SENSOR_DATA, 6);
-		//const char* t[1];
-		//t[1] = SENSOR_DATA[2];
-		//send_message("distance",t, 1);
-		//write_string(SENSOR_DATA[2]);

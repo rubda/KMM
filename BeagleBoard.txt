@@ -1,0 +1,7 @@
+pwd = tmppwd
+sudo ./start.sh
+sudo ./run.sh
+
+desktop/styrenhet
+
+java -jar SpindelGui COM6
