@@ -31,9 +31,8 @@ public abstract class Communication implements SerialPortEventListener {
                 inStream.read(readBuffer, 0, availableBytes);
                 // Print it out
                 message = message + new String(readBuffer, 0, availableBytes);
-                System.out.println("Receive: " + message);
-                System.out.println("Last char: " + message.charAt(message.length() - 1));
-
+                //System.out.println("Received: " + message);
+                //System.out.println("Last char: " + message.charAt(message.length() - 1));
 
                 message = receiveHelper(message);
 

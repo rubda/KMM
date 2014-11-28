@@ -16,42 +16,43 @@ public class MovementCommunication extends Communication {
         System.out.println("ReceiveRobot: "+inputString);
         inputString = inputString.substring(0, inputString.length()-1);
         String parts[] = inputString.split(":");
-        if(parts[0].equals("#init")){
-            if(parts[1].equals("true")){
+
+        if (parts[0].equals("#accept")){
+            if(parts[1].equals("walk")){
                 //nånting
+
+            }
+            else if(parts[1].equals("rotate")){
+                //nånting
+
+            }
+            else if(parts[1].equals("turn")){
+                //nånting
+
+            }
+            else if(parts[1].equals("init")){
                 Main.setRobotReady(true);
-                send("#accept:true;");
+            }
+            else if(parts[1].equals("speed")){
+                //nånting
 
             }
-            else if(parts[1].equals("false")){
-                Main.setRobotReady(false);
-                send("#accept:true;");
+            else if(parts[1].equals("stop")){
 
             }
             else{
                 System.out.println("FALSE: "+ inputString);
-                send("#accept:false;");
+                send("#denied:fel;");
             }
-
         }
-        else if (parts[0].equals("#accept")){
-            if(parts[1].equals("true")){
-                //nånting
-
-            }
-            else if(parts[1].equals("false")){
-                //nånting
-
-            }
-            else{
-                System.out.println("FALSE: "+ inputString);
-                send("#accept:false;");
-            }
+        else if(parts[0].equals("#denied")){
+             //skicka senaste kommando igen
         }
         else{
             System.out.println("FALSE: "+ inputString);
-            send("#accept:false;");
+            send("#denied:fel;");
         }
+
     }
 
     public static void send(String message) {

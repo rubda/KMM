@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-
-
 public class MainComponent extends JComponent {
 
     Boolean rr, rl, f, b;
@@ -132,8 +130,4 @@ public class MainComponent extends JComponent {
         getActionMap().put("stopWalkingBackwards", stopWalkingBackwards);
 
     }
-
-
-
-
 }

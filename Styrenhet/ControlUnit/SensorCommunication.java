@@ -50,11 +50,11 @@ public class SensorCommunication extends Communication {
                 e.printStackTrace();
             }
 
-
             if(parts.length>3){
                 for (int i = 1; i < parts.length; i++) {
                  sensors[i] = (Integer.parseInt(parts[i]));
                 }
+                Main.sensorsReady = true;
             }
             else{
                 sensors[Integer.parseInt(parts[1])] = Integer.parseInt(parts[2]);
@@ -68,22 +68,22 @@ public class SensorCommunication extends Communication {
             send("#accept:true;");
         }
         else if(parts[0].equals("#accept")){
-            if(parts[1].equals("true")){
-                //nånting
-
+            if(parts[1].equals("distance")){
+                // nånting?
             }
-            else if(parts[1].equals("false")){
-                // nånting
-
+            else if(parts[1].equals("rotate")){
+                Main.acceptRotate = true;
             }
             else{
                 System.out.println("FALSE: "+ inputString);
-                send("#accept:false;");
             }
+        }
+        else if(parts[0].equals("#denied")) {
+             // skicka senaste kommado igen
         }
         else{
             System.out.println("FALSE: "+ inputString);
-            send("#accept:false;");
+            send("#denied:fel;");
         }
 
     }

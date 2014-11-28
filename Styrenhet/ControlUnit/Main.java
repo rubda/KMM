@@ -8,8 +8,10 @@ public class Main {
     static MovementCommunication MovementCommunication;
 
     static Boolean robotReady = false;
+    static Boolean sensorsReady = false;
 
     static Boolean rotating = false;
+    static Boolean acceptRotate = false;
     static int upperBound = 120;
     static int lowerBound = 110;
     static int goalBound = 150;
@@ -21,6 +23,8 @@ public class Main {
     int error;
     static int olderror = 0;
     static int steeringValue = 0;
+    static long time;
+    static Timer timer = new Timer();
 
 
     public static void main(String[] args) {
@@ -116,23 +120,23 @@ public class Main {
     }
 
 
-
-
     public static void auto(){
         ComputerCommunication.send("#info:autoStart;");
 
         boolean goal = false;
         setRobotReady(false);
+        sensorsReady = false;
 
         MovementCommunication.send("#init:0;");
+        updateSensors(0);
         //lås här och vänta på klartecken
-        while(!robotReady){}
+        while(!robotReady && !sensorsReady){}
         ComputerCommunication.send("#info:Robot ready;");
+        ComputerCommunication.send("#time:1;");
 
         while (!goal){
-            ComputerCommunication.send("#info:Check forward distance;");
+            ComputerCommunication.send("#info:Check distance;");
             updateSensors(0);
-
 
             if(SensorCommunication.getSensorValue(2) >= upperBound){
                      //kör fram
@@ -157,6 +161,7 @@ public class Main {
 
             }
             else{
+                ComputerCommunication.send("#info:Bättre väg åt sidan?;");
                 //bättre väg åt sidan?
 
                 //vänster > rakt fram
@@ -180,17 +185,16 @@ public class Main {
             }
 
             //Om avstånd > 150. framåt, vänster, höger
-            if(SensorCommunication.getSensorValue(1) < goalBound &&
-                    SensorCommunication.getSensorValue(2) < goalBound &&
-                    SensorCommunication.getSensorValue(3) < goalBound){
+            if(SensorCommunication.getSensorValue(1) > goalBound &&
+                    SensorCommunication.getSensorValue(2) > goalBound &&
+                    SensorCommunication.getSensorValue(3) > goalBound){
                 //Mål!
                 ComputerCommunication.send("#info:Goal!;");
-
+                ComputerCommunication.send("#time:0;");
                 goal = true;
+
                 MovementCommunication.send("#stop:after;");
-
             }
-
         }
     }
 
@@ -199,12 +203,12 @@ public class Main {
     }
 
     public static void walkToDistance(int stopBound){
+        updateSensors(2);
         System.out.println("walkToDistance "+stopBound);
         ComputerCommunication.send("#info:walkToDistance "+stopBound+";");
         MovementCommunication.send("#walk:f;");
         while(SensorCommunication.getSensorValue(2)>stopBound){
             updateSensors(2);
-
             try {
                 Thread.sleep(sensorDelay);
             } catch (InterruptedException e) {
@@ -212,19 +216,16 @@ public class Main {
             }
 
         }
-        MovementCommunication.send("#stop.after;");
+        MovementCommunication.send("#stop:after;");
         ComputerCommunication.send("#info:stop;");
-
     }
 
     private static void walk(){
-
         //Här kan vi ha ett intervall på steeringValue och ge olika styrning beroende på värde...
         if(steeringValue == 0){
-        MovementCommunication.send("#walk:f;");
+            MovementCommunication.send("#walk:f;");
+            ComputerCommunication.send("#info:Walk forward;");
         }
-
-
     }
 
     public static void rotate(int degrees, String direction){
@@ -232,19 +233,44 @@ public class Main {
             ComputerCommunication.send("#info:rotate left "+degrees+";");
 
             SensorCommunication.send("#rotate:"+degrees+";");
-            MovementCommunication.send("#rotate:l;");
-            rotating = true; //vänta på accept?
-            while(rotating){}
-            MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
+
+            //vänta på accept?
+            timer.start();
+            while(time <2000 && !acceptRotate);
+            timer.stop();
+            if (acceptRotate) {
+                MovementCommunication.send("#rotate:l;");
+                rotating = true;
+                while (rotating) {}
+                MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
+                acceptRotate = false;
+            }
+            else{
+                ComputerCommunication.send("#info:rotate again");
+                rotate(degrees, direction);
+            }
         }
         else if(direction.equals("right")){
             ComputerCommunication.send("#info:rotate right "+degrees+";");
 
             SensorCommunication.send("#rotate:-"+degrees+";");
-            MovementCommunication.send("#rotate:r;");
-            rotating = true; //vänta på accept?
-            while(rotating){}
-            MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
+
+
+            // vänta på accept
+            timer.start();
+            while(time <2000 && !acceptRotate);
+            timer.stop();
+            if (acceptRotate){
+                MovementCommunication.send("#rotate:r;");
+                rotating = true;
+                while(rotating){}
+                MovementCommunication.send("#stop:after;"); //ska vara stop direkt sen
+                acceptRotate = false;
+            }
+            else{
+                ComputerCommunication.send("#info:rotate again");
+                rotate(degrees, direction);
+            }
         }
         ComputerCommunication.send("#info:stop;");
     }
@@ -252,6 +278,7 @@ public class Main {
     //update sensors. id 0 = all.
     private static void updateSensors(int id){             //INTE TESTAD
         SensorCommunication.send("#distance:" +id+";");
+
     }
 
 
@@ -262,8 +289,6 @@ public class Main {
 
 
     public static int regulate(int error, int olderror){
-
-
         steeringValue = Kp*error+(Kd/Dt)*(error-olderror);
 
         ComputerCommunication.send("#info:Regulation;");

@@ -64,17 +64,13 @@ public class Communication implements SerialPortEventListener {
 
             if(parts.length>3){
                 for (int i = 1; i < parts.length; i++) {
-                    System.out.println(parts.length);
-                    System.out.println(i);
-                    System.out.println(Integer.parseInt(parts[i]));
-                    System.out.println(parts[i]);
                     FrameWork.sensors[i].setData(parts[i]);
-                    FrameWork.textPanel.add("Sensor" + i + ": " + Integer.parseInt(parts[i]));
+                    //FrameWork.textPanel.add("Sensor" + i + ": " + Integer.parseInt(parts[i]));
                 }
             }
             else{
                 FrameWork.sensors[Integer.parseInt(parts[1])].setData(parts[2]);
-                FrameWork.textPanel.add("Sensor" + Integer.parseInt(parts[1]) + ": " + Integer.parseInt(parts[2]));
+                //FrameWork.textPanel.add("Sensor" + Integer.parseInt(parts[1]) + ": " + Integer.parseInt(parts[2]));
             }
         }
         else if(parts[0].equals("rotate")){
