@@ -32,11 +32,6 @@ void init_sensors()
 	sensor_list[5] = (struct soundSensor) {0b00010100, 0};
 }
 
-/*uint16_t get_data(uint8_t id)
-{
-	sensor_list[id].Distance = get_distance(sensor_list[id]);
-	return sensor_list[id].Distance;
-}*/
 
 struct soundSensor *get_sensor(uint8_t id)
 {
@@ -58,15 +53,13 @@ void get_distance(struct soundSensor* sensor)
  	_delay_us(15);
  	PORTA &= ~(1 << PORTA0);
 
-	while (!(PINA & (1 << PINA1)) && TIME++ < 36000)_delay_us(1);
+	while (!(PINA & (1 << PINA1)) && TIME++ < 36000) _delay_us(1);
 	TIME = 0;
-	cli();
 	while ((PINA & (1 << PINA1)) && TIME < 36000)
 		{	
 			_delay_us(1);
 			TIME++;
 		}
-	sei();
 	_delay_ms(15); //för test?
 		
 	DISTANCE = TIME/40;
@@ -74,9 +67,3 @@ void get_distance(struct soundSensor* sensor)
 	sensor->Distance = DISTANCE;
 }
 
-/*void get_sensors_distance(char* data[]){
-	int i;
-	for (i = 0; i < 6; ++i){
-		itoa(get_sensor(i)->Distance, data[i], 10);
-	}
-}*/

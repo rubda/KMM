@@ -6,7 +6,7 @@
  */ 
 
 #define F_CPU 16000000UL
-
+ 
 #include <avr/io.h>
 #include "gyro.h"
 #include <util/delay.h>
@@ -36,7 +36,6 @@ int main(void)
 		if (got_message()){
 			get_message(&message_in);
 			message_handler(&message_in);
-			//_delay_ms(250);
 		}
 
 		if (SENSOR_ID == 5){

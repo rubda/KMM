@@ -9,12 +9,10 @@
 
 #include "gyro.h"
 #include "SPI.h"
-
+#include "UART.h"
 
 #include <util/delay.h>
 int IS_ROTATED = 0; 
-
-
 
 void activate_adc()
 {
@@ -79,24 +77,24 @@ uint16_t get_angular_rate()
 	return DATA;		
 }	
 
-int adc_to_angular_rate(uint16_t data)
+double adc_to_angular_rate(uint16_t data)
 	{
 		int OFFSET = 2500; //2500
 		
-		int vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
+		double vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
 		
 		return (vOutAngularRate - OFFSET)/6.67; // Uttryckt i grader/sec (beroende på vilken gyro modell vi har)
 	}
 	
 	
-int rotate_to(int angle)
+double rotate_to(int angle)
 {
 	activate_adc();
 	uint16_t rate;
-	int ACHIEVED_ANGLE = 0;
+	double ACHIEVED_ANGLE = 0;
 	int OFFSET = 0;
-	int LEFT_ANGLE = (angle - OFFSET)/2;
-	int RIGHT_ANGLE = (angle + OFFSET)/2;
+	int LEFT_ANGLE = (angle - OFFSET);
+	int RIGHT_ANGLE = (angle + OFFSET);
 		
 	if (angle > 0){
 		while(LEFT_ANGLE > ACHIEVED_ANGLE)
@@ -117,8 +115,8 @@ int rotate_to(int angle)
 		}
 		has_rotated(1);
 	}
-	deactivate_adc();	
-	return ACHIEVED_ANGLE*2;
+	deactivate_adc();
+	return ACHIEVED_ANGLE;
 }
 
 void has_rotated(int bit)

@@ -2,7 +2,6 @@
 #define UART_H_
 
 #define F_CPU 16000000UL
-#define MAX_BUFFER 256
 
 #define BV(bit)               (1 << bit)
 #define set_bit(byte, bit)    (byte |= BV(bit))  // old sbi()
@@ -12,6 +11,9 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+
+extern const char *false[];
+extern const char *true[];
 
 struct attribute 
 {
