@@ -1,5 +1,8 @@
 import java.util.TooManyListenersException;
 
+import static java.lang.Math.atan;
+import static java.lang.Math.toDegrees;
+
 
 public class Main {
 
@@ -148,7 +151,7 @@ public class Main {
             while(!sensorsReady){}
 
             if(SensorCommunication.getSensorValue(2) >= upperBound){
-                     //kör fram
+                //kör fram
                 walk();
             }
             else if(SensorCommunication.getSensorValue(2) <= lowerBound){
@@ -167,7 +170,6 @@ public class Main {
                     //Rotera höger
                     rotate(90, "right");
                 }
-
             }
             else{
                 ComputerCommunication.send("#info:Bättre väg åt sidan?;");
@@ -176,14 +178,11 @@ public class Main {
                 //vänster > rakt fram
                 if(SensorCommunication.getSensorValue(1)>SensorCommunication.getSensorValue(2)){
                     //Rotera vänster
-
                     rotate(90, "left");
-
                 }
                 //höger > rakt fram
                 else if(SensorCommunication.getSensorValue(3)>SensorCommunication.getSensorValue(2)){
                     //Rotera höger
-
                     rotate(90, "right");
                 }
                 //Om inte bättre väg
@@ -198,9 +197,11 @@ public class Main {
                     SensorCommunication.getSensorValue(2) > goalBound &&
                     SensorCommunication.getSensorValue(3) > goalBound){
                 //Mål!
-                ComputerCommunication.send("#info:Goal!;");
                 ComputerCommunication.send("#time:0;");
+                ComputerCommunication.send("#info:Goal!;");
                 goal = true;
+                sensorThread.stop();
+                sensorThread.destroy();
 
                 MovementCommunication.send("#stop:after;");
             }
@@ -219,15 +220,10 @@ public class Main {
         //updateSensors(2);
         System.out.println("walkToDistance "+stopBound);
         ComputerCommunication.send("#info:walkToDistance "+stopBound+";");
-        MovementCommunication.send("#walk:f;");
+        //MovementCommunication.send("#walk:f;");
         while(SensorCommunication.getSensorValue(2)>stopBound){
             //updateSensors(2);
-            try {
-                Thread.sleep(sensorDelay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+            walk();
         }
         MovementCommunication.send("#stop:after;");
         ComputerCommunication.send("#info:stop;");
@@ -310,17 +306,19 @@ public class Main {
     }
 
 
-    /*private int angle(String direction){
+    public static int angle(String direction){
         if(direction.equals("right")){
-            return atan((SensorCommunication.getSensorValue(3)-SensorCommunication.getSensorValue(4))/sideSensorDistance);
+            System.out.println(SensorCommunication.getSensorValue(3) - SensorCommunication.getSensorValue(4));
+            System.out.println((double)(SensorCommunication.getSensorValue(3) - SensorCommunication.getSensorValue(4)) / (double)sideSensorDistance));
+            return (int) toDegrees(atan((double)(SensorCommunication.getSensorValue(3) - SensorCommunication.getSensorValue(4)) / (double)sideSensorDistance));
         }
         else if(direction.equals("left")){
 
-            return atan((SensorCommunication.getSensorValue(6)-SensorCommunication.getSensorValue(1))/sideSensorDistance);
+            return (int) toDegrees(atan((double) (SensorCommunication.getSensorValue(6) - SensorCommunication.getSensorValue(1)) / (double) sideSensorDistance));
         }
         else{
             System.out.println("Wrong argument");
             return 0;
         }
-    }    */
+    }
 }

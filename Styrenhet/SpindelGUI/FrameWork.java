@@ -14,7 +14,7 @@ public class FrameWork extends JFrame
     private final ParameterComponent Kp, Kd, Dt, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, walkToDistance, rotateLeft, rotateRight;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
-    private ButtonComponent autoStart, init;
+    private ButtonComponent autoStart, init, angels;
 
 
     public FrameWork(){
@@ -64,10 +64,12 @@ public class FrameWork extends JFrame
         // Initialize buttons
         autoStart = new ButtonComponent("autoStart");
         init = new ButtonComponent("init");
+        angels = new ButtonComponent("angles");
 
         // Add buttons
         buttonPanel.add(autoStart);
         buttonPanel.add(init);
+        buttonPanel.add(angels);
 
         // Add parameters
         parameterPanel.add(Kp);

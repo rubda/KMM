@@ -78,6 +78,11 @@ public class ComputerCommunication extends Communication {
                 System.out.println("init!");
                 MovementCommunication.send("#"+parts[1]+":0;");
             }
+            else if(parts[1].equals("angles")){
+                System.out.println("angles!");
+                ComputerCommunication.send("#info:Left angle-"+Main.angle("left")+";");
+                ComputerCommunication.send("#info:Right angle-"+Main.angle("right")+";");
+            }
 
         }
         else {
