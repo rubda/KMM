@@ -1,5 +1,6 @@
 import java.util.TooManyListenersException;
 
+
 public class Main {
 
 
@@ -25,6 +26,8 @@ public class Main {
     static int steeringValue = 0;
     static long time;
     static Timer timer = new Timer();
+
+    static int sideSensorDistance = 10; //Distance between side sensors.
 
 
     public static void main(String[] args) {
@@ -125,7 +128,7 @@ public class Main {
 
         boolean goal = false;
         setRobotReady(false);
-        sensorsReady = false;
+        setSensorsReady(false);
 
         MovementCommunication.send("#init:0;");
         updateSensors(0);
@@ -202,6 +205,10 @@ public class Main {
         Main.robotReady = robotReady;
     }
 
+    public static void setSensorsReady(Boolean sensorsReady){
+        Main.sensorsReady = sensorsReady;
+    }
+
     public static void walkToDistance(int stopBound){
         updateSensors(2);
         System.out.println("walkToDistance "+stopBound);
@@ -276,7 +283,7 @@ public class Main {
     }
 
     //update sensors. id 0 = all.
-    private static void updateSensors(int id){             //INTE TESTAD
+    public static void updateSensors(int id){
         SensorCommunication.send("#distance:" +id+";");
 
     }
@@ -297,6 +304,22 @@ public class Main {
 
         return steeringValue;
     }
+
+
+    private int angle(String direction){
+        if(direction.equals("right")){
+            return arctan((SensorCommunication.getSensorValue(3)-SensorCommunication.getSensorValue(4))/sideSensorDistance);
+        }
+        else if(direction.equals("left")){
+
+            return arctan((SensorCommunication.getSensorValue(6)-SensorCommunication.getSensorValue(1))/sideSensorDistance);
+        }
+        else{
+            System.out.println("Wrong argument");
+            return 0;
+        }
+    }
+
 
 
 

@@ -54,7 +54,7 @@ public class SensorCommunication extends Communication {
                 for (int i = 1; i < parts.length; i++) {
                  sensors[i] = (Integer.parseInt(parts[i]));
                 }
-                Main.sensorsReady = true;
+                Main.setSensorsReady(true);
             }
             else{
                 sensors[Integer.parseInt(parts[1])] = Integer.parseInt(parts[2]);

@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
+import javax.swing.plaf.basic.DefaultMenuLayout;
+import java.awt.*;
 
 
 public class FrameWork extends JFrame
@@ -11,7 +14,7 @@ public class FrameWork extends JFrame
     private final ParameterComponent Kp, Kd, Dt, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, walkToDistance, rotateLeft, rotateRight;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
-    private ButtonComponent autoStart;
+    private ButtonComponent autoStart, init;
 
 
     public FrameWork(){
@@ -30,9 +33,7 @@ public class FrameWork extends JFrame
         panel3 = new JPanel();
         panel3.setLayout(new BoxLayout(panel3, BoxLayout.PAGE_AXIS));
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-
-
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
         // Initialize sensors
         sensors = new SensorComponent[7];
         for(int i = 1; i < 7; i++){
@@ -62,9 +63,11 @@ public class FrameWork extends JFrame
 
         // Initialize buttons
         autoStart = new ButtonComponent("autoStart");
+        init = new ButtonComponent("init");
 
         // Add buttons
         buttonPanel.add(autoStart);
+        buttonPanel.add(init);
 
         // Add parameters
         parameterPanel.add(Kp);
