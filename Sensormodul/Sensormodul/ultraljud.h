@@ -18,7 +18,14 @@
 struct soundSensor
 {
 	uint8_t id;
-	uint8_t Distance;
+	uint8_t nr;
+	uint8_t medDist;
+
+	uint8_t Dist1;
+	uint8_t Dist2;
+	uint8_t Dist3;
+	uint8_t Dist4;
+	uint8_t Dist5;
 };
 
 struct soundSensor sensor_list[6];
@@ -26,6 +33,7 @@ struct soundSensor sensor_list[6];
 void init_sensors();
 struct soundSensor* get_sensor(uint8_t id);
 void get_distance(struct soundSensor*);
+uint16_t cmpfunc (const void * a, const void * b);
 
 
 

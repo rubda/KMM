@@ -185,7 +185,7 @@ void dist_to_display(int id)
 
 void distance_to_display(int id, int pos)
 {
-	uint16_t  DISTANCE = get_sensor(id)->Distance;
+	uint16_t  DISTANCE = get_sensor(id)->medDist;
 	
 	//uint16_t FORTH = DISTANCE / 1000;
 	uint16_t THIRD = DISTANCE / 100;
