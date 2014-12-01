@@ -81,12 +81,13 @@ public class ComputerCommunication extends Communication {
 
         }
         else {
-            System.out.println("FEL från dator: "+inputString);
+            System.out.println("FEL från dator: " + inputString);
         }
 
     }
 
     public static void send(String message) {
+        System.out.println("Send to computer: "+message);
         try {
             outStream.write(message.getBytes());
         }  catch (IOException ex) {

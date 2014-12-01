@@ -1,10 +1,8 @@
-public class sensorThread extends Thread {
+public class SensorThread extends Thread {
 
     public void run() {
         while(true){
-
             Main.updateSensors(0);
-
             try {
                 Thread.sleep(Main.sensorDelay);
             } catch (InterruptedException e) {
@@ -13,8 +11,7 @@ public class sensorThread extends Thread {
         }
     }
 
-    public sensorThread(){
-
+    public SensorThread(){
         this.start();
     }
 
