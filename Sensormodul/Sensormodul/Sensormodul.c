@@ -31,6 +31,7 @@ int main(void)
 	while(1)
     {
 		get_distance(get_sensor(SENSOR_ID));
+		
 		dist_to_display(SENSOR_ID);
 		
 		if (got_message()){

@@ -24,12 +24,12 @@ void init_sensors()
 	//B0 till ut
 	DDRB |= (1 << PORTB0);
 	
-	sensor_list[3] = (struct soundSensor) {0b00000000, 0};
-	sensor_list[2] = (struct soundSensor) {0b00000100, 0};
-	sensor_list[1] = (struct soundSensor) {0b00001000, 0};
-	sensor_list[0] = (struct soundSensor) {0b00001100, 0};
-	sensor_list[4] = (struct soundSensor) {0b00010000, 0};
-	sensor_list[5] = (struct soundSensor) {0b00010100, 0};
+	sensor_list[3] = (struct soundSensor) {0b00000000, 1, 0, 0, 0, 0, 0, 0};
+	sensor_list[2] = (struct soundSensor) {0b00000100, 1, 0, 0, 0, 0, 0, 0};
+	sensor_list[1] = (struct soundSensor) {0b00001000, 1, 0, 0, 0, 0, 0, 0};
+	sensor_list[0] = (struct soundSensor) {0b00001100, 1, 0, 0, 0, 0, 0, 0};
+	sensor_list[4] = (struct soundSensor) {0b00010000, 1, 0, 0, 0, 0, 0, 0};
+	sensor_list[5] = (struct soundSensor) {0b00010100, 1, 0, 0, 0, 0, 0, 0};
 }
 
 
@@ -41,7 +41,8 @@ struct soundSensor *get_sensor(uint8_t id)
 void get_distance(struct soundSensor* sensor)
 {
 	uint16_t DISTANCE;
-	uint16_t TIME = 0; 
+	uint16_t TIME = 0;
+	
 		
 	// Måste se till att rätt bitar ändras först
 	PORTA = PORTA & 0b11100011;
@@ -60,10 +61,45 @@ void get_distance(struct soundSensor* sensor)
 			_delay_us(1);
 			TIME++;
 		}
-	_delay_ms(15); //för test?
+	_delay_ms(5); //för test? den var 15 ms
 		
 	DISTANCE = TIME/40;
 	
-	sensor->Distance = DISTANCE;
+	switch(sensor->nr)
+	{
+		case 1:
+			sensor->Dist1 = DISTANCE;
+			sensor->nr++;
+			break;
+		case 2:
+			sensor->Dist2 = DISTANCE;
+			sensor->nr++;
+			break;
+		case 3:
+			sensor->Dist3 = DISTANCE;
+			sensor->nr++;
+			break;
+		case 4:
+			sensor->Dist4 = DISTANCE;
+			sensor->nr++;
+			break;
+		case 5:
+			sensor->Dist5 = DISTANCE;
+			sensor->nr = 1;
+			break;
+		default:
+			break;
+	}
+	
+	uint16_t VALUES[] = {sensor->Dist1, sensor->Dist2, sensor->Dist3, sensor->Dist4, sensor->Dist5};
+	
+	qsort(VALUES, 5, sizeof(uint16_t), cmpfunc);
+	
+	sensor->medDist = VALUES[2];
+}
+
+uint16_t cmpfunc (const void * a, const void * b)
+{
+	return ( *(uint16_t*)a - *(uint16_t*)b );
 }
 

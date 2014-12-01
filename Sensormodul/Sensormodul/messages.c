@@ -71,7 +71,7 @@ void message_handler(uart_message *message_in){
 				char* attr[6];
 				int i; for(i = 0; i < 6; ++i){
 					attr[i] = malloc(4);
-					snprintf(attr[i], 4, "%u", get_sensor(i)->Distance);
+					snprintf(attr[i], 4, "%u", get_sensor(i)->medDist);
 				}
 				send_message("distance", attr, 6);
 				for(i = 0; i < 6; ++i){
@@ -83,7 +83,7 @@ void message_handler(uart_message *message_in){
 				attr[0] = malloc(2);
 				attr[1] = malloc(4);
 				snprintf(attr[0], 2, "%u", c);
-				snprintf(attr[1], 4, "%u", get_sensor(c-1)->Distance);
+				snprintf(attr[1], 4, "%u", get_sensor(c-1)->medDist);
 				send_message("distance", attr, 2);			
 				free(attr[0]);
 				free(attr[1]);
