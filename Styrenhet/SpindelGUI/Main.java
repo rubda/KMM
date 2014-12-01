@@ -17,7 +17,6 @@ public class Main {
             }
         }
 
-
         Communication communication =
                 new Communication(serialPortHandler.getSerialInputStream(),
                         serialPortHandler.getSerialOutputStream());
@@ -27,8 +26,6 @@ public class Main {
         } catch (TooManyListenersException ex) {
             System.err.println(ex.getMessage());
         }
-
-
     }
 }
 

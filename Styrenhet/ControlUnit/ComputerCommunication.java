@@ -74,15 +74,20 @@ public class ComputerCommunication extends Communication {
                 System.out.println("autoStart!");
                 Main.auto();
             }
+            else if(parts[1].equals("init")){                   //INTE TESTAD
+                System.out.println("init!");
+                MovementCommunication.send("#"+parts[1]+":0;");
+            }
 
         }
-        else {   //SÅ länge!
-            SensorCommunication.send(inputString);
+        else {
+            System.out.println("FEL från dator: " + inputString);
         }
 
     }
 
     public static void send(String message) {
+        System.out.println("Send to computer: "+message);
         try {
             outStream.write(message.getBytes());
         }  catch (IOException ex) {

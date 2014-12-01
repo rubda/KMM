@@ -12,7 +12,7 @@ public class TextComponent extends JPanel {
         decisions.setLineWrap(true);
 
         scrollPane = new JScrollPane(decisions);
-        scrollPane.setPreferredSize(new Dimension(200, 200));
+        scrollPane.setPreferredSize(new Dimension(200, 500));
 
         // Auto scroll
         DefaultCaret caret = (DefaultCaret)decisions.getCaret();

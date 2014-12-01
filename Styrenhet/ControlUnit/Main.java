@@ -1,5 +1,6 @@
 import java.util.TooManyListenersException;
 
+
 public class Main {
 
 
@@ -25,6 +26,9 @@ public class Main {
     static int steeringValue = 0;
     static long time;
     static Timer timer = new Timer();
+    static SensorThread sensorThread;
+
+    static int sideSensorDistance = 10; //Distance between side sensors.
 
 
     public static void main(String[] args) {
@@ -124,11 +128,13 @@ public class Main {
         ComputerCommunication.send("#info:autoStart;");
 
         boolean goal = false;
-        setRobotReady(false);
+        robotReady = false;
         sensorsReady = false;
 
         MovementCommunication.send("#init:0;");
-        updateSensors(0);
+        sensorThread = new SensorThread();
+        //sensorsReady = false;
+        //updateSensors(0);
         //lås här och vänta på klartecken
         while(!robotReady && !sensorsReady){}
         ComputerCommunication.send("#info:Robot ready;");
@@ -136,7 +142,10 @@ public class Main {
 
         while (!goal){
             ComputerCommunication.send("#info:Check distance;");
-            updateSensors(0);
+            // wait for sensors to update
+            sensorsReady = false;
+            //updateSensors(0);
+            while(!sensorsReady){}
 
             if(SensorCommunication.getSensorValue(2) >= upperBound){
                      //kör fram
@@ -202,13 +211,17 @@ public class Main {
         Main.robotReady = robotReady;
     }
 
+    public static void setSensorsReady(Boolean sensorsReady){
+        Main.sensorsReady = sensorsReady;
+    }
+
     public static void walkToDistance(int stopBound){
-        updateSensors(2);
+        //updateSensors(2);
         System.out.println("walkToDistance "+stopBound);
         ComputerCommunication.send("#info:walkToDistance "+stopBound+";");
         MovementCommunication.send("#walk:f;");
         while(SensorCommunication.getSensorValue(2)>stopBound){
-            updateSensors(2);
+            //updateSensors(2);
             try {
                 Thread.sleep(sensorDelay);
             } catch (InterruptedException e) {
@@ -231,7 +244,6 @@ public class Main {
     public static void rotate(int degrees, String direction){
         if(direction.equals("left")){
             ComputerCommunication.send("#info:rotate left "+degrees+";");
-
             SensorCommunication.send("#rotate:"+degrees+";");
 
             //vänta på accept?
@@ -276,9 +288,8 @@ public class Main {
     }
 
     //update sensors. id 0 = all.
-    private static void updateSensors(int id){             //INTE TESTAD
+    public static void updateSensors(int id){
         SensorCommunication.send("#distance:" +id+";");
-
     }
 
 
@@ -299,5 +310,17 @@ public class Main {
     }
 
 
+    /*private int angle(String direction){
+        if(direction.equals("right")){
+            return atan((SensorCommunication.getSensorValue(3)-SensorCommunication.getSensorValue(4))/sideSensorDistance);
+        }
+        else if(direction.equals("left")){
 
+            return atan((SensorCommunication.getSensorValue(6)-SensorCommunication.getSensorValue(1))/sideSensorDistance);
+        }
+        else{
+            System.out.println("Wrong argument");
+            return 0;
+        }
+    }    */
 }

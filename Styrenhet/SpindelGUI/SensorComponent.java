@@ -16,12 +16,10 @@ public class SensorComponent extends JPanel {
         textArea.setText(name + ":\n" + data);
         textArea.setEditable(false);
         add(textArea);
-
     }
 
     public void setData(String data){
         textArea.setText(name+":\n"+data);
-
     }
 
 }
