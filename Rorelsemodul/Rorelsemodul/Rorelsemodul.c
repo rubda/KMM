@@ -107,7 +107,7 @@ int main(void)
 	robot_start_position();
 	_delay_ms(1000);
 	
-	timer1(TIMER1_PRESCALER_64, (unsigned int)(CALC_TIMER/1000.0)/(1.0/(F_CPU/64.0)), calculate_body_xy);
+	//timer1(TIMER1_PRESCALER_64, (unsigned int)(CALC_TIMER/1000.0)/(1.0/(F_CPU/64.0)), calculate_body_xy);
 	
 	//move_robot(0,-5,0);
 	//SERVO_ACTION;
