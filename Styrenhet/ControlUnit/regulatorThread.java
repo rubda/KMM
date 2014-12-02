@@ -2,8 +2,7 @@ public class regulatorThread extends Thread {
 
     public void run() {
         while(true){
-
-            Main.regulate(Main.getError(), Main.olderror);
+            Main.steeringValue = Main.regulate(Main.getError(), Main.olderror);
 
             try {
                 Thread.sleep(Main.Dt);

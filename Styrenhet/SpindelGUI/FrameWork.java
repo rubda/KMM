@@ -11,10 +11,10 @@ public class FrameWork extends JFrame
     private final MainComponent mainPanel;
     public static SensorComponent[] sensors; // Sensors
     public static SensorComponent gyro, mode; // Sensors
-    private final ParameterComponent Kp, Kd, Dt, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, walkToDistance, rotateLeft, rotateRight;  // Parameters
+    private final ParameterComponent angleLimit, Kp, Kd, Dt, lowerLimit, upperLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, walkToDistance, rotateLeft, rotateRight;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
-    private ButtonComponent autoStart, init, angels;
+    private ButtonComponent autoStart, init, angels, sensorThread, regulateThread;
 
 
     public FrameWork(){
@@ -33,7 +33,7 @@ public class FrameWork extends JFrame
         panel3 = new JPanel();
         panel3.setLayout(new BoxLayout(panel3, BoxLayout.PAGE_AXIS));
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
         // Initialize sensors
         sensors = new SensorComponent[7];
         for(int i = 1; i < 7; i++){
@@ -46,9 +46,12 @@ public class FrameWork extends JFrame
         textPanel = new TextComponent();
 
         // Initialize parameters
+        angleLimit = new ParameterComponent("angleLimit");
         Kp = new ParameterComponent("Kp");
         Kd = new ParameterComponent("Kd");
         Dt = new ParameterComponent("Dt");
+        lowerLimit = new ParameterComponent("lowerLimit");
+        upperLimit = new ParameterComponent("upperLimit");
         sensorstring = new ParameterComponent("sensorstring");
         movementstring = new ParameterComponent("movementstring");
         speed = new ParameterComponent("speed");
@@ -65,16 +68,23 @@ public class FrameWork extends JFrame
         autoStart = new ButtonComponent("autoStart");
         init = new ButtonComponent("init");
         angels = new ButtonComponent("angles");
+        sensorThread = new ButtonComponent("sensorThread");
+        regulateThread = new ButtonComponent("regulateThread");
 
         // Add buttons
         buttonPanel.add(autoStart);
         buttonPanel.add(init);
         buttonPanel.add(angels);
+        buttonPanel.add(sensorThread);
+        buttonPanel.add(regulateThread);
 
         // Add parameters
+        parameterPanel.add(angleLimit);
         parameterPanel.add(Kp);
         parameterPanel.add(Kd);
         parameterPanel.add(Dt);
+        parameterPanel.add(upperLimit);
+        parameterPanel.add(lowerLimit);
         parameterPanel.add(speed);
         parameterPanel.add(upperBound);
         parameterPanel.add(lowerBound);
