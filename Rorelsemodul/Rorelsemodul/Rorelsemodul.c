@@ -12,6 +12,8 @@
 #include "UART.h"
 #include <stdlib.h>
 #include <string.h>
+#include "body_ik.h"
+#include "atmega-timers.h"
 
 // BYT TAKTIK www.youtube.com/watch?v=Tsxe8AuSsUc
 // Position: 0x01 = 0.29 grader 
@@ -73,7 +75,7 @@ void handle_message(uart_message *mess){
 	}
 }
 
-void move_robot(x, y, z){
+void move_robot(int x, int y, int z){
 	int8_t leg1[] = {11, 20, 0};
 	int8_t leg2[] = {11, 20, 0};
 	int8_t leg3[] = {0, 20, 0};
@@ -87,7 +89,7 @@ void move_robot(x, y, z){
 	
 	for(i = 1; i < 7; ++i){
 		if(i == 1 || i == 4 || i == 5)
-			ik(legs[i - 1][0] + y, legs[i - 1][1] + x, z, i);
+			ik(legs[i - 1][0] + x, legs[i - 1][1] + y, z, i);
 		_delay_ms(400);
 	}
 }
@@ -95,11 +97,22 @@ void move_robot(x, y, z){
 int main(void)
 {	
 	_delay_ms(500);
-	robot_init(0x00B0);
+	robot_init(0x0060);
 	_delay_ms(1000);
 	uart_init(0x0067);
 	_delay_ms(1000);
 	sei();
+	
+	body_init();
+	robot_start_position();
+	_delay_ms(1000);
+	
+	timer1(TIMER1_PRESCALER_64, (unsigned int)(CALC_TIMER/1000.0)/(1.0/(F_CPU/64.0)), calculate_body_xy);
+	
+	//move_robot(0,-5,0);
+	//SERVO_ACTION;
+	
+	for(;;);
 	
 	uart_message mess;
 	

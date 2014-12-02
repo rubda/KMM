@@ -4,6 +4,8 @@
 
 atmega-timers.c
 
+body_ik.c
+
 hexapod_control.c
 
 Rorelsemodul.c

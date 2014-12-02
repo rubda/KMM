@@ -526,9 +526,7 @@ void ik(double x, double y, double z, int leg){
 	l1 = y_proj-6.0;//sqrt(pow(x,2) + pow(y,2));
 	alpha = calc_alpha(x, y_proj, z_offs, leg);
 
-	move_servo_dir(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
-	_delay_ms(500);
-	move_servo_dir(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
-	_delay_ms(500);
-	move_servo_dir(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
+	move_servo_reg(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
+	move_servo_reg(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
+	move_servo_reg(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
 }

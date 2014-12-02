@@ -1,3 +1,6 @@
+#ifndef SERVO_UART_H_
+#define SERVO_UART_H_
+
 #define F_CPU 16000000UL
 
 #include <avr/io.h>
@@ -43,3 +46,5 @@ servo_response suart_command_write_data(uint8_t id, uint8_t data_addr, uint8_t *
 servo_response suart_command_reg_write(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len);
 servo_response suart_command_action(uint8_t id);
 servo_response suart_command_reset(uint8_t id);
+
+#endif

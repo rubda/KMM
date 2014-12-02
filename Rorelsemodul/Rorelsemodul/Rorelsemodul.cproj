@@ -139,6 +139,12 @@
     <Compile Include="atmega-timers.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="body_ik.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="body_ik.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="hexapod_control.c">
       <SubType>compile</SubType>
     </Compile>
