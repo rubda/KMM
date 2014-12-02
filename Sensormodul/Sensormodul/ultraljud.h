@@ -19,13 +19,13 @@ struct soundSensor
 {
 	uint8_t id;
 	uint8_t nr;
-	uint8_t medDist;
+	uint16_t medDist;
 
-	uint8_t Dist1;
-	uint8_t Dist2;
-	uint8_t Dist3;
-	uint8_t Dist4;
-	uint8_t Dist5;
+	uint16_t Dist1;
+	uint16_t Dist2;
+	uint16_t Dist3;
+	uint16_t Dist4;
+	uint16_t Dist5;
 };
 
 struct soundSensor sensor_list[6];
