@@ -20,6 +20,8 @@ int main(void)
 {	
 	int SENSOR_ID = 0;
 	uart_message message_in;
+	int order[] = {0, 2, 4, 1, 3, 5};
+
 
 	init_sensors();
 	init_display();
@@ -30,9 +32,8 @@ int main(void)
 	
 	while(1)
     {
-		get_distance(get_sensor(SENSOR_ID));
-		
-		dist_to_display(SENSOR_ID);
+		get_distance(get_sensor(order[SENSOR_ID]));
+		dist_to_display(order[SENSOR_ID]);
 		
 		if (got_message()){
 			get_message(&message_in);
