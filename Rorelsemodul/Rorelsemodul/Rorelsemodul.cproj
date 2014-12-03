@@ -151,6 +151,12 @@
     <Compile Include="hexapod_control.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="leg_ik.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="leg_ik.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Rorelsemodul.c">
       <SubType>compile</SubType>
     </Compile>
