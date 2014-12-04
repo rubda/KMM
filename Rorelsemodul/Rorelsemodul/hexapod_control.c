@@ -10,6 +10,8 @@ uint8_t leg4[] = {14, 16 ,18};
 uint8_t leg5[] = {7, 9, 11};
 uint8_t leg6[] = {8, 10, 12};
 	
+uint16_t current_position[] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1};
+	
 uint8_t R_MIDDLE_SERVO_START[] = {0x60, 0x02};	
 uint8_t R_OUTER_SERVO_START[] = {0x00, 0x01};
 uint8_t L_MIDDLE_SERVO_START[] = {0x9F, 0x01};
@@ -124,11 +126,13 @@ void robot_start_position(){
 //Move servo using reg write command. Need to run SERVO_ACTION to perform action
 void move_servo_reg(uint8_t id, uint8_t *position){
 	suart_command_reg_write(id, GOAL_POSITION_L, position, 2);
+	current_position[id-1] = position[0] + (position[1] << 8);
 }
 
 //Move servo using write data command. Moves servo directly
 void move_servo_dir(uint8_t id, uint8_t *position){
 	suart_command_write_data(id, GOAL_POSITION_L, position, 2);
+	current_position[id-1] = position[0] + (position[1] << 8);
 }
 
 //Lifts leg to "lift" position. Moves middle and outer servo
@@ -425,108 +429,88 @@ void rotate(uint16_t length, uint16_t bla, int direction){
 	}
 }
 
-void star_wars_mode(){
-	int i;
+#define INNER_LENGTH 5.5
+#define MIDDLE_LENGTH 6.0
+#define OUTER_LENGTH 13.5
+
+double rad_to_degree(double rad){
+	return rad*57.295779513;
+}
+
+double degree_to_rad(double deg){
+	return (deg/57.295779513);
+}
+
+double calc_angle1(double x, double y, double z){
+	double G = sqrt(pow(x, 2) + pow(z, 2));
+	double H = sqrt(pow(y, 2) + pow(G, 2));
+	double b = acos((pow(MIDDLE_LENGTH, 2) + pow(H, 2) - pow(OUTER_LENGTH, 2))/(2*MIDDLE_LENGTH*H));
 	
-	for(i = 1; i < 7; ++i){
-		move_servo_reg(inner_servo(i), INNER_SERVO_START);
+	return rad_to_degree((atan2(G, y))+b)-90;
+}
+
+double calc_angle2(double x, double y, double z){
+	double G = sqrt(pow(x, 2) + pow(z, 2));
+	double H = sqrt(pow(y, 2) + pow(G, 2));
+	double b = acos((pow(MIDDLE_LENGTH, 2) + pow(H, 2) - pow(OUTER_LENGTH, 2))/(2*MIDDLE_LENGTH*H));
+	double h2 = asin(H*(sin(b))/OUTER_LENGTH);
 		
-		_delay_ms(200);
-			
+	return rad_to_degree(h2) - 130;
+}
+
+double calc_angle3(double x, double y, double z){
+	return rad_to_degree(atan2(z, x));
+}
+
+uint16_t calc_servo_speed(unsigned length, unsigned ms){
+	double speed = (length/0.29296875)/(ms/1000.0);
+	speed *= 0.166666666667;
+	return (uint16_t)(speed+0.5);
+}
+
+uint16_t move_servo_degree(uint16_t servo, double deg, int time){
+	uint16_t to_servo;
+	
+	deg = 150 + deg;
+	to_servo = (uint16_t)(deg/0.29296875);
+	
+	if(to_servo < 0){
+		to_servo = 0;
+	}else if(to_servo > 1023){
+		to_servo = 1023;
 	}
 	
-	SERVO_ACTION;
-	_delay_ms(1000);
-		
-	for(i = 1; i < 7; ++i){
-		if(i % 2 == 1){
-			move_servo_reg(middle_servo(i), (uint8_t[2]){0x2F, 0x03}); //rm
-			move_servo_reg(outer_servo(i), (uint8_t[2]){0x5F, 0x01});
-		}else{
-			move_servo_reg(middle_servo(i), (uint8_t[2]){0xD0, 0x00}); //rm
-			move_servo_reg(outer_servo(i), (uint8_t[2]){0xA0, 0x02});
-		}
-		
+	if(servo % 2 == 1){
+		to_servo = 0x3ff - to_servo;
 	}
+	if(current_position[servo-1] != -1){
+		set_servo_speed(servo, calc_servo_speed(abs(to_servo-current_position[servo-1]), time));
+	}
+	_delay_ms(1);
+	
+	move_servo_reg(servo, (uint8_t[2]){to_servo, to_servo >> 8});
+	
+	return to_servo;
+}
+
+double angle3_offset(uint8_t leg, double y){
+	if(leg == 3 || leg == 4){
+		return y;
+	}
+	return y - 45;
+}
+
+void move_leg_ik(uint8_t leg, double x, double y, double z, int time){
+	int angle3 = angle3_offset(leg, calc_angle3(x, y, z));
+	
+	//int x_proj = x;// / cos(degree_to_rad(angle3));
+	
+	int angle1 = calc_angle1(x, y, z);
+	int angle2 = calc_angle2(x, y, z);
+	
+	move_servo_degree(inner_servo(leg), angle3, time);
+	move_servo_degree(middle_servo(leg), angle1, time);
+	move_servo_degree(outer_servo(leg), angle2, time);
 	
 	SERVO_ACTION;
-}
-
-double calc_gamma(double x, double y){
-	double gamma = atan(x / y);
-	
-	//return 0x0160 + (uint16_t) (gamma * 57.2957795 / 0.29);
-	return gamma;
-}
-
-uint16_t gamma_to_hex(double g, int leg){
-	if(leg == 5)
-		return 0x0160 - (long) (g * 57.2957795 / 0.29);
-	else if(leg == 2)
-		return 0x0160 + (long) (g * 57.2957795 / 0.29);
-	else if(leg == 1)
-		return 0x029F - (long) (g * 57.2957795 / 0.29);
-	else if(leg == 6)
-		return 0x029F + (long) (g * 57.2957795 / 0.29); 
-	else if(leg == 4)
-		return 0x0200 + (long) (g * 57.2957795 / 0.29);
-	else
-		return 0x0200 - (long) (g * 57.2957795 / 0.29);
-}	
-
-uint16_t calc_alpha(double x, double y, double z, int leg){
-	double L = sqrt(pow(y-5.0, 2) + pow(z, 2));
-	
-	double a1 = acos(z/L);
-	
-	double a2_t = pow(13.0, 2) - pow(6.5, 2) - pow(L, 2);
-	double a2_n = -2.0 * 6.5 * L;
-	double arg = a2_t/a2_n;
-	
-	double a2 = acos(arg);
-	
-	double alpha = a1 + a2;
-	
-	if(leg % 2 == 1)
-		return 0x0300 - (int)(alpha * 57.2957795 / 0.29); 
-	else
-		return 0x0100 + (int)((alpha * 57.2957795) / 0.29); 
-}
-
-uint16_t calc_beta(double y, double z, double z_offs, int leg){
-	double beta;
-	double a, b, l, l1;
-	
-	l1 = y - 5.0;
-	l = sqrt(pow(l1, 2.0) + pow(z_offs, 2.0));
-	
-	a = pow(l, 2) - pow(13.0, 2.0) - pow(6.5, 2.0);
-	b = -2 * 13.0 * 6.5;
-	
-	beta = acos(a / b);
-	
-	if(leg % 2 == 1)
-		return 0x0338 - (long) ((beta * 57.2957795 - 90 )/ 0.29);
-	else
-		return 0x00C7 + (long) ((beta * 57.2957795 - 90 )/ 0.29);
-
-}
-
-void ik(double x, double y, double z, int leg){
-	double l1, l2;
-	uint16_t alpha, beta, gamma_hex;
-	double alpha1, alpha2;
-	double z_offs = 4.0 - z;
-	double y_proj;
-	double gamma;
-	
-	gamma = calc_gamma(x, y); gamma_hex = gamma_to_hex(gamma, leg);
-	y_proj = y / cos(gamma);
-	beta = calc_beta(y_proj, z, z_offs, leg);
-	l1 = y_proj-6.0;//sqrt(pow(x,2) + pow(y,2));
-	alpha = calc_alpha(x, y_proj, z_offs, leg);
-
-	move_servo_reg(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
-	move_servo_reg(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
-	move_servo_reg(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
 }

@@ -40,6 +40,7 @@ C_SRCS +=  \
 ../atmega-timers.c \
 ../body_ik.c \
 ../hexapod_control.c \
+../leg_ik.c \
 ../Rorelsemodul.c \
 ../servo_uart.c \
 ../UART.c
@@ -55,6 +56,7 @@ OBJS +=  \
 atmega-timers.o \
 body_ik.o \
 hexapod_control.o \
+leg_ik.o \
 Rorelsemodul.o \
 servo_uart.o \
 UART.o
@@ -63,6 +65,7 @@ OBJS_AS_ARGS +=  \
 atmega-timers.o \
 body_ik.o \
 hexapod_control.o \
+leg_ik.o \
 Rorelsemodul.o \
 servo_uart.o \
 UART.o
@@ -71,6 +74,7 @@ C_DEPS +=  \
 atmega-timers.d \
 body_ik.d \
 hexapod_control.d \
+leg_ik.d \
 Rorelsemodul.d \
 servo_uart.d \
 UART.d
@@ -79,6 +83,7 @@ C_DEPS_AS_ARGS +=  \
 atmega-timers.d \
 body_ik.d \
 hexapod_control.d \
+leg_ik.d \
 Rorelsemodul.d \
 servo_uart.d \
 UART.d
@@ -97,6 +102,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

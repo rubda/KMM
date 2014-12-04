@@ -110,3 +110,8 @@ void star_wars_mode();
 
 void ik(double x, double y, double z, int leg);
 void robot_reset();
+
+
+
+uint16_t move_servo_degree(uint16_t servo, double deg, int time);
+void move_leg_ik(uint8_t leg, double x, double y, double z, int time);

@@ -12,6 +12,7 @@
 #include "UART.h"
 #include <stdlib.h>
 #include <string.h>
+#include "leg_ik.h"
 #include "body_ik.h"
 #include "atmega-timers.h"
 
@@ -103,20 +104,45 @@ int main(void)
 	_delay_ms(1000);
 	sei();
 	
-	body_init();
 	robot_start_position();
 	_delay_ms(1000);
+	for(;;);
+	int i = 0;
+	/*for(;;){
+		for(i = 1; i <= 1; ++i)
+			move_leg_ik(i, 4, 11, -2);
+		
+		_delay_ms(500);
+		
+		
+		for(i = 1; i <= 1; ++i)
+		move_leg_ik(i, 4, 11, 0);
+		
+		_delay_ms(500);
+		
+		for(i = 1; i <= 1; ++i)
+			move_leg_ik(i, 4, 11, 2);
+			
+		_delay_ms(500);
+	}*/
 	
-	//timer1(TIMER1_PRESCALER_64, (unsigned int)(CALC_TIMER/1000.0)/(1.0/(F_CPU/64.0)), calculate_body_xy);
+	for(;;){
+		calculate_body_xy();
+		_delay_ms(CALC_TIMER-50);
+	}
+	
+	timer1(TIMER1_PRESCALER_64, (unsigned int)(CALC_TIMER/1000.0)/(1.0/(F_CPU/64.0)), calculate_body_xy);
 	
 	//move_robot(0,-5,0);
 	//SERVO_ACTION;
+		
 	
-	for(;;);
+	
+	//for(;;);
 	
 	uart_message mess;
 	
-	int i = 0;
+	//int i = 0;
 	
 	while(1)
 	{

@@ -11,7 +11,5 @@
 
 #include "hexapod_control.h"
 
-uint16_t move_servo_degree(uint16_t servo, int deg);
-
 
 #endif /* LEK_IK_H_ */

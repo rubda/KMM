@@ -8,6 +8,8 @@ body_ik.c
 
 hexapod_control.c
 
+leg_ik.c
+
 Rorelsemodul.c
 
 servo_uart.c
