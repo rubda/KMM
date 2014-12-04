@@ -22,6 +22,8 @@ void setup_spi()
 	DDRB &= ~(1 << SPI_MISO); // input
 	DDRB |= (1 << SPI_SS); // output
 	DDRB |= (1 << SPI_SCLK); // output
+	
+	ss_high();
 }
 
 void disable_spi()

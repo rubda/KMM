@@ -104,6 +104,6 @@ void get_distance(struct soundSensor* sensor)
 // En jämförelsefunktion som krävs för att quicksorten ska funka
 uint16_t cmpfunc (const void * a, const void * b)
 {
-	return ( *(uint16_t*)a - *(uint16_t*)b );
+	return (*(uint16_t*)a - *(uint16_t*)b);
 }
 

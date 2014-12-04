@@ -28,7 +28,6 @@ int main(void)
 	init_sensors();
 	init_display();
 	setup_spi();
-	ss_high();
 	uart_init(0x0067);
 	sei();		
 	
@@ -43,7 +42,8 @@ int main(void)
 			get_message(&message_in);
 			message_handler(&message_in);
 		}
-
+		
+		//Iterera över våra sensor id:n
 		if (SENSOR_ID == 5){
 			SENSOR_ID = 0;
 		}else{

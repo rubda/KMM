@@ -11,8 +11,8 @@
 
 
 //Strängar som skickas
-const char *false[] = {"false"};
-const char *true[] = {"true"};
+//const char *false[] = {"false"};
+//const char *true[] = {"true"};
 const char *rotate[] = {"rotate"};
 const char *distance[] = {"distance"};
 char *returnMessage[1];

@@ -24,7 +24,7 @@ void activate_adc()
 	REG = get_spi(0xFF);
 	ss_high();
 	
-	if (REG & (1 << 15)) activate_adc();
+	//if (REG & (1 << 15)) activate_adc();
 	REG = 0;
 	_delay_us(200);
 }
@@ -39,7 +39,7 @@ void deactivate_adc()
 	REG = get_spi(0xFF);
 	ss_high();
 	
-	if (REG & (1 << 15)) deactivate_adc();
+	//if (REG & (1 << 15)) deactivate_adc();
 	REG = 0;
 }
 
@@ -52,7 +52,7 @@ void start_conversion()
 	send_spi(START_CONVERSION);
 	REG = get_spi(0xFF);
 	ss_high();
-	if (REG & (1 << 15)) start_conversion();
+	//if (REG & (1 << 15)) start_conversion();
 	REG = 0;
 }
 
@@ -67,7 +67,7 @@ uint16_t get_angular_rate()
 	send_spi(POLL);
 	_delay_us(200);
 	
-	//if (REG & (1 << 16)) get_angular_rate();
+	//if (REG & (1 << 15)) get_angular_rate();
 	REG = get_spi(0xFF);
 	ss_high();
 	
@@ -93,28 +93,29 @@ double rotate_to(int angle)
 	activate_adc();
 	uint16_t rate;
 	double ACHIEVED_ANGLE = 0;
+	int TIME = 0;
 	int OFFSET = 0;
 	int LEFT_ANGLE = (angle - OFFSET);
 	int RIGHT_ANGLE = (angle + OFFSET);
 		
 	if (angle > 0){
-		while(LEFT_ANGLE > ACHIEVED_ANGLE)
+		while(LEFT_ANGLE > ACHIEVED_ANGLE && TIME++ < 1000)
 		{		
 			start_conversion();
 			rate = get_angular_rate();
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
 			_delay_ms(10);
 		}
-		has_rotated(1);
+		//has_rotated(1);
 	}else if (angle < 0){
-		while(ACHIEVED_ANGLE > RIGHT_ANGLE)
+		while(ACHIEVED_ANGLE > RIGHT_ANGLE && TIME++ < 1000)
 		{
 			start_conversion();
 			rate = get_angular_rate();
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
 			_delay_ms(10);
 		}
-		has_rotated(1);
+		//has_rotated(1);
 	}
 	deactivate_adc();
 	return ACHIEVED_ANGLE;
