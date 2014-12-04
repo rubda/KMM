@@ -20,9 +20,11 @@ int main(void)
 {	
 	int SENSOR_ID = 0;
 	uart_message message_in;
+	
+	//Används för att begära avståndssensorer i den här ordningen
 	int order[] = {0, 2, 4, 1, 3, 5};
 
-
+	//Allt som behövs initieras 
 	init_sensors();
 	init_display();
 	setup_spi();
@@ -32,9 +34,11 @@ int main(void)
 	
 	while(1)
     {
+		//Begär ett avstånd från en specifik avståndssensor och lägger ut det på displayen
 		get_distance(get_sensor(order[SENSOR_ID]));
 		dist_to_display(order[SENSOR_ID]);
 		
+		//Kollar om vi har fått ett message för att sedan behandla det
 		if (got_message()){
 			get_message(&message_in);
 			message_handler(&message_in);

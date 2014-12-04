@@ -9,6 +9,8 @@
 #include "gyro.h"
 #include <stdlib.h>
 
+
+//Strängar som skickas
 const char *false[] = {"false"};
 const char *true[] = {"true"};
 const char *rotate[] = {"rotate"};
@@ -16,7 +18,7 @@ const char *distance[] = {"distance"};
 char *returnMessage[1];
 
 
-	
+//Tolkar det kommando som har mottagits 
 int get_cmd(uart_message *message){
 	
 	char *cmd = (*message).data[0].data;
@@ -33,6 +35,7 @@ int get_cmd(uart_message *message){
 	
 }
 
+//Tolkar den validationen som har mottagits
 int get_validation(uart_message *message){
 	
 	char *valid = (*message).data[1].data;
@@ -45,6 +48,9 @@ int get_validation(uart_message *message){
 	return 0;
 }
 
+//Hanterar de meddelanden som fås från styrenheten
+//Det som sker till mesta del är konverteringar mellan tal till strängar eller tvärtom
+//och förstås användandet av funktioner som var definierade i gyro.c och ultraljud.c
 void message_handler(uart_message *message_in){
 
 	int ANGLE = 0;

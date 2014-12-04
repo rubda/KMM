@@ -11,12 +11,6 @@
 #ifndef SPI_H_
 #define SPI_H_
 
-// Alla modes beroende på klocka och polaritet 
-#define SPI_MODE_0 0b00 /* Sample (Rising) Setup (Falling) CPOL=0, CPHA=0 */
-#define SPI_MODE_1 0b01 /* Sample (Rising) Setup (Falling) CPOL=0, CPHA=1 */
-#define SPI_MODE_2 0b10 /* Sample (Rising) Setup (Falling) CPOL=1, CPHA=0 */
-#define SPI_MODE_3 0b11 /* Sample (Rising) Setup (Falling) CPOL=1, CPHA=1 */
-
 // Definierar alla pins
 #define SPI_SS PORTB4
 #define SPI_MOSI PORTB5

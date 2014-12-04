@@ -6,14 +6,7 @@
  */ 
 #include "display.h"
 #include <util/delay.h>
-//#include "UART.h"
 
-
-void wait(int n){
-	
-	volatile int a = 0;
-	while(a<n){a++;}
-}
 
 void init_display()
 {
@@ -32,7 +25,7 @@ void init_display()
     PORTB &= ~(1 << DISP_E);
     _delay_ms(1000);
     
-    // Detta borde funka, men fråga mig inte varför
+    // Detta borde funka
     set_display(0x00, 0x30);
     toggle_enable();
     
@@ -63,21 +56,23 @@ void init_display()
 	
 }
 
+//Clear display
 void clear_display()
 {
 	set_display(0x00, 0x01);
 	toggle_enable();
 }
 
+//Sätter enable hög för en stund
 void toggle_enable()
 {
 	PORTB |= (1 << DISP_E);
 	_delay_us (250);
 	PORTB &= ~(1 << DISP_E);
 	_delay_us(250);
-
 }
 
+//Sätter displayen till ett visst läge
 void set_display(int mode, int instr)
 {	
 	PORTB &= ~(1 << DISP_RS);
@@ -109,11 +104,13 @@ void set_display(int mode, int instr)
 
 }
 
+//Skriver ut BOSSE på displayen
 void BOSSE()
 {
 	write_string("BOSSE", 0x85);	
 }
 
+//Skriver ut en sträng på displayen med önskad position
 void write_string(char* str, int pos){
 	int i;
 	for (i = 0; str[i] != '\0' && i <= 32; ++i){
@@ -124,7 +121,7 @@ void write_string(char* str, int pos){
 		toggle_enable();
 	}	
 }
-	
+//Skriver ut helttal till displayen	
 void write_to_display(uint16_t value, int pos)
 {
 	uint16_t symbol = int_to_char(value);
@@ -136,20 +133,11 @@ void write_to_display(uint16_t value, int pos)
 	toggle_enable();
 }
 
-void write_to_display2(uint16_t value, int pos)
-{
-	uint16_t symbol = int_to_char(value);
-	
-	set_display(0x00, 0x85+pos);
-	toggle_enable();
-	
-	set_display(0x02, symbol);
-	toggle_enable();
-}
 
+//Skriver ut parametrar på display 
 void write_params()
 {
-	write_string("D1: ", 0xC0); //D1: 000 D2: 000
+	write_string("D1: ", 0xC0); //D1: 000
 	write_string("D2: ", 0xC9);
 	write_string("D3: ", 0x90);
 	write_string("D4: ", 0x99);
@@ -157,9 +145,9 @@ void write_params()
 	write_string("D6: ", 0xD9);
 }
 
+//Uppdaterar distanser på displayer
 void dist_to_display(int id)
 {
-
 	switch(id){
 		case 0:
 			distance_to_display(id,0xC4);
@@ -183,11 +171,11 @@ void dist_to_display(int id)
 	
 }
 
+//Bryter upp ett värde (går att använda inbyggda funktioner)
 void distance_to_display(int id, int pos)
 {
 	uint16_t  DISTANCE = get_sensor(id)->medDist;
 	
-	//uint16_t FORTH = DISTANCE / 1000;
 	uint16_t THIRD = DISTANCE / 100;
 	uint16_t SECOND = (DISTANCE / 10) - (DISTANCE / 100)*10;
 	uint16_t FIRST = (DISTANCE / 1) - (DISTANCE / 10)*10;
@@ -203,28 +191,3 @@ uint16_t int_to_char(uint16_t digit)
 	return data; 
 }
 
-
-
-void data_to_display(int DISTANCE)
-{
-	char name[] = "TEST";
-	
-	uint16_t FORTH = DISTANCE / 1000;
-	uint16_t THIRD = DISTANCE / 100 - (DISTANCE / 1000)*10;
-	uint16_t SECOND = (DISTANCE / 10) - (DISTANCE / 100)*10;
-	uint16_t FIRST = (DISTANCE / 1) - (DISTANCE / 10)*10;
-	
-	int i;
-	for (i = 0; i < 4; ++i){
-		set_display(0x00, 0x80+i);
-		toggle_enable();
-	
-		set_display(0x02, name[i]);
-		toggle_enable();
-		}
-	
-	write_to_display2(FORTH, 3);
-	write_to_display2(THIRD, 4);
-	write_to_display2(SECOND, 5);
-	write_to_display2(FIRST, 6);
-}

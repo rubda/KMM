@@ -17,9 +17,9 @@
 
 struct soundSensor
 {
-	uint8_t id;
-	uint8_t nr;
-	uint16_t medDist;
+	uint8_t id; //Det id som krävs för att aktivera ett visst ultraljud
+	uint8_t nr; //Ett nr för att iterera mellan dist1 till dist5
+	uint16_t medDist; //Medianen av fem andra distanser som syns nedan
 
 	uint16_t Dist1;
 	uint16_t Dist2;

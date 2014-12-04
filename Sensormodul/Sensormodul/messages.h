@@ -15,9 +15,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-
-
 	
 int get_cmd(uart_message *message);
 int get_validation(uart_message *message);

@@ -10,7 +10,7 @@
 void setup_spi()
 {
 	SPCR |= (1 << MSTR); // AVR blir master
-	SPCR |= (1 << SPE); // Enable SPI?
+	SPCR |= (1 << SPE); // Enable SPI
 	SPCR |= (SPI_MSB << DORD); // MSB först
 	
 	SPCR |= (1 << CPOL); // CPOL = 1
@@ -37,6 +37,7 @@ uint8_t send_spi(uint8_t out)
 }
 
 
+//Skickar totalt 16 bitars data och tar emot 16 bitars data
 uint16_t get_spi(uint8_t data)
 {
 	uint16_t REG = 0;

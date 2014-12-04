@@ -83,10 +83,11 @@ double adc_to_angular_rate(uint16_t data)
 		
 		double vOutAngularRate = (data * 25/12)+400; //Uttryckt i millivolts
 		
-		return (vOutAngularRate - OFFSET)/6.67; // Uttryckt i grader/sec (beroende på vilken gyro modell vi har)
+		return (vOutAngularRate - OFFSET)/6.67; // Uttryckt i grader/sec
 	}
 	
-	
+
+//Returnerar en vinkel tills vi har roterat klart till en vinkel vi fått in	
 double rotate_to(int angle)
 {
 	activate_adc();

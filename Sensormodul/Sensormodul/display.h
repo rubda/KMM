@@ -26,7 +26,6 @@
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 
-void wait(int n);
 void init_display();
 void clear_display();
 uint16_t int_to_char(uint16_t digit);
@@ -35,8 +34,6 @@ void set_display(int mode, int instr);
 void write_to_display(uint16_t value, int pos);
 void BOSSE();
 void distance_to_display(int id, int pos);
-void data_to_display(int DISTANCE);
-void write_to_display2(uint16_t value, int pos);
 void write_params();
 void write_string(char* str, int pos);
 
