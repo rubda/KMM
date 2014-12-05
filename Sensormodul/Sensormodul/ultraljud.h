@@ -34,9 +34,7 @@ void init_sensors();
 struct soundSensor* get_sensor(uint8_t id);
 void get_distance(struct soundSensor*);
 uint16_t cmpfunc (const void * a, const void * b);
-
-
-
+void refresh_sensors();
 	
 
 

@@ -24,7 +24,7 @@ void activate_adc()
 	REG = get_spi(0xFF);
 	ss_high();
 	
-	//if (REG & (1 << 15)) activate_adc();
+	if (REG & (1 << 15)) activate_adc();
 	REG = 0;
 	_delay_us(200);
 }
@@ -39,7 +39,7 @@ void deactivate_adc()
 	REG = get_spi(0xFF);
 	ss_high();
 	
-	//if (REG & (1 << 15)) deactivate_adc();
+	if (REG & (1 << 15)) deactivate_adc();
 	REG = 0;
 }
 
@@ -52,7 +52,7 @@ void start_conversion()
 	send_spi(START_CONVERSION);
 	REG = get_spi(0xFF);
 	ss_high();
-	//if (REG & (1 << 15)) start_conversion();
+	if (REG & (1 << 15)) start_conversion();
 	REG = 0;
 }
 
@@ -106,7 +106,6 @@ double rotate_to(int angle)
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
 			_delay_ms(10);
 		}
-		//has_rotated(1);
 	}else if (angle < 0){
 		while(ACHIEVED_ANGLE > RIGHT_ANGLE && TIME++ < 1000)
 		{
@@ -115,7 +114,6 @@ double rotate_to(int angle)
 			ACHIEVED_ANGLE += adc_to_angular_rate(rate)/100;
 			_delay_ms(10);
 		}
-		//has_rotated(1);
 	}
 	deactivate_adc();
 	return ACHIEVED_ANGLE;

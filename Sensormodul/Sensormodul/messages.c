@@ -11,8 +11,6 @@
 
 
 //Strängar som skickas
-//const char *false[] = {"false"};
-//const char *true[] = {"true"};
 const char *rotate[] = {"rotate"};
 const char *distance[] = {"distance"};
 char *returnMessage[1];
@@ -93,6 +91,18 @@ void message_handler(uart_message *message_in){
 				send_message("distance", attr, 2);			
 				free(attr[0]);
 				free(attr[1]);
+			}else if(c == 7){
+				send_message("accept", distance, 1);
+				refresh_sensors();
+				char* attr[6];
+				int i; for(i = 0; i < 6; ++i){
+					attr[i] = malloc(4);
+					snprintf(attr[i], 4, "%u", get_sensor(i)->medDist);
+				}
+				send_message("distance", attr, 6);
+				for(i = 0; i < 6; ++i){
+					free(attr[i]);
+				}
 			}else{
 				send_message("denied", distance, 1);
 			}

@@ -107,3 +107,16 @@ uint16_t cmpfunc (const void * a, const void * b)
 	return (*(uint16_t*)a - *(uint16_t*)b);
 }
 
+
+//Uppdaterar alla sensorer fem gånger var, på en gång
+void refresh_sensors()
+{
+	int order[] = {0, 2, 4, 1, 3, 5};
+	int i, j;
+	
+	for(j = 0; j < 5; ++j){
+		for(i = 0; i < 6; ++i){
+			get_distance(get_sensor(order[i]));
+		}
+	}
+}
