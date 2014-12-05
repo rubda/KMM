@@ -84,7 +84,6 @@ int main(void)
 	uart_message mess;
 	
 	while(1){
-		//funny_walk(step_len, FORWARD);
 		
 		if(got_message()){
 			get_message(&mess);

@@ -103,5 +103,3 @@ void move_leg_backward(uint8_t leg_id, uint16_t length);
 
 //	Inverse kinematics for leg
 void ik(double x, double y, double z, int leg);
-
-void funny_walk(uint16_t length, int direction);
