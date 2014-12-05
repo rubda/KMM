@@ -11,12 +11,12 @@ uint8_t leg5[] = {7, 9, 11};
 uint8_t leg6[] = {8, 10, 12};
 	
 uint8_t R_MIDDLE_SERVO_START[] = {0x60, 0x02};	
-uint8_t R_OUTER_SERVO_START[] = {0x00, 0x01};
+uint8_t R_OUTER_SERVO_START[] = {0x30, 0x01};
 uint8_t L_MIDDLE_SERVO_START[] = {0x9F, 0x01};
-uint8_t L_OUTER_SERVO_START[] = {0xFF, 0x02};
+uint8_t L_OUTER_SERVO_START[] = {0xCF, 0x02};
 uint8_t INNER_SERVO_START_R[] = {0x00, 0x02};
 uint8_t INNER_SERVO_START_L[] = {0x00, 0x02};
-uint8_t INNER_SERVO_START_M[] = {0xFF, 0x01};
+uint8_t INNER_SERVO_START_M[] = {0x00, 0x02};
 uint8_t INNER_SERVO_START[] = {0x00, 0x02};
 
 //Init robot and UART communication
@@ -59,14 +59,9 @@ void set_speed(uint16_t s){
 	speed[1] = s >> 8;
 	
 	uint8_t torque_enable[] = {0x01};
-	uint8_t slope[] = {0xFF};
 	suart_command_write_data(BROADCAST_ID, MOVING_SPEED_L, speed, 2);
 	_delay_us(300);
 	suart_command_write_data(BROADCAST_ID, 0x18, torque_enable, 1);
-	_delay_us(300);
-	suart_command_write_data(BROADCAST_ID, 0x1C, slope, 1);
-	_delay_us(300);
-	suart_command_write_data(BROADCAST_ID, 0x1D, slope, 1);
 }
 
 //Set speed of individual servo
@@ -79,6 +74,9 @@ void set_servo_speed(uint8_t id, uint16_t s){
 
 //Put robot into starting position
 void robot_start_position(){
+	uint8_t torque_enable[] = {0x01};
+	suart_command_write_data(BROADCAST_ID, 0x18, torque_enable, 1);
+	
 	int i;
 	_delay_us(300);
 	
@@ -193,6 +191,8 @@ void move_leg_forward(uint8_t leg_id, uint16_t length){
 	}else{
 		move_servo_reg(inner_servo(leg_id), back_r);
 	}
+	
+	_delay_ms(10);
 }
 
 //TODO: Kolla plus och minus för benen
@@ -221,6 +221,8 @@ void move_leg_backward(uint8_t leg_id, uint16_t length){
 	}else if(leg_id == 6){
 		move_servo_reg(inner_servo(leg_id), INNER_SERVO_START_L);
 	}
+	
+	_delay_ms(10);
 }
 
 //Moves leg 1, 4, 5 into walking position. Use only if robot is in starting position
@@ -235,20 +237,20 @@ void setup_first_step(uint16_t length_l, uint16_t   length_r, int direction){
 		move_leg_forward(1, length_l);
 		move_leg_forward(4, length_r);
 		move_leg_forward(5, length_l);
-	/*}else if(direction == BACKWARD){
-		move_leg_backward(1, length);
-		move_leg_backward(4, length);
-		move_leg_backward(5, length);
+	}else if(direction == BACKWARD){
+		move_leg_backward(1, length_l);
+		move_leg_backward(4, length_r);
+		move_leg_backward(5, length_l);
 	}else if(direction == RIGHT){
-		move_leg_forward(1, length);
-		move_leg_backward(4, length);
-		move_leg_forward(5, length);
+		move_leg_forward(1, length_l);
+		move_leg_backward(4, length_r);
+		move_leg_forward(5, length_l);
 	}else if(direction == LEFT){
-		move_leg_backward(1, length);
-		move_leg_forward(4, length);
-		move_leg_backward(5, length);
-	}*/
+		move_leg_backward(1, length_l);
+		move_leg_forward(4, length_r);
+		move_leg_backward(5, length_l);
 	}
+
 	SERVO_ACTION;
 	_delay_ms(200);
 	
@@ -341,8 +343,6 @@ void take_step_2(uint16_t length_r, uint16_t length_l, int direction){
 	robot_delay(0x003F, 0x003F);
 }
 
-//Make robot take "one" step. Need to run setup_first_step() first. 
-//Loop for walking
 uint8_t last_step = 0;
 void take_step(uint16_t length_r, uint16_t length_l, int direction){
 	if(last_step++ % 2 == 0){
@@ -419,51 +419,33 @@ void rotate_2(uint16_t length, int direction){
 
 void rotate(uint16_t length, uint16_t bla, int direction){
 	if(last_step++ % 2 == 0){
-		rotate_1(length, direction);
+		rotate_1(length-0x0019, direction);
 	}else{
-		rotate_2(length, direction);
+		rotate_2(length-0x0019, direction);
 	}
 }
 
-void star_wars_mode(){
-	int i;
-	
-	for(i = 1; i < 7; ++i){
-		move_servo_reg(inner_servo(i), INNER_SERVO_START);
-		
-		_delay_ms(200);
-			
+void turn(uint16_t length_r, uint16_t length_l, int direction){
+	if(direction == RIGHT){
+		take_step(length_r, length_l, FORWARD);
+		rotate(length_r+0x0019, 0x0000, RIGHT);
+	}else if(direction == LEFT){
+		take_step(length_r, length_l, FORWARD);
+		rotate(length_r+0x0019, 0x0000, LEFT);
 	}
-	
-	SERVO_ACTION;
-	_delay_ms(1000);
-		
-	for(i = 1; i < 7; ++i){
-		if(i % 2 == 1){
-			move_servo_reg(middle_servo(i), (uint8_t[2]){0x2F, 0x03}); //rm
-			move_servo_reg(outer_servo(i), (uint8_t[2]){0x5F, 0x01});
-		}else{
-			move_servo_reg(middle_servo(i), (uint8_t[2]){0xD0, 0x00}); //rm
-			move_servo_reg(outer_servo(i), (uint8_t[2]){0xA0, 0x02});
-		}
-		
-	}
-	
-	SERVO_ACTION;
 }
 
 double calc_gamma(double x, double y){
-	double gamma = atan(x / y);
+	double gamma = atan2(x, y);
 	
-	//return 0x0160 + (uint16_t) (gamma * 57.2957795 / 0.29);
 	return gamma;
 }
 
 uint16_t gamma_to_hex(double g, int leg){
 	if(leg == 5)
-		return 0x0160 - (long) (g * 57.2957795 / 0.29);
+		return 0x0168 - (long) (g * 57.2957795 / 0.29);
 	else if(leg == 2)
-		return 0x0160 + (long) (g * 57.2957795 / 0.29);
+		return 0x0168 + (long) (g * 57.2957795 / 0.29);
 	else if(leg == 1)
 		return 0x029F - (long) (g * 57.2957795 / 0.29);
 	else if(leg == 6)
@@ -488,9 +470,9 @@ uint16_t calc_alpha(double x, double y, double z, int leg){
 	double alpha = a1 + a2;
 	
 	if(leg % 2 == 1)
-		return 0x0300 - (int)(alpha * 57.2957795 / 0.29); 
+		return 0x0330 - (int)(alpha * 57.2957795 / 0.29); 
 	else
-		return 0x0100 + (int)((alpha * 57.2957795) / 0.29); 
+		return 0x00CF + (int)(alpha * 57.2957795 / 0.29); 
 }
 
 uint16_t calc_beta(double y, double z, double z_offs, int leg){
@@ -506,9 +488,9 @@ uint16_t calc_beta(double y, double z, double z_offs, int leg){
 	beta = acos(a / b);
 	
 	if(leg % 2 == 1)
-		return 0x0338 - (long) ((beta * 57.2957795 - 90 )/ 0.29);
+		return 0x0330 - (long) ((beta * 57.2957795 - 45 )/ 0.29);
 	else
-		return 0x00C7 + (long) ((beta * 57.2957795 - 90 )/ 0.29);
+		return 0x00CF + (long) ((beta * 57.2957795 - 45 )/ 0.29);
 
 }
 
@@ -516,19 +498,29 @@ void ik(double x, double y, double z, int leg){
 	double l1, l2;
 	uint16_t alpha, beta, gamma_hex;
 	double alpha1, alpha2;
-	double z_offs = 4.0 - z;
+	double z_offs = 8 - z;
+	double x_offs, y_offs;
 	double y_proj;
 	double gamma;
 	
-	gamma = calc_gamma(x, y); gamma_hex = gamma_to_hex(gamma, leg);
-	y_proj = y / cos(gamma);
+	if(leg == 1 || leg == 2){
+		x_offs = 6 + x;
+		y_offs = 10 + y;
+	}else if(leg == 5 || leg == 6){
+		x_offs = -6 + x;
+		y_offs = 10 + y;
+	}else{
+		x_offs = x;
+		y_offs = 10 + y;
+	}
+	
+	gamma = calc_gamma(x_offs, y_offs); gamma_hex = gamma_to_hex(gamma, leg);
+	y_proj = y_offs / cos(gamma);
 	beta = calc_beta(y_proj, z, z_offs, leg);
-	l1 = y_proj-6.0;//sqrt(pow(x,2) + pow(y,2));
 	alpha = calc_alpha(x, y_proj, z_offs, leg);
 
-	move_servo_dir(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
-	_delay_ms(500);
-	move_servo_dir(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
-	_delay_ms(500);
-	move_servo_dir(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
+	move_servo_reg(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
+	move_servo_reg(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
+	move_servo_reg(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
 }
+
