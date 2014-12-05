@@ -83,6 +83,14 @@ int main(void)
 	
 	uart_message mess;
 	
+	ik(0, 0, 0, 1);
+	ik(0, 0, 0, 2);
+	ik(0, 0, 0, 3);
+	ik(0, 0, 0, 4);
+	ik(0, 0, 0, 5);
+	ik(0, 0, 0, 6);
+	SERVO_ACTION;
+	
 	while(1){
 		
 		if(got_message()){

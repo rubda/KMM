@@ -436,16 +436,16 @@ void turn(uint16_t length_r, uint16_t length_l, int direction){
 }
 
 double calc_gamma(double x, double y){
-	double gamma = atan(x / y);
+	double gamma = atan2(x, y);
 	
 	return gamma;
 }
 
 uint16_t gamma_to_hex(double g, int leg){
 	if(leg == 5)
-		return 0x0160 - (long) (g * 57.2957795 / 0.29);
+		return 0x0168 - (long) (g * 57.2957795 / 0.29);
 	else if(leg == 2)
-		return 0x0160 + (long) (g * 57.2957795 / 0.29);
+		return 0x0168 + (long) (g * 57.2957795 / 0.29);
 	else if(leg == 1)
 		return 0x029F - (long) (g * 57.2957795 / 0.29);
 	else if(leg == 6)
@@ -470,9 +470,9 @@ uint16_t calc_alpha(double x, double y, double z, int leg){
 	double alpha = a1 + a2;
 	
 	if(leg % 2 == 1)
-		return 0x0300 - (int)(alpha * 57.2957795 / 0.29); 
+		return 0x0330 - (int)(alpha * 57.2957795 / 0.29); 
 	else
-		return 0x0100 + (int)((alpha * 57.2957795) / 0.29); 
+		return 0x00CF + (int)(alpha * 57.2957795 / 0.29); 
 }
 
 uint16_t calc_beta(double y, double z, double z_offs, int leg){
@@ -488,9 +488,9 @@ uint16_t calc_beta(double y, double z, double z_offs, int leg){
 	beta = acos(a / b);
 	
 	if(leg % 2 == 1)
-		return 0x0338 - (long) ((beta * 57.2957795 - 90 )/ 0.29);
+		return 0x0330 - (long) ((beta * 57.2957795 - 45 )/ 0.29);
 	else
-		return 0x00C7 + (long) ((beta * 57.2957795 - 90 )/ 0.29);
+		return 0x00CF + (long) ((beta * 57.2957795 - 45 )/ 0.29);
 
 }
 
@@ -498,14 +498,25 @@ void ik(double x, double y, double z, int leg){
 	double l1, l2;
 	uint16_t alpha, beta, gamma_hex;
 	double alpha1, alpha2;
-	double z_offs = 4.0 - z;
+	double z_offs = 8 - z;
+	double x_offs, y_offs;
 	double y_proj;
 	double gamma;
 	
-	gamma = calc_gamma(x, y); gamma_hex = gamma_to_hex(gamma, leg);
-	y_proj = y / cos(gamma);
+	if(leg == 1 || leg == 2){
+		x_offs = 6 + x;
+		y_offs = 10 + y;
+	}else if(leg == 5 || leg == 6){
+		x_offs = -6 + x;
+		y_offs = 10 + y;
+	}else{
+		x_offs = x;
+		y_offs = 10 + y;
+	}
+	
+	gamma = calc_gamma(x_offs, y_offs); gamma_hex = gamma_to_hex(gamma, leg);
+	y_proj = y_offs / cos(gamma);
 	beta = calc_beta(y_proj, z, z_offs, leg);
-	l1 = y_proj-6.0;//sqrt(pow(x,2) + pow(y,2));
 	alpha = calc_alpha(x, y_proj, z_offs, leg);
 
 	move_servo_reg(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
