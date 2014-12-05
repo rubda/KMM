@@ -16,7 +16,6 @@
 #define SUART_TX_ACTIVE PORTD |= (1 << PORTD5)
 #define SUART_RX_ACTIVE PORTD &= ~(1 << PORTD5)
 
-
 struct suart_response
 {
 	uint8_t id;
@@ -27,16 +26,27 @@ struct suart_response
 
 typedef struct suart_response servo_response;
 
+//	Init UART to servos
 void suart_init(long baud);
 
+//	Send char to servo
 void suart_send_char(uint8_t data);
-char suart_read_char();
 
-int suart_read_string(char *s, int size);
+//	Send string to servo
 void suart_send_string(char *s, uint8_t size);
 
+//	Read char from servo UART
+char suart_read_char();
+
+//	Read string from servo UART
+int suart_read_string(char *s, int size);
+
+//	Send servo command to id
 servo_response suart_command(uint8_t id, char* command, uint8_t size);
 
+/************************************************************************/
+/* Servo command functions                                              */
+/************************************************************************/
 servo_response suart_command_ping(uint8_t id);
 servo_response suart_command_read_data(uint8_t id, uint8_t data_addr, uint8_t data_len);
 servo_response suart_command_write_data(uint8_t id, uint8_t data_addr, uint8_t *data_list, uint8_t list_len);

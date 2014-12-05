@@ -4,6 +4,9 @@
 
 #define BROADCAST_ID 0xFE //Broadcast ID for servos
 
+/************************************************************************/
+/* Robot direction constants                                             */
+/************************************************************************/
 #define FORWARD 1
 #define BACKWARD 2
 #define LEFT 3
@@ -25,17 +28,12 @@
 #define ID_ADDR 0x03
 
 /************************************************************************/
-/* Servo starting values                                                */
-/************************************************************************/
-
-
-/************************************************************************/
 /* Servo lift values                                                    */
 /************************************************************************/
 #define L_MIDDLE_SERVO_LIFT (uint8_t[2]){0x00, 0x01}
 #define R_MIDDLE_SERVO_LIFT (uint8_t[2]){0x20, 0x03}
-//#define L_OUTER_SERVO_LIFT (uint8_t[2]){0xFF, 0x02}
-//#define R_OUTER_SERVO_LIFT (uint8_t[2]){0x00, 0x01}
+#define L_OUTER_SERVO_LIFT (uint8_t[2]){0xFF, 0x02}
+#define R_OUTER_SERVO_LIFT (uint8_t[2]){0x00, 0x01}
 	
 /************************************************************************/
 /* Robot leg definitions                                                */
@@ -47,29 +45,21 @@ extern uint8_t leg4[3];
 extern uint8_t leg5[3];
 extern uint8_t leg6[3];
 
-
+// Broadcast action command to servos
 #define SERVO_ACTION suart_command_action(BROADCAST_ID)
 
-/* 
-	Initialize UART communication with servos
-	Set speed of robot
-	Put robot into starting position
-*/
+//Initialize UART communication with servos
+//Set speed of robot
+//Put robot into starting position
 void robot_init(uint16_t speed);
 
-/*
-	Put robot into starting position
-*/
+//Put robot into starting position
 void robot_start_position();
 
-/*
-	Set speed of all servos
-*/
+//Set speed of all servos
 void set_speed(uint16_t s);
 
-/*
-	Set speed of individual servo
-*/
+//Set speed of individual servo
 void set_servo_speed(uint8_t id, uint16_t s);
 
 //	Move individual servo
@@ -87,26 +77,31 @@ void lift_leg(uint8_t leg_id);
 //	Put down leg from "lift" position
 void put_down_leg(uint8_t leg_id);
 
-
 //	Reset leg to defined starting position
 void reset_leg(uint8_t leg_id);
 
 //	Moves leg into walking position
-//	
 void setup_first_step(uint16_t length_l, uint16_t length_r, int direction);
+
+//	Take a step
+//	Set direction to FORWARD or BACKWARD
 void take_step(uint16_t length_l, uint16_t length_r, int direction);
+
+//	Rotate one step
+//	Set direction to RIGHT or LEFT
 void rotate(uint16_t length, uint16_t bla, int direction);
 
+//	Turn while walking forward
+//	Set direction to RIGHT or LEFT
+void turn(uint16_t length_r, uint16_t length_l, int direction);
+
+//	Move leg to "forward" position
 void move_leg_forward(uint8_t leg_id, uint16_t length);
+
+//	Move leg to "backward" position
 void move_leg_backward(uint8_t leg_id, uint16_t length);
 
-/*void stretch_leg(uint8_t leg_id);
-void move_front_leg(uint8_t leg_id, uint16_t length);
-void move_back_leg(uint8_t leg_id);
-uint16_t get_relative_speed(float multiplier);
-void move_middle_leg(uint8_t leg_id);*/
-
-void star_wars_mode();
-
+//	Inverse kinematics for leg
 void ik(double x, double y, double z, int leg);
-void robot_reset();
+
+void funny_walk(uint16_t length, int direction);

@@ -12,7 +12,7 @@ void suart_init(long baud){
 
 char suart_read_char(){
 	while(!(UCSR1A & (1 << RXC1)));
-	while(!(UCSR1A & (1 << UDRE1)));
+	//while(!(UCSR1A & (1 << UDRE1)));
 	return UDR1;
 }
 
@@ -26,18 +26,14 @@ int suart_read_string(char *s, int size){
 	
 	uint8_t i = 0;
 	char c;
+	int len;
 	
-	while(i < size - 1){
+	while(i < 5){
 		c = suart_read_char();
-		if(c == '\0')
-			break;
-		s[i] = c;
-		i++;
+		s[i++] = c;
 	}
 	
-	s[i] = 0;
-	
-	return i + 1;
+	return 5;
 }
 
 void suart_send_string(char *s, uint8_t size){
@@ -55,13 +51,26 @@ void suart_send_string(char *s, uint8_t size){
 
 servo_response suart_command(uint8_t id, char* command, uint8_t size){
 	servo_response response;
+	char buffer[16];
+	char error[16] = "#ERROR:";
 
 	suart_send_string(command, size);
-	//_delay_us(10);
-	//uint8_t bytes_read = suart_read_string(buffer, 16);
-	/*
-	if(bytes_read > 5){
-		PORTB = 0x99;
+	/*_delay_us(10);
+	uint8_t bytes_read = suart_read_string(buffer, 16);
+	
+	error[7] = buffer[4];
+	error[8] = ';';
+	
+	uint8_t led[] = {0x01};
+	
+	if(buffer[4] == 0)
+		suart_command_write_data(id, 0x19, led, 1);
+	
+	switch(buffer[4]){
+		case 0:
+			return;
+		default:
+			uart_send_string(error);
 	}
 	
 	response.id = id;
@@ -73,8 +82,8 @@ servo_response suart_command(uint8_t id, char* command, uint8_t size){
 	for(i = 0; i < response.parameter_size; ++i){
 		parameter_list[i] = buffer[5+i];
 	}
-	response.parameters = parameter_list;*/
-	
+	response.parameters = parameter_list;
+	*/
 	return response;
 }
 
