@@ -4,6 +4,8 @@
 
 atmega-timers.c
 
+gait.c
+
 hexapod_control.c
 
 move_body.c

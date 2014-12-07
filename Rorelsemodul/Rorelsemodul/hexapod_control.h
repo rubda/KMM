@@ -56,7 +56,9 @@ void robot_init(uint16_t speed);
 //Put robot into starting position
 void robot_start_position();
 
+void robot_delay_ms(uint16_t ms);
 void robot_delay2(uint16_t length);
+uint16_t calc_servo_delay(uint8_t id, uint16_t length);
 
 //Set speed of all servos
 void set_speed(uint16_t s);
