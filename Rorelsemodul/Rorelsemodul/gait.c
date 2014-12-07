@@ -102,23 +102,23 @@ void set_ripple_gait(){
 
 void set_wave_gait(){
 	add_gait_step(0,		 0,			0,		1.0/6.0);
-	add_gait_step(1,		 1/7,		0,		1.0/6.0);
-	add_gait_step(2,		 2/7,		0,		1.0/6.0);
-	add_gait_step(3,		 3/7,		0,		1.0/6.0);
-	add_gait_step(4,		 4/7,		0,		1.0/6.0);
-	add_gait_step(5,		 5/7,		0,		1.0/6.0);
-	add_gait_step(6,		 6/7,		0,		1.0/6.0);
+	add_gait_step(1,		 1.0/7,		0,		1.0/6.0);
+	add_gait_step(2,		 2.0/7,		0,		1.0/6.0);
+	add_gait_step(3,		 3.0/7,		0,		1.0/6.0);
+	add_gait_step(4,		 4.0/7,		0,		1.0/6.0);
+	add_gait_step(5,		 5.0/7,		0,		1.0/6.0);
+	add_gait_step(6,		 6.0/7,		0,		1.0/6.0);
 	add_gait_step(7,		 1,			0,		1.0/6.0);
-	add_gait_step(8,		 4/7,		0,		1);
-	add_gait_step(9,		 0,			0,		1);
-	add_gait_step(10,		-4/7,		0,		1);
+	add_gait_step(8,		 3.5/7,		0.8,	1);
+	add_gait_step(9,		 0,			1,		1);
+	add_gait_step(10,		-3.5/7,		0.8,	1);
 	add_gait_step(11,		-1,			0,		1.0/6.0);
-	add_gait_step(12,		-6/7,		0,		1.0/6.0);
-	add_gait_step(13,		-5/7,		0,		1.0/6.0);
-	add_gait_step(14,		-4/7,		0,		1.0/6.0);
-	add_gait_step(15,		-3/7,		0,		1.0/6.0);
-	add_gait_step(16,		-2/7,		0,		1.0/6.0);
-	add_gait_step(17,		-1/7,		0,		1.0/6.0);
+	add_gait_step(12,		-6.0/7,		0,		1.0/6.0);
+	add_gait_step(13,		-5.0/7,		0,		1.0/6.0);
+	add_gait_step(14,		-4.0/7,		0,		1.0/6.0);
+	add_gait_step(15,		-3.0/7,		0,		1.0/6.0);
+	add_gait_step(16,		-2.0/7,		0,		1.0/6.0);
+	add_gait_step(17,		-1.0/7,		0,		1.0/6.0);
 	
 	gait.length = 18;
 	
@@ -131,6 +131,8 @@ void set_wave_gait(){
 }
 
 int gait_step = 0;
+uint8_t servo_done[6];
+
 void gait_move(int direction, double length){
 	double move_x = -length*cos(degree_to_rad_2(direction))/2.0;
 	double move_y = length*sin(degree_to_rad_2(direction))/2.0;
@@ -139,8 +141,37 @@ void gait_move(int direction, double length){
 	int y_multi = 1;
 	uint16_t max = 0;
 	for(i = 1; i <= 6; ++i){
+		servo_done[i] = 0; //Not done
+		
 		a = (gait_step+gait.offset[i-1])%gait.length;
 		y_multi = (i % 2 == 0 ? 1 : -1);
+		set_servo_speed(i, get_relative_speed(gait.steps[a].speed));
+		max = get_max_3(ik(gait.steps[a].x*move_x, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i), max);
+	}
+	
+	gait_step++;
+	SERVO_ACTION;
+	robot_delay_ms(max);
+}
+
+void gait_stop(int direction, double length){
+	double move_x = -length*cos(degree_to_rad_2(direction))/2.0;
+	double move_y = length*sin(degree_to_rad_2(direction))/2.0;
+	
+	int i,a;
+	int y_multi = 1;
+	uint16_t max = 0;
+	for(i = 1; i <= 6; ++i){
+		if(servo_done[i] > 0) continue;
+		
+		a = (gait_step+gait.offset[i-1])%gait.length;
+		
+		if(a == 0){
+			servo_done[i] = 1;
+		}
+		
+		y_multi = (i % 2 == 0 ? 1 : -1);
+		set_servo_speed(i, get_relative_speed(gait.steps[a].speed));
 		max = get_max_3(ik(gait.steps[a].x*move_x, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i), max);
 	}
 	
