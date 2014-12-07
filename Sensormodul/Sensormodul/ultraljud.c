@@ -64,23 +64,30 @@ void get_distance(struct soundSensor* sensor)
 			_delay_us(1);
 			TIME++;
 		}
-	_delay_ms(5); 
+	_delay_ms(30); 
 			
 	DISTANCE = TIME/40; //Gör om det till ett avstånd uttryckt i cm
 	
-	//Lägger till den nya distansen för en specifik plats på listan
+	//Lägger till den nya distansen för en specifik plats i listan
 	int NR = sensor->nr;
 	sensor->Dists[NR] = DISTANCE;	
+	
 	if (NR == 4) {
 		sensor->nr = 0;
 	}else{
 		sensor->nr++;
 	};
 	
-	//Sorterar distanserna och tar ut mittenvärdet 
-	qsort(sensor->Dists, 5, sizeof(uint16_t), cmpfunc);
+	//Kopierar arrayen
+	int VALUES[5];
+	for (int i = 0; i < 5; i++) {
+		   VALUES[i] = sensor->Dists[i];
+	}
 	
-	sensor->medDist = sensor->Dists[2];
+	//Sorterar distanserna och tar ut mittenvärdet 
+	qsort(VALUES, 5, sizeof(uint16_t), cmpfunc);
+	
+	sensor->medDist = VALUES[2];
 }
 
 // En jämförelsefunktion som krävs för att quicksorten ska funka
