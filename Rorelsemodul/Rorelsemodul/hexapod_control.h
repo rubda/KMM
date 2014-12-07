@@ -56,6 +56,8 @@ void robot_init(uint16_t speed);
 //Put robot into starting position
 void robot_start_position();
 
+void robot_delay2(uint16_t length);
+
 //Set speed of all servos
 void set_speed(uint16_t s);
 
@@ -64,12 +66,12 @@ void set_servo_speed(uint8_t id, uint16_t s);
 
 //	Move individual servo
 //	Uses "write data" command
-void move_servo_dir(uint8_t id, uint8_t *position);
+uint16_t move_servo_dir(uint8_t id, uint8_t *position);
 
 //	Move individual servo
 //	Uses "reg write" command
 //	Must send "action" command after 
-void move_servo_reg(uint8_t id, uint8_t *position);
+uint16_t move_servo_reg(uint8_t id, uint8_t *position);
 
 //	Put leg into "lift" position
 void lift_leg(uint8_t leg_id);
@@ -102,4 +104,4 @@ void move_leg_forward(uint8_t leg_id, uint16_t length);
 void move_leg_backward(uint8_t leg_id, uint16_t length);
 
 //	Inverse kinematics for leg
-void ik(double x, double y, double z, int leg);
+uint16_t ik(double x, double y, double z, int leg);

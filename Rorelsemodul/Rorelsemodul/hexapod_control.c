@@ -2,6 +2,7 @@
 
 uint8_t speed[2] = {0xFF, 0x00};
 uint8_t *leg_list[6];
+uint16_t current_pos[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 uint8_t leg1[] = {1, 3, 5};
 uint8_t leg2[] = {2, 4, 6};
@@ -77,6 +78,15 @@ void robot_start_position(){
 	uint8_t torque_enable[] = {0x01};
 	suart_command_write_data(BROADCAST_ID, 0x18, torque_enable, 1);
 	
+	/*ik(0, 0, 0, 1);
+	ik(0, 0, 0, 2);
+	ik(0, 0, 0, 3);
+	ik(0, 0, 0, 4);
+	ik(0, 0, 0, 5);
+	ik(0, 0, 0, 6);
+	
+	SERVO_ACTION;*/
+	
 	int i;
 	_delay_us(300);
 	
@@ -120,13 +130,25 @@ void robot_start_position(){
 }
 
 //Move servo using reg write command. Need to run SERVO_ACTION to perform action
-void move_servo_reg(uint8_t id, uint8_t *position){
+uint16_t move_servo_reg(uint8_t id, uint8_t *position){
 	suart_command_reg_write(id, GOAL_POSITION_L, position, 2);
+	
+	uint16_t temp = position[0] + (position[1] << 8);
+	uint16_t ret = temp > current_pos[id-1] ? temp-current_pos[id-1] : current_pos[id-1]-temp;
+	
+	current_pos[id-1] = temp;
+	return ret;
 }
 
 //Move servo using write data command. Moves servo directly
-void move_servo_dir(uint8_t id, uint8_t *position){
+uint16_t move_servo_dir(uint8_t id, uint8_t *position){
 	suart_command_write_data(id, GOAL_POSITION_L, position, 2);
+	
+	uint16_t temp = position[0] + (position[1] << 8);
+	uint16_t ret = temp > current_pos[id-1] ? temp-current_pos[id-1] : current_pos[id-1]-temp;
+	
+	current_pos[id-1] = temp;
+	return ret;
 }
 
 //Lifts leg to "lift" position. Moves middle and outer servo
@@ -151,18 +173,7 @@ void put_down_leg(uint8_t leg_id){
 
 //Reset individual leg to starting position
 void reset_leg(uint8_t leg_id){
-	move_servo_dir(inner_servo(leg_id), INNER_SERVO_START);
-	_delay_ms(800);
-	
-	if(leg_id % 2 == 1){
-		move_servo_dir(middle_servo(leg_id), L_MIDDLE_SERVO_START);
-		_delay_ms(800);
-		move_servo_dir(outer_servo(leg_id), L_OUTER_SERVO_START);
-	}else{
-		move_servo_dir(middle_servo(leg_id), R_MIDDLE_SERVO_START);
-		_delay_ms(800);
-		move_servo_dir(outer_servo(leg_id), R_OUTER_SERVO_START);
-	}
+	ik(0, 0, 0, leg_id);
 }
 
 // TODO: Kolla plus och minus för benen
@@ -267,8 +278,11 @@ void robot_delay_ms(uint16_t ms){
 	}
 }
 
-void robot_delay(uint16_t length_r, uint16_t length_l){
-	double length = length_r > length_l ? length_r : length_l;
+void robot_delay(uint16_t a, uint16_t b){
+	robot_delay2(a > b ? a : b);
+}
+
+void robot_delay2(uint16_t length){
 	double speed_d = speed[0] + (speed[1] << 8);
 	
 	length = (double)(length*0.29 + 0.5);
@@ -494,7 +508,15 @@ uint16_t calc_beta(double y, double z, double z_offs, int leg){
 
 }
 
-void ik(double x, double y, double z, int leg){
+
+uint16_t get_max(uint16_t a, uint16_t b, uint16_t c){
+	uint16_t max = a;
+	max = b > max ? b : max;
+	max = c > max ? c : max;
+	return max;
+}
+
+uint16_t ik(double x, double y, double z, int leg){
 	double l1, l2;
 	uint16_t alpha, beta, gamma_hex;
 	double alpha1, alpha2;
@@ -519,8 +541,10 @@ void ik(double x, double y, double z, int leg){
 	beta = calc_beta(y_proj, z, z_offs, leg);
 	alpha = calc_alpha(x, y_proj, z_offs, leg);
 
-	move_servo_reg(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
-	move_servo_reg(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
-	move_servo_reg(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
+	uint16_t mov1 = move_servo_reg(inner_servo(leg), (uint8_t[2]){gamma_hex, gamma_hex >> 8});
+	uint16_t mov2 = move_servo_reg(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
+	uint16_t mov3 = move_servo_reg(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
+	
+	return get_max(mov1, mov2, mov3);
 }
 

@@ -5,15 +5,17 @@
 #include "UART.h"
 #include <stdlib.h>
 #include <string.h>
+#include "move_body.h"
 
 int direction;
 uint16_t step_len = 0x0020;
 
-void do_nothing(uint16_t t, uint16_t c, int d){
+void do_nothing(uint16_t a, uint16_t b, int d){
 	return;
 }
 
 void (*func)(uint16_t, uint16_t, int) = do_nothing;
+//void (*func)(int, double) = do_nothing;
 
 uint8_t is_command(uart_message* mess, char* c){
 	return strcmp(mess->data[0].data, c) == 0;
@@ -38,10 +40,10 @@ void handle_message(uart_message *mess){
 	char *attr[] = {mess->data[0].data};
 	
 	if(is_command(mess, "rotate")){
-		func = rotate;
+		func = rotate;//rotate_body;
 		direction = get_direction(mess);
 	}else if(is_command(mess, "walk")){
-		func = take_step;
+		func = take_step; //move_body;
 		direction = get_direction(mess);
 	}else if(is_command(mess, "stop")){
 		func = do_nothing;
@@ -79,17 +81,27 @@ int main(void)
 	uart_init(0x0067);
 	_delay_ms(1000);
 	
+	body_move_init();
+	
 	sei();
 	
 	uart_message mess;
 	
-	ik(0, 0, 0, 1);
-	ik(0, 0, 0, 2);
-	ik(0, 0, 0, 3);
-	ik(0, 0, 0, 4);
-	ik(0, 0, 0, 5);
-	ik(0, 0, 0, 6);
-	SERVO_ACTION;
+	/*move_body(0, 0);
+	move_body(0, 0);
+	move_body(0, 0);
+	
+	if((current_step / 10) < 5){
+		reset_leg(1);
+		reset_leg(4);
+		reset_leg(5);
+		SERVO_ACTION;
+	}else{
+		reset_leg(2);
+		reset_leg(3);
+		reset_leg(6);
+		SERVO_ACTION;
+	}*/
 	
 	while(1){
 		
@@ -97,6 +109,7 @@ int main(void)
 			get_message(&mess);
 			handle_message(&mess);
 		}
+		
 		func(step_len, step_len, direction);
 	}	                                                               
 }
