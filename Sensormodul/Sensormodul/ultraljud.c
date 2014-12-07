@@ -24,12 +24,14 @@ void init_sensors()
 	//B0 till ut
 	DDRB |= (1 << PORTB0);
 	
-	sensor_list[3] = (struct soundSensor) {0b00000000, 1, 0, 0, 0, 0, 0, 0};
-	sensor_list[2] = (struct soundSensor) {0b00000100, 1, 0, 0, 0, 0, 0, 0};
-	sensor_list[1] = (struct soundSensor) {0b00001000, 1, 0, 0, 0, 0, 0, 0};
-	sensor_list[0] = (struct soundSensor) {0b00001100, 1, 0, 0, 0, 0, 0, 0};
-	sensor_list[4] = (struct soundSensor) {0b00010000, 1, 0, 0, 0, 0, 0, 0};
-	sensor_list[5] = (struct soundSensor) {0b00010100, 1, 0, 0, 0, 0, 0, 0};
+	sensor_list[3] = (struct soundSensor) {0b00000000, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[2] = (struct soundSensor) {0b00000100, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[1] = (struct soundSensor) {0b00001000, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[0] = (struct soundSensor) {0b00001100, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[4] = (struct soundSensor) {0b00010000, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[5] = (struct soundSensor) {0b00010100, 0, 0, {0, 0, 0, 0, 0}};
+		
+	refresh_sensors();
 }
 
 //Returnerar en viss sensor struct från vår lista av sensorer
@@ -66,39 +68,19 @@ void get_distance(struct soundSensor* sensor)
 			
 	DISTANCE = TIME/40; //Gör om det till ett avstånd uttryckt i cm
 	
-	//Rätt så självförklarande 
-	switch(sensor->nr)
-	{
-		case 1:
-			sensor->Dist1 = DISTANCE;
-			sensor->nr++;
-			break;
-		case 2:
-			sensor->Dist2 = DISTANCE;
-			sensor->nr++;
-			break;
-		case 3:
-			sensor->Dist3 = DISTANCE;
-			sensor->nr++;
-			break;
-		case 4:
-			sensor->Dist4 = DISTANCE;
-			sensor->nr++;
-			break;
-		case 5:
-			sensor->Dist5 = DISTANCE;
-			sensor->nr = 1;
-			break;
-		default:
-			break;
-	}
-	
-	uint16_t VALUES[] = {sensor->Dist1, sensor->Dist2, sensor->Dist3, sensor->Dist4, sensor->Dist5};
+	//Lägger till den nya distansen för en specifik plats på listan
+	int NR = sensor->nr;
+	sensor->Dists[NR] = DISTANCE;	
+	if (NR == 4) {
+		sensor->nr = 0;
+	}else{
+		sensor->nr++;
+	};
 	
 	//Sorterar distanserna och tar ut mittenvärdet 
-	qsort(VALUES, 5, sizeof(uint16_t), cmpfunc);
+	qsort(sensor->Dists, 5, sizeof(uint16_t), cmpfunc);
 	
-	sensor->medDist = VALUES[2];
+	sensor->medDist = sensor->Dists[2];
 }
 
 // En jämförelsefunktion som krävs för att quicksorten ska funka
