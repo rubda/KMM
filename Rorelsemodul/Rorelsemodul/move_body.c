@@ -31,13 +31,13 @@ uint16_t move_servo_degree(uint16_t servo, double deg, int time){
 	return to_servo;
 }
 */
-
+#include "move_body.h"
 
 double degree_to_rad(double deg){
 	return (deg/57.295779513);
 }
 
-#define LIFT_HEIGHT 5.0
+#define LIFT_HEIGHT 2.0
 
 double step_multi[10][3];
 
@@ -60,20 +60,25 @@ void body_move_init(){
 	set_init_xyz(9,		-0.5,	-0.5,	0);
 }
 
+uint16_t get_max_2(uint16_t a, uint16_t b){
+	return b > a ? b : a;
+}
+
 int current_step = 0;
 void move_body(int direction, double length){
-	double move_x = length*cos(degree_to_rad(direction))/2.0;
+	double move_x = -length*cos(degree_to_rad(direction))/2.0;
 	double move_y = length*sin(degree_to_rad(direction))/2.0;
 	
 	int i,a;
 	int y_multi = 1;
+	uint16_t max = 0;
 	for(i = 1; i <= 6; ++i){
 		a = current_step%10;
 		if(i == 1 || i == 4 || i == 5){
 			a = (current_step + 5)%10;
 		}
 		y_multi = (i % 2 == 0 ? 1 : -1);
-		leg_ik(step_multi[a][0]*move_x, y_multi*step_multi[a][1]*move_y, step_multi[a][2]*LIFT_HEIGHT);
+		max = get_max_2(ik(step_multi[a][0]*move_x, y_multi*step_multi[a][1]*move_y, step_multi[a][2]*LIFT_HEIGHT, i), max);
 	}
 	
 	//CALCULATE SPEED
@@ -81,5 +86,34 @@ void move_body(int direction, double length){
 	
 	current_step++;
 	SERVO_ACTION;
-	_delay_ms(1000);
+	robot_delay2(max);
+}
+
+void rotate_body(int direction, double length){
+	double move_x = -length*cos(degree_to_rad(direction))/2.0;
+	double move_y = length*sin(degree_to_rad(direction))/2.0;
+	
+	double move_x1 = -length*cos(degree_to_rad(180 - direction))/2.0;
+	double move_y1 = length*sin(degree_to_rad(180 - direction))/2.0;
+	
+	int i,a;
+	int y_multi = 1;
+	uint16_t max = 0;
+	for(i = 1; i <= 6; ++i){
+		a = current_step%10;
+		if(i == 1 || i == 4 || i == 5){
+			a = (current_step + 5)%10;
+		}
+		y_multi = (i % 2 == 0 ? 1 : -1);
+		
+		if(i % 2 == 1){
+			max = get_max_2(ik(step_multi[a][0]*move_x, y_multi*step_multi[a][1]*move_y, step_multi[a][2]*LIFT_HEIGHT, i), max);
+		}else if(i % 2 == 0){
+			max = get_max_2(ik(step_multi[a][0]*move_x1, y_multi*step_multi[a][1]*move_y1, step_multi[a][2]*LIFT_HEIGHT, i), max);
+		}
+	}
+	
+	current_step++;
+	SERVO_ACTION;
+	robot_delay2(max);
 }
