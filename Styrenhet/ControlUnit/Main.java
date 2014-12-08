@@ -25,11 +25,12 @@ public class Main {
     private static int goalBound = 100;
     private static int stopBound = 40;
     private static int sensorDelay = 300;
-    private static double sideSensorDistance = 10.0; //Distance between side sensors.
     private static int speed = 176;
     private static int angleLimit = 12;
-    private static int distanceLimit = 24;
+    private static int distanceToSideWallLimit = 24;
     private static int allowedAngleError = 25;
+
+    private final static double sideSensorDistance = 10.0; //Distance between side sensors.
 
     public static void main(String[] args) {
         if (args.length < 3) {
@@ -122,6 +123,7 @@ public class Main {
                         sendToComputer("#time:0;");
                         sendToComputer("#info:Goal!;");
                         isAutoMode.set(false);
+                        sendToComputer("#mode:manual;");
                         goal = true;
                     }
 
@@ -250,11 +252,11 @@ public class Main {
         }
 
         // Check distance to wall
-        if(getSensorValue(1)<distanceLimit){ // Too close to the left wall?
+        if(getSensorValue(1)< distanceToSideWallLimit){ // Too close to the left wall?
             sendToComputer("#info:Wall strafe right;");
             sendToMovement("#walk:f:315;");
         }
-        else if(getSensorValue(3)<distanceLimit){ // Too close to the right wall?
+        else if(getSensorValue(3)< distanceToSideWallLimit){ // Too close to the right wall?
             sendToComputer("#info:Wall strafe left;");
             sendToMovement("#walk:f:45;");
         }
@@ -440,8 +442,8 @@ public class Main {
     public static void setAngleLimit(int value){
         angleLimit = value;
     }
-    public static void setDistanceLimit(int value){
-        distanceLimit = value;
+    public static void setDistanceToSideWallLimit(int value){
+        distanceToSideWallLimit = value;
     }
     public static void setWalkAfterRotationValue(int value){
         walkAfterRotationValue = value;

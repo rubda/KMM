@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 
 public class FrameWork extends JFrame
@@ -8,7 +9,7 @@ public class FrameWork extends JFrame
     public static final MainComponent mainPanel = new MainComponent();
     public static SensorComponent[] sensors = new SensorComponent[7]; // Sensors
     public static SensorComponent gyro, mode; // Sensors
-    private final ParameterComponent walkAfterRotationValue, allowedAngleError, angleLimit, distanceLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, rotateLeft, rotateRight;  // Parameters
+    private final ParameterComponent walkAfterRotationValue, allowedAngleError, angleLimit, distanceToSideWallLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, rotateLeft, rotateRight;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
     private ButtonComponent changeMode, init, angels;
@@ -24,6 +25,7 @@ public class FrameWork extends JFrame
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
         parameterPanel = new JPanel();
         parameterPanel.setLayout(new BoxLayout(parameterPanel, BoxLayout.PAGE_AXIS));
+        parameterPanel.setPreferredSize(new Dimension(300, 500));
         sensorPanel = new JPanel();
         sensorPanel.setLayout(new BoxLayout(sensorPanel, BoxLayout.PAGE_AXIS));
         panel3 = new JPanel();
@@ -45,7 +47,7 @@ public class FrameWork extends JFrame
         walkAfterRotationValue = new ParameterComponent("walkAfterRotationValue");
         allowedAngleError = new ParameterComponent("allowedAngleError");
         angleLimit = new ParameterComponent("angleLimit");
-        distanceLimit = new ParameterComponent("distanceLimit");
+        distanceToSideWallLimit = new ParameterComponent("distanceToSideWallLimit");
         sensorstring = new ParameterComponent("sensorstring");
         movementstring = new ParameterComponent("movementstring");
         speed = new ParameterComponent("speed");
@@ -71,7 +73,7 @@ public class FrameWork extends JFrame
         parameterPanel.add(walkAfterRotationValue);
         parameterPanel.add(allowedAngleError);
         parameterPanel.add(angleLimit);
-        parameterPanel.add(distanceLimit);
+        parameterPanel.add(distanceToSideWallLimit);
         parameterPanel.add(speed);
         parameterPanel.add(upperBound);
         parameterPanel.add(lowerBound);

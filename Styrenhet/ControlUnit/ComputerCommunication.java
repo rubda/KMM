@@ -23,11 +23,9 @@ public class ComputerCommunication extends Communication {
         }
         else if(parts[0].equals("#param")){
             if(parts[1].equals("sensorstring")){
-                    System.out.println("SEND: " +parts[2]+":"+parts[3]);
-                    SensorCommunication.send(parts[2]+":"+parts[3]);
+                SensorCommunication.send(parts[2]+":"+parts[3]);
             }
             else if(parts[1].equals("movementstring")){
-                System.out.println("SEND: " +parts[2]+":"+parts[3]);
                 MovementCommunication.send(parts[2]+":"+parts[3]);
             }
             else if(parts[1].equals("speed")){     //INTE TESTAD
@@ -49,10 +47,6 @@ public class ComputerCommunication extends Communication {
             else if(parts[1].equals("sensorDelay")){
                 Main.setSensorDelay(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
-            /*else if(parts[1].equals("walkToDistance")){
-                System.out.println("send walkToDistance"+Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
-                Main.walkToDistance(Integer.parseInt(parts[2].substring(0, parts[2].length() - 1)));
-            }  */
             else if(parts[1].equals("rotateLeft")){
                 Main.rotateCorner(Integer.parseInt(parts[2].substring(0, parts[2].length() - 1)), "left", "left");
             }
@@ -80,8 +74,8 @@ public class ComputerCommunication extends Communication {
             else if(parts[1].equals("angleLimit")){
                 Main.setAngleLimit(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
-            else if(parts[1].equals("distanceLimit")){
-                Main.setDistanceLimit(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
+            else if(parts[1].equals("distanceToSideWallLimit")){
+                Main.setDistanceToSideWallLimit(Integer.parseInt(parts[2].substring(0, parts[2].length() - 1)));
             }
             else if(parts[1].equals("allowedAngleError")){
                 Main.setAllowedAngleError(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));

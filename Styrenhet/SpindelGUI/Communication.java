@@ -38,6 +38,7 @@ public class Communication implements SerialPortEventListener {
             System.err.println(ex.getMessage());
         }
     }
+
     // Send action
     public static void sendAction(String message){
         System.out.println(message);
