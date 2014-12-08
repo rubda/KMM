@@ -305,7 +305,7 @@ uint16_t calc_servo_delay(uint8_t id, uint16_t length){
 	length = (double)(length*0.29 + 0.5);
 	speed_d = (double)(speed_d*0.666 + 0.5);
 	
-	(uint16_t)((length*1000)/speed_d);
+	return (uint16_t)((length*1000)/speed_d);
 }
 
 void robot_servo_delay(uint8_t id, uint16_t length){
@@ -566,6 +566,6 @@ uint16_t ik(double x, double y, double z, int leg){
 	uint16_t mov2 = move_servo_reg(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
 	uint16_t mov3 = move_servo_reg(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
 	
-	return get_max(calc_servo_delay(mov1), calc_servo_delay(mov1), calc_servo_delay(mov1));
+	return get_max(calc_servo_delay(inner_servo(leg), mov1), calc_servo_delay(outer_servo(leg), mov2), calc_servo_delay(middle_servo(leg), mov3));
 }
 

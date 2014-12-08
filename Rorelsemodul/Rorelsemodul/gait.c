@@ -141,7 +141,7 @@ void gait_move(int direction, double length){
 	int y_multi = 1;
 	uint16_t max = 0;
 	for(i = 1; i <= 6; ++i){
-		servo_done[i] = 0; //Not done
+		servo_done[i] = 0;
 		
 		a = (gait_step+gait.offset[i-1])%gait.length;
 		y_multi = (i % 2 == 0 ? 1 : -1);
@@ -173,6 +173,40 @@ void gait_stop(int direction, double length){
 		y_multi = (i % 2 == 0 ? 1 : -1);
 		set_servo_speed(i, get_relative_speed(gait.steps[a].speed));
 		max = get_max_3(ik(gait.steps[a].x*move_x, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i), max);
+	}
+	
+	gait_step++;
+	SERVO_ACTION;
+	robot_delay_ms(max);
+}
+
+
+void gait_rotate(int direction, int rotation, double length){ //Rotation between -180 and -180 degrees (+-180 är full rotation)
+	double move_x = -length*cos(degree_to_rad_2(direction))/2.0;
+	double move_y = length*sin(degree_to_rad_2(direction))/2.0;
+	
+	int i,a;
+	int y_multi = 1;
+	double rot_multi = 1;
+	//double cos_rot = cos(degree_to_rad_2(rotation));
+	//double x_rot = 0;
+	//double y_rot = 0;
+	
+	uint16_t max = 0;
+	for(i = 1; i <= 6; ++i){
+		servo_done[i] = 0;
+		
+		a = (gait_step+gait.offset[i-1])%gait.length;
+		y_multi = (i % 2 == 0 ? 1 : -1);
+		set_servo_speed(i, get_relative_speed(gait.steps[a].speed));
+		if(rotation > 0 && (i % 2 == 0)){
+			rot_multi = cos(rotation);
+		}else if(rotation < 0 && (i % 2 == 1)){
+			rot_multi = cos(-rotation);
+		}else{
+			rot_multi = 1;
+		}
+		max = get_max_3(ik(gait.steps[a].x*move_x*rot_multi, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i), max);
 	}
 	
 	gait_step++;
