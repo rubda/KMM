@@ -65,6 +65,7 @@ uint16_t get_max_2(uint16_t a, uint16_t b){
 }
 
 int current_step = 0;
+int test_leg = 0;
 void move_body(int direction, double length){
 	double move_x = -length*cos(degree_to_rad(direction))/2.0;
 	double move_y = length*sin(degree_to_rad(direction))/2.0;
@@ -85,8 +86,40 @@ void move_body(int direction, double length){
 	//CALCULATE WAIT
 	
 	current_step++;
+	if(current_step % 5 == 0) test_leg++;
 	SERVO_ACTION;
 	robot_delay2(max);
+}
+
+uint8_t init_body(int direction, double length){
+	double move_x = -length*cos(degree_to_rad(direction))/2.0;
+	double move_y = length*sin(degree_to_rad(direction))/2.0;
+	
+	int i,a;
+	int y_multi = 1;
+	uint16_t max = 0;
+	for(i = 1; i <= 6; ++i){
+		a = current_step%10;
+		if(current_step%10 == 5){
+			current_step = 0;
+			a = 0;
+		}
+		if(a != 0 && (i == 1 || i == 4 || i == 5)){
+			a = (current_step + 5)%10;
+		}
+		
+		y_multi = (i % 2 == 0 ? 1 : -1);
+		max = get_max_2(ik(step_multi[a][0]*move_x, y_multi*step_multi[a][1]*move_y, step_multi[a][2]*LIFT_HEIGHT, i), max);
+	}
+	
+	//CALCULATE SPEED
+	//CALCULATE WAIT
+	
+	if(current_step % 10 != 0) current_step++;
+	SERVO_ACTION;
+	robot_delay2(max);
+	
+	return current_step%10;
 }
 
 void rotate_body(int direction, double length){

@@ -78,16 +78,16 @@ void robot_start_position(){
 	uint8_t torque_enable[] = {0x01};
 	suart_command_write_data(BROADCAST_ID, 0x18, torque_enable, 1);
 	
-	/*ik(0, 0, 0, 1);
+	ik(0, 0, 0, 1);
 	ik(0, 0, 0, 2);
 	ik(0, 0, 0, 3);
 	ik(0, 0, 0, 4);
 	ik(0, 0, 0, 5);
 	ik(0, 0, 0, 6);
 	
-	SERVO_ACTION;*/
+	SERVO_ACTION;
 	
-	int i;
+	/*int i;
 	_delay_us(300);
 	
 	for(i = 1; i < 7; ++i){
@@ -126,7 +126,7 @@ void robot_start_position(){
 		_delay_ms(1);
 	}
 	
-	SERVO_ACTION;
+	SERVO_ACTION;*/
 }
 
 //Move servo using reg write command. Need to run SERVO_ACTION to perform action
@@ -520,7 +520,7 @@ uint16_t ik(double x, double y, double z, int leg){
 	double l1, l2;
 	uint16_t alpha, beta, gamma_hex;
 	double alpha1, alpha2;
-	double z_offs = 8 - z;
+	double z_offs = 9 - z;
 	double x_offs, y_offs;
 	double y_proj;
 	double gamma;
