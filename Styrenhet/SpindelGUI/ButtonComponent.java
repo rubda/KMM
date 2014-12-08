@@ -2,9 +2,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by danielfalk on 11/25/14.
- */
 public class ButtonComponent extends JPanel {
 
     JButton button = new JButton();

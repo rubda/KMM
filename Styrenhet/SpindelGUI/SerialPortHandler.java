@@ -15,12 +15,10 @@ public class SerialPortHandler {
     public void connect(String portName) throws IOException {
         try {
             // Obtain a CommPortIdentifier object for the port you want to open
-            CommPortIdentifier portId =
-                    CommPortIdentifier.getPortIdentifier(portName);
+            CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portName);
 
             // Get the port's ownership
-            serialPort =
-                    (SerialPort) portId.open("Demo application", 5000);
+            serialPort = (SerialPort) portId.open("Demo application", 5000);
 
             // Set the parameters of the connection.
             setSerialPortParameters();
@@ -42,13 +40,11 @@ public class SerialPortHandler {
     }
 
     // Get the serial port input stream
-    // @return The serial port input stream
     public InputStream getSerialInputStream() {
         return inStream;
     }
 
-    // Get the serial port output stream
-    // @return The serial port output stream
+    // Get the serial port output strea
     public OutputStream getSerialOutputStream() {
         return outStream;
     }
@@ -59,14 +55,8 @@ public class SerialPortHandler {
 
         try {
             // Set serial port to 57600bps-8N1..my favourite
-            serialPort.setSerialPortParams(
-                    baudRate,
-                    SerialPort.DATABITS_8,
-                    SerialPort.STOPBITS_1,
-                    SerialPort.PARITY_NONE);
-
-            serialPort.setFlowControlMode(
-                    SerialPort.FLOWCONTROL_NONE);
+            serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+            serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
         } catch (UnsupportedCommOperationException ex) {
             throw new IOException("Unsupported serial port parameter");
         }
@@ -78,7 +68,6 @@ public class SerialPortHandler {
         String portArray[] = null;
         while (ports.hasMoreElements()) {
             CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
-            //System.out.println(port.getName());
             if (port.getPortType() == CommPortIdentifier.PORT_SERIAL) {
                 portList.add(port.getName());
             }
@@ -88,9 +77,7 @@ public class SerialPortHandler {
     }
 
     // brief Register listener for data available event
-    // @param dataAvailableListener The data available listener
-    public void addDataAvailableListener(SerialPortEventListener dataAvailableListener)
-            throws TooManyListenersException {
+    public void addDataAvailableListener(SerialPortEventListener dataAvailableListener) throws TooManyListenersException {
         // Add the serial port event listener
         serialPort.addEventListener(dataAvailableListener);
         serialPort.notifyOnDataAvailable(true);
@@ -103,7 +90,7 @@ public class SerialPortHandler {
                 // close the i/o streams.
                 outStream.close();
                 inStream.close();
-            } catch (IOException ex) {
+            } catch (IOException e) {
                 // don't care
             }
             // Close the port.

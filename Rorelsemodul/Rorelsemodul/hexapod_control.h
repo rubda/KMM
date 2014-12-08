@@ -58,6 +58,7 @@ void robot_start_position();
 
 void robot_delay_ms(uint16_t ms);
 void robot_delay2(uint16_t length);
+uint16_t calc_leg_delay(uint8_t id, uint16_t length);
 uint16_t calc_servo_delay(uint8_t id, uint16_t length);
 
 uint16_t get_relative_speed(float multiplier);
@@ -65,6 +66,8 @@ uint16_t get_relative_speed(float multiplier);
 //Set speed of all servos
 void set_speed(uint16_t s);
 
+
+void set_leg_speed(uint8_t id, uint16_t s);
 //Set speed of individual servo
 void set_servo_speed(uint8_t id, uint16_t s);
 

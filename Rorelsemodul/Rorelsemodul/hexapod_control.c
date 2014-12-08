@@ -1,7 +1,7 @@
 #include "hexapod_control.h"
 
 uint8_t speed[2] = {0x00, 0xff};
-uint8_t servo_speed[6][2];
+uint8_t servo_speed[18][2];
 uint8_t *leg_list[6];
 uint16_t current_pos[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
@@ -58,7 +58,7 @@ uint16_t get_relative_speed(float multiplier){
 //Set speed for all servos
 void set_speed(uint16_t s){
 	int i;
-	for(i = 0; i < 6; ++i){
+	for(i = 0; i < 18; ++i){
 		servo_speed[i][0] = s;
 		servo_speed[i][1] = s >> 8;
 	}
@@ -69,6 +69,12 @@ void set_speed(uint16_t s){
 	suart_command_write_data(BROADCAST_ID, MOVING_SPEED_L, speed, 2);
 	_delay_us(300);
 	suart_command_write_data(BROADCAST_ID, 0x18, torque_enable, 1);
+}
+
+void set_leg_speed(uint8_t id, uint16_t s){
+	set_servo_speed(inner_servo(id),s);
+	set_servo_speed(middle_servo(id),s);
+	set_servo_speed(outer_servo(id),s);
 }
 
 //Set speed of individual servo
@@ -86,16 +92,16 @@ void robot_start_position(){
 	uint8_t torque_enable[] = {0x01};
 	suart_command_write_data(BROADCAST_ID, 0x18, torque_enable, 1);
 	
-	/*ik(0, 0, 0, 1);
+	ik(0, 0, 0, 1);
 	ik(0, 0, 0, 2);
 	ik(0, 0, 0, 3);
 	ik(0, 0, 0, 4);
 	ik(0, 0, 0, 5);
 	ik(0, 0, 0, 6);
 	
-	SERVO_ACTION;*/
+	SERVO_ACTION;
 	
-	int i;
+	/*int i;
 	_delay_us(300);
 	
 	for(i = 1; i < 7; ++i){
@@ -134,7 +140,7 @@ void robot_start_position(){
 		_delay_ms(1);
 	}
 	
-	SERVO_ACTION;
+	SERVO_ACTION;*/
 }
 
 //Move servo using reg write command. Need to run SERVO_ACTION to perform action
@@ -299,6 +305,7 @@ void robot_delay2(uint16_t length){
 	robot_delay_ms((uint16_t)((length*1000)/speed_d));
 }
 
+
 uint16_t calc_servo_delay(uint8_t id, uint16_t length){
 	double speed_d = servo_speed[id-1][0] + (servo_speed[id-1][1] << 8);
 	
@@ -306,6 +313,10 @@ uint16_t calc_servo_delay(uint8_t id, uint16_t length){
 	speed_d = (double)(speed_d*0.666 + 0.5);
 	
 	return (uint16_t)((length*1000)/speed_d);
+}
+
+uint16_t calc_leg_delay(uint8_t leg, uint16_t length){
+	return calc_servo_delay(inner_servo(leg), length);
 }
 
 void robot_servo_delay(uint8_t id, uint16_t length){
@@ -541,7 +552,7 @@ uint16_t ik(double x, double y, double z, int leg){
 	double l1, l2;
 	uint16_t alpha, beta, gamma_hex;
 	double alpha1, alpha2;
-	double z_offs = 8 - z;
+	double z_offs = 9 - z;
 	double x_offs, y_offs;
 	double y_proj;
 	double gamma;
@@ -566,6 +577,6 @@ uint16_t ik(double x, double y, double z, int leg){
 	uint16_t mov2 = move_servo_reg(outer_servo(leg), (uint8_t[2]){beta, beta >> 8});
 	uint16_t mov3 = move_servo_reg(middle_servo(leg), (uint8_t[2]){alpha, alpha >> 8});
 	
-	return get_max(calc_servo_delay(inner_servo(leg), mov1), calc_servo_delay(outer_servo(leg), mov2), calc_servo_delay(middle_servo(leg), mov3));
+	return get_max(mov1, mov2, mov3);
 }
 

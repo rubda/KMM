@@ -16,7 +16,6 @@ public class MainComponent extends JComponent {
 
     private void addBindings(){
 
-        //InputMap map = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         InputMap map = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 
@@ -24,8 +23,12 @@ public class MainComponent extends JComponent {
         map.put(KeyStroke.getKeyStroke("pressed RIGHT"), "rotateRight");
         map.put(KeyStroke.getKeyStroke("pressed UP"), "walkForward");
         map.put(KeyStroke.getKeyStroke("pressed DOWN"), "walkBackwards");
+        map.put(KeyStroke.getKeyStroke("pressed 7"), "strafeLeftForward");
+        map.put(KeyStroke.getKeyStroke("pressed 9"), "strafeRightForward");
         map.put(KeyStroke.getKeyStroke("pressed R"), "reset");
 
+        map.put(KeyStroke.getKeyStroke("released 7"), "stopStrafeLeftForward");
+        map.put(KeyStroke.getKeyStroke("released 9"), "stopStrafeRightForward");
         map.put(KeyStroke.getKeyStroke("released LEFT"), "stopRotateLeft");
         map.put(KeyStroke.getKeyStroke("released RIGHT"), "stopRotateRight");
         map.put(KeyStroke.getKeyStroke("released UP"), "stopWalkingForward");
@@ -72,9 +75,22 @@ public class MainComponent extends JComponent {
                     Communication.sendAction("#turn:r;");
                 }
                 else{
-                    Communication.sendAction("#walk:f;");
+                    Communication.sendAction("#walk:f:0;");
 
                 }
+            }
+        };
+
+        Action strafeLeftForward = new AbstractAction() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Communication.sendAction("#walk:f:45;");
+            }
+        };
+        Action strafeRightForward = new AbstractAction() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Communication.sendAction("#walk:f:315;");
             }
         };
         Action walkBackwards = new AbstractAction(){
@@ -119,15 +135,30 @@ public class MainComponent extends JComponent {
                 }
             }
         };
+        Action stopStrafeLeftForward = new AbstractAction() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Communication.sendAction("#stop:after;");
+            }
+        };
+        Action stopStrafeRightForward = new AbstractAction() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Communication.sendAction("#stop:after;");
+            }
+        };
         getActionMap().put("reset", reset);
         getActionMap().put("rotateLeft", rotateLeft);
         getActionMap().put("rotateRight", rotateRight);
         getActionMap().put("walkForward", walkForward);
         getActionMap().put("walkBackwards", walkBackwards);
+        getActionMap().put("strafeLeftForward", strafeLeftForward);
+        getActionMap().put("strafeRightForward", strafeRightForward);
         getActionMap().put("stopRotateLeft", stopRotateLeft);
         getActionMap().put("stopRotateRight", stopRotateRight);
         getActionMap().put("stopWalkingForward", stopWalkingForward);
         getActionMap().put("stopWalkingBackwards", stopWalkingBackwards);
-
+        getActionMap().put("stopStrafeLeftForward", stopStrafeLeftForward);
+        getActionMap().put("stopStrafeRightForward", stopStrafeRightForward);
     }
 }

@@ -21,8 +21,9 @@
 #define GAIT_TRIPOD 1
 #define GAIT_RIPPLE 2
 #define GAIT_WAVE 3
+#define GAIT_TRIPLE 4
 
-#define LIFT_HEIGHT 2.0
+#define LIFT_HEIGHT 3.0
 
 struct Coordinate {
 	double x;

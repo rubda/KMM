@@ -2,9 +2,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by danielfalk on 11/3/14.
- */
 public class ParameterComponent extends JPanel {
 
 JTextField field = new JTextField(10);
@@ -24,6 +21,5 @@ JTextField field = new JTextField(10);
             }
         });
         add(field);
-
     }
 }

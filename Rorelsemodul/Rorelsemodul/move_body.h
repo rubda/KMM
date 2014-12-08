@@ -15,8 +15,6 @@
 void body_move_init();
 void move_body(int direction, double length);
 void rotate_body(int direction, double length);
-
-extern int current_step;
-
+uint8_t init_body(int direction, double length);
 
 #endif /* MOVE_BODY_H_ */

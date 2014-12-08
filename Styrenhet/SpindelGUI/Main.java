@@ -1,9 +1,6 @@
 import java.io.IOException;
 import java.util.TooManyListenersException;
 
-import static java.lang.Math.atan;
-import static java.lang.Math.toDegrees;
-
 public class Main {
 
     public static void main(String[] args) throws IOException {
@@ -20,11 +17,7 @@ public class Main {
             }
         }
 
-        System.out.println((int) toDegrees(atan((double)(-2) / (double)10)));
-
-        Communication communication =
-                new Communication(serialPortHandler.getSerialInputStream(),
-                        serialPortHandler.getSerialOutputStream());
+        Communication communication = new Communication(serialPortHandler.getSerialInputStream(), serialPortHandler.getSerialOutputStream());
 
         try {
             serialPortHandler.addDataAvailableListener(communication);

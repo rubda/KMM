@@ -30,15 +30,19 @@ public class SensorCommunication extends Communication {
     @Override
     void receive(String inputString) {
         System.out.println("ReceiveSensors: " + inputString);
+
+        // Split string
         inputString = inputString.substring(0, inputString.length()-1);
         String parts[] = inputString.split(":");
 
+
+        // Interpret message
         if(parts[0].equals("#rotate")){
 
-            Main.rotating = false;
+            Main.setIsRotating(false);
 
-            //skicka sensordata till dator
-            ComputerCommunication.send(inputString+";");
+            // Send sensor data to computer
+            sendToComputer(inputString + ";");
             send("#accept:true;");
 
         }
@@ -50,21 +54,20 @@ public class SensorCommunication extends Communication {
                 e.printStackTrace();
             }
 
-            if(parts.length>3){
+            if(parts.length>3){ // All sensors at once
                 for (int i = 1; i < parts.length; i++) {
                  sensors[i] = (Integer.parseInt(parts[i]));
                 }
-                Main.setSensorsReady(true);
+                Main.setAreSensorsReady(true);
             }
-            else{
+            else{  // Only one sensor
                 sensors[Integer.parseInt(parts[1])] = Integer.parseInt(parts[2]);
             }
 
             sensorSemaphore.release();
 
-            //skicka sensordata till dator
-            ComputerCommunication.send(inputString+";");
-
+            // Send sensor data to computer
+            sendToComputer(inputString + ";");
             send("#accept:true;");
         }
         else if(parts[0].equals("#accept")){
@@ -72,14 +75,14 @@ public class SensorCommunication extends Communication {
                 // nånting?
             }
             else if(parts[1].equals("rotate")){
-                Main.acceptRotate = true;
+                Main.setIsRotateAccepted(true);
             }
             else{
                 System.out.println("FALSE: "+ inputString);
             }
         }
         else if(parts[0].equals("#denied")) {
-             // skicka senaste kommado igen
+             // Send last command again?
         }
         else{
             System.out.println("FALSE: "+ inputString);
@@ -94,5 +97,10 @@ public class SensorCommunication extends Communication {
         }  catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
+    }
+
+
+    static void sendToComputer(String message){
+        ComputerCommunication.send(message);
     }
 }

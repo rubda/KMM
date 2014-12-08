@@ -8,6 +8,8 @@
 #include "gait.h"
 
 Gait gait;
+uint8_t servo_done[6];
+
 
 double degree_to_rad_2(double deg){
 	return (deg/57.295779513);
@@ -18,6 +20,11 @@ uint16_t get_max_3(uint16_t a, uint16_t b){
 }
 
 void set_gait(uint8_t g){
+	int i;
+	for(i = 0; i < 6; ++i){
+		servo_done[i] = 0;
+	}
+	
 	switch (g)
 	{
 		case GAIT_RIPPLE:
@@ -25,6 +32,9 @@ void set_gait(uint8_t g){
 		break;
 		case GAIT_WAVE:
 			set_wave_gait();
+		break;
+		case GAIT_TRIPLE:
+			set_triple_gait();
 		break;
 		case GAIT_TRIPOD:
 		default:
@@ -162,8 +172,7 @@ void set_ripple_gait(){
 }
 
 int gait_step = 0;
-uint8_t servo_done[6];
-
+uint8_t servo_id[] = {1, 2, 13, 14, 7, 8};
 void gait_move(int direction, double length){
 	double move_x = -length*cos(degree_to_rad_2(direction))/2.0;
 	double move_y = length*sin(degree_to_rad_2(direction))/2.0;
@@ -177,10 +186,10 @@ void gait_move(int direction, double length){
 			continue;
 		}
 		
-		a = (gait_step+gait.offset[i-1])%gait.length;
+		a = (gait_step + gait.offset[i-1]) % gait.length;
 		y_multi = (i % 2 == 0 ? 1 : -1);
-		set_servo_speed(i, get_relative_speed(gait.steps[a].speed));
-		max = get_max_3(ik(gait.steps[a].x*move_x, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i), max);
+		//set_leg_speed(i, get_relative_speed(gait.steps[a].speed));
+		max = get_max_3(calc_servo_delay(servo_id[i-1], ik(gait.steps[a].x*move_x, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i)), max);
 	}
 	
 	gait_step++;
@@ -205,8 +214,8 @@ void gait_stop(int direction, double length){
 		}
 		
 		y_multi = (i % 2 == 0 ? 1 : -1);
-		set_servo_speed(i, get_relative_speed(gait.steps[a].speed));
-		max = get_max_3(ik(gait.steps[a].x*move_x, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i), max);
+		set_leg_speed(i, get_relative_speed(gait.steps[a].speed));
+		max = get_max_3(calc_servo_delay(servo_id[i-1], ik(gait.steps[a].x*move_x, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i)), max);
 	}
 	
 	gait_step++;
@@ -229,15 +238,15 @@ void gait_rotate(int direction, int rotation, double length){ //Rotation between
 		
 		a = (gait_step+gait.offset[i-1])%gait.length;
 		y_multi = (i % 2 == 0 ? 1 : -1);
-		set_servo_speed(i, get_relative_speed(gait.steps[a].speed));
+		set_leg_speed(i, get_relative_speed(gait.steps[a].speed));
 		if(rotation > 0 && (i % 2 == 0)){
-			rot_multi = cos(rotation);
+			rot_multi = cos(degree_to_rad_2(rotation));
 		}else if(rotation < 0 && (i % 2 == 1)){
-			rot_multi = cos(-rotation);
+			rot_multi = cos(degree_to_rad_2(-rotation));
 		}else{
 			rot_multi = 1;
 		}
-		max = get_max_3(ik(gait.steps[a].x*move_x*rot_multi, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i), max);
+		max = get_max_3(calc_servo_delay(servo_id[i-1], ik(gait.steps[a].x*move_x*rot_multi, y_multi*gait.steps[a].y*move_y, gait.steps[a].z*LIFT_HEIGHT, i)), max);
 	}
 	
 	gait_step++;
