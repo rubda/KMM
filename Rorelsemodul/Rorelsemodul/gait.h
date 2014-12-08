@@ -41,9 +41,20 @@ struct Gait {
 
 typedef struct Gait Gait;
 
+//Set type of gait
 void set_gait(uint8_t g);
 void set_tripod_gait();
-void set_ripple_gait();
+void set_ripple_gait(); //Not real ripple gait, just more stable tripod gait
 void set_wave_gait();
+
+
+//Move robot in @direction(-360,360) with each step @length cm long
+void gait_move(int direction, double length);
+
+//Moves all legs to init position.
+void gait_stop(int direction, double length);
+
+//Same as gait_move but with rotation(-180,180)
+void gait_rotate(int direction, int rotation, double length);
 
 #endif /* GAIT_H_ */

@@ -141,7 +141,10 @@ void gait_move(int direction, double length){
 	int y_multi = 1;
 	uint16_t max = 0;
 	for(i = 1; i <= 6; ++i){
-		servo_done[i] = 0;
+		if(servo_done[i] > 0){
+			servo_done[i]--;
+			continue;
+		}
 		
 		a = (gait_step+gait.offset[i-1])%gait.length;
 		y_multi = (i % 2 == 0 ? 1 : -1);
@@ -167,7 +170,7 @@ void gait_stop(int direction, double length){
 		a = (gait_step+gait.offset[i-1])%gait.length;
 		
 		if(a == 0){
-			servo_done[i] = 1;
+			servo_done[i] = gait.offset[i-1];
 		}
 		
 		y_multi = (i % 2 == 0 ? 1 : -1);
@@ -188,9 +191,6 @@ void gait_rotate(int direction, int rotation, double length){ //Rotation between
 	int i,a;
 	int y_multi = 1;
 	double rot_multi = 1;
-	//double cos_rot = cos(degree_to_rad_2(rotation));
-	//double x_rot = 0;
-	//double y_rot = 0;
 	
 	uint16_t max = 0;
 	for(i = 1; i <= 6; ++i){
