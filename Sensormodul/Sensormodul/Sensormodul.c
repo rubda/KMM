@@ -44,11 +44,8 @@ int main(void)
 		}
 		
 		//Iterera över våra sensor id:n
-		if (SENSOR_ID == 5){
-			SENSOR_ID = 0;
-		}else{
-			SENSOR_ID++;
-		}
+		SENSOR_ID = (SENSOR_ID+1) % 6;
+		
 	}
 }	
 	

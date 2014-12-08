@@ -69,31 +69,15 @@ void get_distance(struct soundSensor* sensor)
 	DISTANCE = TIME/40; //Gör om det till ett avstånd uttryckt i cm
 	
 	//Lägger till den nya distansen för en specifik plats i listan
-	int NR = sensor->nr;
-	sensor->Dists[NR] = DISTANCE;	
-	
-	if (NR == 4) {
-		sensor->nr = 0;
-	}else{
-		sensor->nr++;
-	};
-	
-	//Kopierar arrayen
-	int VALUES[5];
-	for (int i = 0; i < 5; i++) {
-		   VALUES[i] = sensor->Dists[i];
-	}
-	
-	//Sorterar distanserna och tar ut mittenvärdet 
-	qsort(VALUES, 5, sizeof(uint16_t), cmpfunc);
-	
-	sensor->medDist = VALUES[2];
-}
+	sensor->Dists[sensor->nr] = DISTANCE;	
+	sensor->nr = (sensor->nr + 1) % 5;
 
-// En jämförelsefunktion som krävs för att quicksorten ska funka
-uint16_t cmpfunc (const void * a, const void * b)
-{
-	return (*(uint16_t*)a - *(uint16_t*)b);
+	//Kopierar arrayen
+	int VALUES[] = {sensor->Dists[0], sensor->Dists[1], sensor->Dists[2], sensor->Dists[3], sensor->Dists[4]};
+	
+	//Sorterar distanserna och tar ut mittenvärdet 	
+	insertion_sort(VALUES, 5);
+	sensor->medDist = VALUES[2];
 }
 
 
@@ -107,5 +91,18 @@ void refresh_sensors()
 		for(i = 0; i < 6; ++i){
 			get_distance(get_sensor(order[i]));
 		}
+	}
+}
+
+//Insertion sort
+void insertion_sort(int *a, const size_t n) {
+	size_t i, j;
+	int value;
+	for (i = 1; i < n; i++) {
+		value = a[i];
+		for (j = i; j > 0 && value < a[j - 1]; j--) {
+			a[j] = a[j - 1];
+		}
+		a[j] = value;
 	}
 }

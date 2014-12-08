@@ -14,6 +14,7 @@
 
 #include "UART.h"
 #include "messages.h"
+#include <stddef.h>
 
 struct soundSensor
 {
@@ -28,8 +29,9 @@ struct soundSensor sensor_list[6];
 void init_sensors();
 struct soundSensor* get_sensor(uint8_t id);
 void get_distance(struct soundSensor*);
-uint16_t cmpfunc (const void * a, const void * b);
+//uint16_t cmpfunc (const void * a, const void * b);
 void refresh_sensors();
+void insertion_sort(int *a, const size_t n);
 	
 
 
