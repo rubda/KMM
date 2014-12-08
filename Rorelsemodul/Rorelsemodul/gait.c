@@ -70,7 +70,7 @@ void set_tripod_gait(){
 	set_leg_offset(6, 5);
 }
 
-void set_ripple_gait(){
+void set_triple_gait(){
 	add_gait_simple_step(0, 0, 0);
 	add_gait_simple_step(1, 0.25, 0);
 	add_gait_simple_step(2, 0.5, 0);
@@ -101,24 +101,24 @@ void set_ripple_gait(){
 }
 
 void set_wave_gait(){
-	add_gait_step(0,		 0,			0,		1.0/6.0);
-	add_gait_step(1,		 1.0/7,		0,		1.0/6.0);
-	add_gait_step(2,		 2.0/7,		0,		1.0/6.0);
-	add_gait_step(3,		 3.0/7,		0,		1.0/6.0);
-	add_gait_step(4,		 4.0/7,		0,		1.0/6.0);
-	add_gait_step(5,		 5.0/7,		0,		1.0/6.0);
-	add_gait_step(6,		 6.0/7,		0,		1.0/6.0);
-	add_gait_step(7,		 1,			0,		1.0/6.0);
+	add_gait_step(0,		 0,			0,		1.0/5.0);
+	add_gait_step(1,		 1.0/7,		0,		1.0/5.0);
+	add_gait_step(2,		 2.0/7,		0,		1.0/5.0);
+	add_gait_step(3,		 3.0/7,		0,		1.0/5.0);
+	add_gait_step(4,		 4.0/7,		0,		1.0/5.0);
+	add_gait_step(5,		 5.0/7,		0,		1.0/5.0);
+	add_gait_step(6,		 6.0/7,		0,		1.0/5.0);
+	add_gait_step(7,		 1,			0,		1.0/5.0);
 	add_gait_step(8,		 3.5/7,		0.8,	1);
 	add_gait_step(9,		 0,			1,		1);
 	add_gait_step(10,		-3.5/7,		0.8,	1);
-	add_gait_step(11,		-1,			0,		1.0/6.0);
-	add_gait_step(12,		-6.0/7,		0,		1.0/6.0);
-	add_gait_step(13,		-5.0/7,		0,		1.0/6.0);
-	add_gait_step(14,		-4.0/7,		0,		1.0/6.0);
-	add_gait_step(15,		-3.0/7,		0,		1.0/6.0);
-	add_gait_step(16,		-2.0/7,		0,		1.0/6.0);
-	add_gait_step(17,		-1.0/7,		0,		1.0/6.0);
+	add_gait_step(11,		-1,			0,		1.0/5.0);
+	add_gait_step(12,		-6.0/7,		0,		1.0/5.0);
+	add_gait_step(13,		-5.0/7,		0,		1.0/5.0);
+	add_gait_step(14,		-4.0/7,		0,		1.0/5.0);
+	add_gait_step(15,		-3.0/7,		0,		1.0/5.0);
+	add_gait_step(16,		-2.0/7,		0,		1.0/5.0);
+	add_gait_step(17,		-1.0/7,		0,		1.0/5.0);
 	
 	gait.length = 18;
 	
@@ -127,6 +127,37 @@ void set_wave_gait(){
 	set_leg_offset(3, 6);
 	set_leg_offset(4, 9);
 	set_leg_offset(5, 12);
+	set_leg_offset(6, 15);
+}
+
+void set_ripple_gait(){
+	add_gait_step(0,		 0,			0,		1.0/2.0);
+	add_gait_step(1,		 1.0/7,		0,		1.0/2.0);
+	add_gait_step(2,		 2.0/7,		0,		1.0/2.0);
+	add_gait_step(3,		 3.0/7,		0,		1.0/2.0);
+	add_gait_step(4,		 4.0/7,		0,		1.0/2.0);
+	add_gait_step(5,		 5.0/7,		0,		1.0/2.0);
+	add_gait_step(6,		 6.0/7,		0,		1.0/2.0);
+	add_gait_step(7,		 1,			0,		1.0/2.0);
+	add_gait_step(8,		 3.5/7,		0.8,	1);
+	add_gait_step(9,		 0,			1,		1);
+	add_gait_step(10,		-3.5/7,		0.8,	1);
+	add_gait_step(11,		-1,			0,		1.0/2.0);
+	add_gait_step(12,		-6.0/7,		0,		1.0/2.0);
+	add_gait_step(13,		-5.0/7,		0,		1.0/2.0);
+	add_gait_step(14,		-4.0/7,		0,		1.0/2.0);
+	add_gait_step(15,		-3.0/7,		0,		1.0/2.0);
+	add_gait_step(16,		-2.0/7,		0,		1.0/2.0);
+	add_gait_step(17,		-1.0/7,		0,		1.0/2.0);
+	
+	gait.length = 18;
+	
+	set_leg_offset(1, 0);
+	set_leg_offset(4, 6);
+	set_leg_offset(5, 12);
+	
+	set_leg_offset(2, 3);
+	set_leg_offset(3, 9);
 	set_leg_offset(6, 15);
 }
 
@@ -170,7 +201,7 @@ void gait_stop(int direction, double length){
 		a = (gait_step+gait.offset[i-1])%gait.length;
 		
 		if(a == 0){
-			servo_done[i] = gait.offset[i-1];
+			servo_done[i] = gait.offset[i-1]+1;
 		}
 		
 		y_multi = (i % 2 == 0 ? 1 : -1);

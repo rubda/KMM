@@ -44,6 +44,7 @@ typedef struct Gait Gait;
 //Set type of gait
 void set_gait(uint8_t g);
 void set_tripod_gait();
+void set_triple_gait();
 void set_ripple_gait(); //Not real ripple gait, just more stable tripod gait
 void set_wave_gait();
 
