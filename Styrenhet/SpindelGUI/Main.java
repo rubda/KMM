@@ -20,11 +20,8 @@ public class Main {
             }
         }
 
-        System.out.println((int) toDegrees(atan((double)(-2) / (double)10)));
-
         Communication communication =
-                new Communication(serialPortHandler.getSerialInputStream(),
-                        serialPortHandler.getSerialOutputStream());
+                new Communication(serialPortHandler.getSerialInputStream(), serialPortHandler.getSerialOutputStream());
 
         try {
             serialPortHandler.addDataAvailableListener(communication);

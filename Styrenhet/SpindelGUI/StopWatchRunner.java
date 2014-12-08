@@ -1,11 +1,10 @@
 import java.awt.event.*;
 import javax.swing.*;
 
-public class StopWatchRunner extends JLabel
-        implements ActionListener {
+public class StopWatchRunner extends JLabel implements ActionListener {
 
     private long startTime;   // Start time of stopwatch.
-    //   (Time is measured in milliseconds.)
+    // (Time is measured in milliseconds.)
 
     private boolean running;  // True when the stopwatch is running.
 
@@ -37,7 +36,6 @@ public class StopWatchRunner extends JLabel
             else
                 timer.restart();
         }
-
     }
 
     // Stop the stopwatch and print the time

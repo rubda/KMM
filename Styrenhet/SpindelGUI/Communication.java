@@ -18,10 +18,7 @@ public class Communication implements SerialPortEventListener {
 
     private static String lastAction;
 
-    private int lastindex = 0;
-
     String message = "";
-
 
     public Communication(String message){
     }
@@ -56,10 +53,10 @@ public class Communication implements SerialPortEventListener {
 
     // Receive and interpret a message
     public static void receive(String message){
-        System.out.println("receive: "+message);
+        //System.out.println("receive: "+message);
         message = message.substring(1, message.length()-1);
         parts = message.split(":");
-        System.out.println(parts[0]);
+        //System.out.println(parts[0]);
         if(parts[0].equals("distance")){
 
             if(parts.length>3){
@@ -74,13 +71,17 @@ public class Communication implements SerialPortEventListener {
             }
         }
         else if(parts[0].equals("rotate")){
-            System.out.println(parts[1]);
+            //System.out.println(parts[1]);
             FrameWork.gyro.setData(parts[1]);
             FrameWork.textPanel.add("Gyro: "+Integer.parseInt(parts[1]));
         }
         else if(parts[0].equals("mode")){
+            System.out.println("mode setData to '" + parts[1] + "'");
             FrameWork.mode.setData(parts[1]);
             FrameWork.textPanel.add("Mode: "+parts[1]);
+            if (parts[1].equals("manual")) {
+                FrameWork.mainPanel.requestFocus();
+            }
         }
         else if(parts[0].equals("time")){
             if(parts[1].equals("1")){
@@ -98,7 +99,7 @@ public class Communication implements SerialPortEventListener {
         }
         else{
             System.out.println(parts[0]);
-            System.out.println("FEL!!!!");
+            System.out.println("recieve() error");
         }
 
     }
@@ -112,13 +113,13 @@ public class Communication implements SerialPortEventListener {
                 inStream.read(readBuffer, 0, availableBytes);
                 // Print it out
                 message = message + new String(readBuffer, 0, availableBytes);
-                System.out.println("Receive: " + message);
+                //System.out.println("Receive: " + message);
 
                 message = receiveHelper(message);
 
             }
         } catch (IOException e) {
-            System.out.println("error");
+            System.out.println("readSerial() error");
         }
     }
 
@@ -128,7 +129,6 @@ public class Communication implements SerialPortEventListener {
             receive(messages[0]+";");
             return receiveHelper(messages[1]);
         }
-
         return message;
     }
 
@@ -139,7 +139,6 @@ public class Communication implements SerialPortEventListener {
                 readSerial();
         }
     }
-
 
 }
 

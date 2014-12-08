@@ -11,7 +11,10 @@ public class Timer implements ActionListener
 
     public void actionPerformed(ActionEvent evt) {
         long time = (System.currentTimeMillis()-startTime);
-        Main.time = time;
+        if(time>1000){
+            Main.running.compareAndSet(true, false);
+            stop();
+        }
     }
 
     // Record the time and start the stopwatch.
@@ -19,7 +22,6 @@ public class Timer implements ActionListener
         if (running == false) {
             running = true;
             startTime = System.currentTimeMillis();
-            Main.time = 0;
             if (timer == null) {
                 timer = new javax.swing.Timer(100,this);
                 timer.start();

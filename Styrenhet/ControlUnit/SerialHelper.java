@@ -49,11 +49,8 @@ public class SerialHelper {
     private OutputStream outStream;
     private InputStream inStream;
 
-    /**
-     * \brief List the available serial ports
-     *
-     * \return Array of string for the available serial port names
-     */
+    // brief List the available serial ports
+    // return Array of string for the available serial port names
     public static String[] listSerialPorts() {
         Enumeration ports = CommPortIdentifier.getPortIdentifiers();
         ArrayList portList = new ArrayList();

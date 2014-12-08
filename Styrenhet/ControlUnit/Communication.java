@@ -23,7 +23,7 @@ public abstract class Communication implements SerialPortEventListener {
         try {
             //System.out.println("readSerial");
             //System.out.println(new String(readBuffer, Charset.defaultCharset()));
-            //System.out.println(inStream.available());
+            //System.out.println("inStream: "+inStream.available());
 
             int availableBytes = inStream.available();
             if (availableBytes > 0) {
@@ -31,10 +31,11 @@ public abstract class Communication implements SerialPortEventListener {
                 inStream.read(readBuffer, 0, availableBytes);
                 // Print it out
                 message = message + new String(readBuffer, 0, availableBytes);
-                //System.out.println("Received: " + message);
+                System.out.println("Received: " + message);
                 //System.out.println("Last char: " + message.charAt(message.length() - 1));
 
                 message = receiveHelper(message);
+                System.out.println("Message (recieveHelper): "+message);
 
             }
         } catch (IOException e) {
@@ -45,6 +46,8 @@ public abstract class Communication implements SerialPortEventListener {
     private String receiveHelper(String message){
         String messages[] = message.split(";", 2);
         if(messages.length == 2){
+            //System.out.println("messages[0] = "+messages[0]);
+            //System.out.println("messages[1] = "+messages[1]);
             receive(messages[0]+";");
             return receiveHelper(messages[1]);
         }

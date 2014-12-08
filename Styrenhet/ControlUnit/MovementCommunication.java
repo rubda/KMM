@@ -17,7 +17,23 @@ public class MovementCommunication extends Communication {
         inputString = inputString.substring(0, inputString.length()-1);
         String parts[] = inputString.split(":");
 
-        if (parts[0].equals("#accept")){
+        if (parts[0].equals("#mode")){
+            if (parts[1].equals("change")){
+                if (Main.isAutoMode.compareAndSet(true,true)) {
+                    Main.isAutoMode.set(false);
+                    ComputerCommunication.send("#mode:manual");
+                }
+                else {
+                    Main.isAutoMode.set(true);
+                    ComputerCommunication.send("#mode:auto");
+                }
+            }
+            else {
+                System.out.println("Wrong command: "+ inputString);
+                send("#denied:fel;");
+            }
+        }
+        else if (parts[0].equals("#accept")){
             if(parts[1].equals("walk")){
                 //nånting
 
@@ -31,7 +47,7 @@ public class MovementCommunication extends Communication {
 
             }
             else if(parts[1].equals("init")){
-                Main.setRobotReady(true);
+                Main.setIsRobotReady(true);
             }
             else if(parts[1].equals("speed")){
                 //nånting
@@ -41,7 +57,7 @@ public class MovementCommunication extends Communication {
 
             }
             else{
-                System.out.println("FALSE: "+ inputString);
+                System.out.println("Wrong command: "+ inputString);
                 send("#denied:fel;");
             }
         }
@@ -49,7 +65,7 @@ public class MovementCommunication extends Communication {
              //skicka senaste kommando igen
         }
         else{
-            System.out.println("FALSE: "+ inputString);
+            System.out.println("Wrong command: "+ inputString);
             send("#denied:fel;");
         }
 
