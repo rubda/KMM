@@ -31,32 +31,23 @@ public class ComputerCommunication extends Communication {
                 MovementCommunication.send(parts[2]+":"+parts[3]);
             }
             else if(parts[1].equals("speed")){     //INTE TESTAD
-                Main.speed = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setSpeed(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
                 MovementCommunication.send("#"+parts[1]+":"+parts[2]);
             }
-            else if(parts[1].equals("Kp")){
-                Main.Kp = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
-            }
-            else if(parts[1].equals("Kd")){
-                Main.Kd = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
-            }
-            else if(parts[1].equals("Dt")){
-                Main.Dt = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
-            }
             else if(parts[1].equals("upperBound")){
-                Main.upperBound = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setUpperBound(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("lowerBound")){
-                Main.lowerBound = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setLowerBound(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("goalBound")){
-                Main.goalBound = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setGoalBound(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("stopBound")){
-                Main.stopBound = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setStopBound(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("sensorDelay")){
-                Main.sensorDelay = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setSensorDelay(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             /*else if(parts[1].equals("walkToDistance")){
                 System.out.println("send walkToDistance"+Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
@@ -77,36 +68,26 @@ public class ComputerCommunication extends Communication {
                 else {
                     Main.isAutoMode.set(true);
                     send("#mode:auto;");
-                    //Main.auto();
                 }
             }
             else if(parts[1].equals("init")){
-                //System.out.println("Init!");
                 MovementCommunication.send("#"+parts[1]+":0;");
             }
-            /*else if(parts[1].equals("sensorThread")){
-                //Main.sensorThread = new SensorThread();
-            }
-            else if(parts[1].equals("regulateThread")){
-                //Main.regulatorThread = new regulatorThread();
-
-            }*/
             else if(parts[1].equals("angles")){
-                System.out.println("angles!");
                 ComputerCommunication.send("#info:Left angle-" + Main.angle("left") + ";");
                 ComputerCommunication.send("#info:Right angle-"+Main.angle("right")+";");
             }
             else if(parts[1].equals("angleLimit")){
-                Main.angleLimit = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setAngleLimit(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("distanceLimit")){
-                Main.distanceLimit = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setDistanceLimit(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("allowedAngleError")){
-                Main.allowedAngleError = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setAllowedAngleError(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("walkAfterRotationValue")){
-                Main.walkAfterRotationValue = Integer.parseInt(parts[2].substring(0,parts[2].length()-1));
+                Main.setWalkAfterRotationValue(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
         }
         else {
@@ -120,7 +101,7 @@ public class ComputerCommunication extends Communication {
         try {
             outStream.write(message.getBytes());
         }  catch (IOException ex) {
-            System.out.println("Send error");
+            System.out.println("Send error (computer)");
             System.err.println(ex.getMessage());
         }
     }

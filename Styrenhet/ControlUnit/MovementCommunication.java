@@ -13,7 +13,7 @@ public class MovementCommunication extends Communication {
 
     @Override
     public void receive(String inputString) {
-        System.out.println("ReceiveRobot: "+inputString);
+        System.out.println("ReceiveMovement: "+inputString);
         inputString = inputString.substring(0, inputString.length()-1);
         String parts[] = inputString.split(":");
 
@@ -36,39 +36,34 @@ public class MovementCommunication extends Communication {
         else if (parts[0].equals("#accept")){
             if(parts[1].equals("walk")){
                 //nånting
-
             }
             else if(parts[1].equals("rotate")){
                 //nånting
-
             }
             else if(parts[1].equals("turn")){
                 //nånting
-
             }
             else if(parts[1].equals("init")){
                 Main.setIsRobotReady(true);
             }
             else if(parts[1].equals("speed")){
                 //nånting
-
             }
             else if(parts[1].equals("stop")){
-
+                //nånting
             }
             else{
-                System.out.println("Wrong command: "+ inputString);
-                send("#denied:fel;");
+                System.out.println("Wrong command from Movement: "+ inputString);
+                send("#denied:lastcommand;");
             }
         }
         else if(parts[0].equals("#denied")){
-             //skicka senaste kommando igen
+             //skicka senaste kommando igen?
         }
         else{
-            System.out.println("Wrong command: "+ inputString);
-            send("#denied:fel;");
+            System.out.println("Wrong command from Movement: "+ inputString);
+            send("#denied:lastcommand;");
         }
-
     }
 
     public static void send(String message) {

@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.security.Key;
 
 public class MainComponent extends JComponent {
 
@@ -161,6 +160,5 @@ public class MainComponent extends JComponent {
         getActionMap().put("stopWalkingBackwards", stopWalkingBackwards);
         getActionMap().put("stopStrafeLeftForward", stopStrafeLeftForward);
         getActionMap().put("stopStrafeRightForward", stopStrafeRightForward);
-
     }
 }

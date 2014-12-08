@@ -1,7 +1,4 @@
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
-import javax.swing.plaf.basic.DefaultMenuLayout;
-import java.awt.*;
 
 
 public class FrameWork extends JFrame
@@ -11,10 +8,10 @@ public class FrameWork extends JFrame
     public static final MainComponent mainPanel = new MainComponent();
     public static SensorComponent[] sensors = new SensorComponent[7]; // Sensors
     public static SensorComponent gyro, mode; // Sensors
-    private final ParameterComponent walkAfterRotationValue, allowedAngleError, angleLimit, distanceLimit, Kp, Kd, Dt, lowerLimit, upperLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, walkToDistance, rotateLeft, rotateRight;  // Parameters
+    private final ParameterComponent walkAfterRotationValue, allowedAngleError, angleLimit, distanceLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, rotateLeft, rotateRight;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
-    private ButtonComponent changeMode, init, angels, sensorThread, regulateThread;
+    private ButtonComponent changeMode, init, angels;
 
 
     public FrameWork(){
@@ -49,11 +46,6 @@ public class FrameWork extends JFrame
         allowedAngleError = new ParameterComponent("allowedAngleError");
         angleLimit = new ParameterComponent("angleLimit");
         distanceLimit = new ParameterComponent("distanceLimit");
-        Kp = new ParameterComponent("Kp");
-        Kd = new ParameterComponent("Kd");
-        Dt = new ParameterComponent("Dt");
-        lowerLimit = new ParameterComponent("lowerLimit");
-        upperLimit = new ParameterComponent("upperLimit");
         sensorstring = new ParameterComponent("sensorstring");
         movementstring = new ParameterComponent("movementstring");
         speed = new ParameterComponent("speed");
@@ -62,7 +54,6 @@ public class FrameWork extends JFrame
         goalBound = new ParameterComponent("goalBound");
         stopBound = new ParameterComponent("stopBound");
         sensorDelay = new ParameterComponent("sensorDelay");
-        walkToDistance = new ParameterComponent("walkToDistance");
         rotateLeft = new ParameterComponent("rotateLeft");
         rotateRight = new ParameterComponent("rotateRight");
 
@@ -70,26 +61,17 @@ public class FrameWork extends JFrame
         changeMode = new ButtonComponent("changeMode");
         init = new ButtonComponent("init");
         angels = new ButtonComponent("angles");
-        sensorThread = new ButtonComponent("sensorThread");
-        regulateThread = new ButtonComponent("regulateThread");
 
         // Add buttons
         buttonPanel.add(changeMode);
         buttonPanel.add(init);
         buttonPanel.add(angels);
-        buttonPanel.add(sensorThread);
-        buttonPanel.add(regulateThread);
 
         // Add parameters
         parameterPanel.add(walkAfterRotationValue);
         parameterPanel.add(allowedAngleError);
         parameterPanel.add(angleLimit);
         parameterPanel.add(distanceLimit);
-        parameterPanel.add(Kp);
-        parameterPanel.add(Kd);
-        parameterPanel.add(Dt);
-        parameterPanel.add(upperLimit);
-        parameterPanel.add(lowerLimit);
         parameterPanel.add(speed);
         parameterPanel.add(upperBound);
         parameterPanel.add(lowerBound);
@@ -98,7 +80,6 @@ public class FrameWork extends JFrame
         parameterPanel.add(sensorDelay);
         parameterPanel.add(sensorstring);
         parameterPanel.add(movementstring);
-        parameterPanel.add(walkToDistance);
         parameterPanel.add(rotateLeft);
         parameterPanel.add(rotateRight);
 

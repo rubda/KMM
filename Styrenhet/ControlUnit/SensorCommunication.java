@@ -39,7 +39,7 @@ public class SensorCommunication extends Communication {
         // Interpret message
         if(parts[0].equals("#rotate")){
 
-            Main.isRotating.set(false);
+            Main.setIsRotating(false);
 
             // Send sensor data to computer
             sendToComputer(inputString + ";");
@@ -75,7 +75,7 @@ public class SensorCommunication extends Communication {
                 // nånting?
             }
             else if(parts[1].equals("rotate")){
-                Main.isRotateAccepted.set(true);
+                Main.setIsRotateAccepted(true);
             }
             else{
                 System.out.println("FALSE: "+ inputString);

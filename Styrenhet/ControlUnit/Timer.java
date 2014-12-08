@@ -3,11 +3,9 @@ import java.awt.event.ActionListener;
 
 public class Timer implements ActionListener
 {
-    private long startTime;   // Start time of stopwatch.  (Time is measured in milliseconds.)
-
-    private boolean running;  // True when the stopwatch is running.
-
-    private javax.swing.Timer timer;  // A timer that will generate events while the stopwatch is running
+    private long startTime;   // Start time (time is measured in milliseconds)
+    private boolean running;  // True when the timer is running
+    private javax.swing.Timer timer;  // A timer that will generate events while the timer is running
 
     public void actionPerformed(ActionEvent evt) {
         long time = (System.currentTimeMillis()-startTime);
@@ -17,7 +15,7 @@ public class Timer implements ActionListener
         }
     }
 
-    // Record the time and start the stopwatch.
+    // Record the time and start the timer.
     public void start() {
         if (running == false) {
             running = true;
@@ -31,7 +29,7 @@ public class Timer implements ActionListener
         }
     }
 
-    // Stop the stopwatch and print the time
+    // Stop the timer
     public void stop(){
         timer.stop();
         running = false;
