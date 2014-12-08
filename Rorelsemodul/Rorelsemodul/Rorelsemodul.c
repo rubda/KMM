@@ -100,6 +100,9 @@ int main(void)
 	
 	body_move_init();
 	
+	EICRA |= (1 << ISC20) | (1 << ISC21);
+	EIMSK |= (1 << INT2);
+	
 	sei();
 	
 	uart_message mess;
@@ -119,7 +122,7 @@ ISR(USART1_TX_vect){
 }
 
 ISR(INT2_vect){
-	uart_send_string("#mode:change;")
+	uart_send_string("#mode:change;");
 }
 
 
