@@ -1,9 +1,3 @@
-/*
- * move_body.c
- *
- * Created: 5/12 2014 15:09:57
- *  Author: Jonas
- */ 
 
 /*
 uint16_t move_servo_degree(uint16_t servo, double deg, int time){
