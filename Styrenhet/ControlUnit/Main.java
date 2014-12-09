@@ -24,11 +24,11 @@ public class Main {
     private static int counterLimit = 30;
 
     private static int upperBound = 120;
-    private static int lowerBound = 100;
+    private static int lowerBound = 90;
     private static int goalBound = 60;
     private static int stopBound = 40;
     private static int sensorDelay = 300;
-    private static int speed = 176;
+    private static int speed = 200;
     private static int angleLimit = 12;
     private static int distanceToSideWallLimit = 24;
     private static int allowedAngleError = 25;
@@ -237,24 +237,6 @@ public class Main {
         System.out.println("Disconnected");
     }
 
-   /*public static void walkToDistance(int stopBound){
-        //updateSensors(2);
-        ComputerCommunication.send("#info:walkToDistance "+stopBound+";");
-        //MovementCommunication.send("#walk:f;");
-        while(SensorCommunication.getSensorValue(2)>stopBound){
-            //updateSensors(2);
-            walk();
-            try {
-                Thread.sleep(sensorDelay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        MovementCommunication.send("#stop:after;");
-        ComputerCommunication.send("#info:stop;");
-    }   */
-
-
     // Walk forward
     private static void walk(char direction){
         int angle;
@@ -382,7 +364,7 @@ public class Main {
 
         }
         areSensorsReady.set(false);
-        updateSensors(7);
+        updateSensors(8);
         while(areSensorsReady.compareAndSet(false,false) && isAutoMode.compareAndSet(true,true));
         sendToComputer("#info:Stopped rotating;");
     }
@@ -425,7 +407,7 @@ public class Main {
 
         int angle;
         areSensorsReady.set(false);
-        updateSensors(7);
+        updateSensors(8);
         while(areSensorsReady.compareAndSet(false,false) && isAutoMode.compareAndSet(true,true));
 
         if(curve.equals("left")){
