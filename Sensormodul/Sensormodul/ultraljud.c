@@ -24,12 +24,12 @@ void init_sensors()
 	//B0 till ut
 	DDRB |= (1 << PORTB0);
 	
-	sensor_list[3] = (struct soundSensor) {0b00000000, 0, 0, {0, 0, 0, 0, 0}};
-	sensor_list[2] = (struct soundSensor) {0b00000100, 0, 0, {0, 0, 0, 0, 0}};
-	sensor_list[1] = (struct soundSensor) {0b00001000, 0, 0, {0, 0, 0, 0, 0}};
-	sensor_list[0] = (struct soundSensor) {0b00001100, 0, 0, {0, 0, 0, 0, 0}};
-	sensor_list[4] = (struct soundSensor) {0b00010000, 0, 0, {0, 0, 0, 0, 0}};
-	sensor_list[5] = (struct soundSensor) {0b00010100, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[3] = (struct soundSensor) {0b00000000, 0, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[2] = (struct soundSensor) {0b00000100, 0, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[1] = (struct soundSensor) {0b00001000, 0, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[0] = (struct soundSensor) {0b00001100, 0, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[4] = (struct soundSensor) {0b00010000, 0, 0, 0, {0, 0, 0, 0, 0}};
+	sensor_list[5] = (struct soundSensor) {0b00010100, 0, 0, 0, {0, 0, 0, 0, 0}};
 		
 	refresh_sensors();
 }
@@ -71,13 +71,21 @@ void get_distance(struct soundSensor* sensor)
 	//Lägger till den nya distansen för en specifik plats i listan
 	sensor->Dists[sensor->nr] = DISTANCE;	
 	sensor->nr = (sensor->nr + 1) % 5;
+	sensor->Dist = DISTANCE;
 
 	//Kopierar arrayen
 	int VALUES[] = {sensor->Dists[0], sensor->Dists[1], sensor->Dists[2], sensor->Dists[3], sensor->Dists[4]};
+	//int weakVALUES[] = {sensor->Dists[0], sensor->Dists[1], sensor->Dists[2]};
 	
 	//Sorterar distanserna och tar ut mittenvärdet 	
 	insertion_sort(VALUES, 5);
 	sensor->medDist = VALUES[2];
+	
+	//Kass "optimering"
+/*	if (sensor->nr == 3){ 
+		insertion_sort(weakVALUES, 3);
+		sensor->weakDist = weakVALUES[1];
+		}*/		
 }
 
 
@@ -94,6 +102,23 @@ void refresh_sensors()
 	}
 }
 
+//Uppdaterar varje sensor endast tre gånger
+void refresh_less()
+{
+	int order[] = {0, 2, 4, 1, 3, 5};
+	int i, j;
+	
+	for(j = 0; j < 6; ++j){
+		get_sensor(j)->nr = 0;
+	}
+	
+	for(j = 0; j < 3; ++j){
+		for(i = 0; i < 6; ++i){
+			get_distance(get_sensor(order[i]));
+		}
+	}
+}
+
 //Insertion sort
 void insertion_sort(int *a, const size_t n) {
 	size_t i, j;
@@ -104,5 +129,22 @@ void insertion_sort(int *a, const size_t n) {
 			a[j] = a[j - 1];
 		}
 		a[j] = value;
+	}
+}
+
+
+void median_of_dists(int n)
+{
+	int order[] = {0, 2, 4, 1, 3, 5};
+	int values[6][n];
+	int i, j;
+
+	for(j = 0; j < n; ++j){
+		for(i = 0; i < 6; ++i){
+			get_distance(get_sensor(order[i]));
+			values[order[i]][j]= get_sensor(order[i])->Dist;
+		}
+		insertion_sort(values[order[i]], n);
+		get_sensor(order[i])->medDist = values[order[i]][n/2];
 	}
 }

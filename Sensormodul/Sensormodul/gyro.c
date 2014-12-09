@@ -94,7 +94,7 @@ double rotate_to(int angle)
 	uint16_t rate;
 	double ACHIEVED_ANGLE = 0;
 	int TIME = 0;
-	int OFFSET = 0;
+	int OFFSET = 5;
 	int LEFT_ANGLE = (angle - OFFSET);
 	int RIGHT_ANGLE = (angle + OFFSET);
 		

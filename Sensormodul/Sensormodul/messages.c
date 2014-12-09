@@ -103,6 +103,18 @@ void message_handler(uart_message *message_in){
 				for(i = 0; i < 6; ++i){
 					free(attr[i]);
 				}
+			}else if(c == 8){
+				send_message("accept", distance, 1);
+				refresh_less();
+				char* attr[6];
+				int i; for(i = 0; i < 6; ++i){
+				attr[i] = malloc(4);
+				//snprintf(attr[i], 4, "%u", get_sensor(i)->weakDist);
+				}
+				send_message("distance", attr, 6);
+				for(i = 0; i < 6; ++i){
+					free(attr[i]);
+				}
 			}else{
 				send_message("denied", distance, 1);
 			}
