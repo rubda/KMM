@@ -18,17 +18,21 @@ public class Main {
     private static AtomicBoolean isRotateAccepted = new AtomicBoolean(false);
 
     private static int walkAfterRotationCounter = 0;
-    private static int walkAfterRotationValue = 20;
+    private static int walkAfterRotationValue = 4000;
+
+    private static int counter = 0;
+    private static int counterLimit = 30;
 
     private static int upperBound = 120;
-    private static int lowerBound = 110;
-    private static int goalBound = 100;
+    private static int lowerBound = 90;
+    private static int goalBound = 60;
     private static int stopBound = 40;
     private static int sensorDelay = 300;
-    private static int speed = 176;
+    private static int speed = 200;
     private static int angleLimit = 12;
     private static int distanceToSideWallLimit = 24;
     private static int allowedAngleError = 25;
+    private static int deadEndWallLimit = 50;
 
     private final static double sideSensorDistance = 10.0; //Distance between side sensors.
 
@@ -49,9 +53,6 @@ public class Main {
         checkConnect(serialHelperComputer, args[0], 57600);
         checkConnect(serialHelperSensors, args[1], 9600);
         checkConnect(serialHelperMovement, args[2], 9600);
-
-        //checkAddDataAvailableListener(serialHelper, args[1]);
-        //System.out.println("Check data available listener");
 
         ComputerCommunication = new ComputerCommunication(serialHelperComputer.getSerialInputStream(), serialHelperComputer.getSerialOutputStream());
         try {
@@ -91,7 +92,7 @@ public class Main {
                 sendToMovement("#init:"+speed+";");
 
                 updateSensors(0);
-                while(isRobotReady.compareAndSet(false,false) && areSensorsReady.compareAndSet(false,false));
+                while(isRobotReady.compareAndSet(false,false) && areSensorsReady.compareAndSet(false,false) && isAutoMode.compareAndSet(true,true));
                 sendToComputer("#info:Robot ready;");
                 sendToComputer("#time:1;");
 
@@ -102,23 +103,28 @@ public class Main {
                         e.printStackTrace();
                     }
 
+                    counter++;
+
                     if(walkAfterRotationCounter > 0){
                         walkAfterRotationCounter--;
                     }
 
                     sendToComputer("#info:Check distance;");
-                    sendToComputer(("#info:Delay="+ walkAfterRotationCounter +";"));
+                    sendToComputer(("#info:WalkAfterRotationCounter="+ walkAfterRotationCounter +";"));
+                    sendToComputer(("#info:Counter="+ counter +";"));
+
 
                     areSensorsReady.set(false);
                     updateSensors(0);
-                    while(areSensorsReady.compareAndSet(false,false));  // wait for sensors to update
+                    while(areSensorsReady.compareAndSet(false,false)&& isAutoMode.compareAndSet(true,true));  // wait for sensors to update
 
                     //timer.start();
                     //running.compareAndSet(false, true);
                     //while(!running.compareAndSet(false, true) && areSensorsReady);  //fel i timeout på compareAndSet
 
                     // Kontrollera målgång (om avstånd > goalBound. framåt, vänster, höger)
-                    if(getSensorValue(1) > goalBound && getSensorValue(2) > goalBound && getSensorValue(3) > goalBound && walkAfterRotationCounter == 0){
+                    if(getSensorValue(1) > goalBound && getSensorValue(2) > goalBound && getSensorValue(3) > goalBound
+                            && getSensorValue(4) > goalBound && getSensorValue(6) > goalBound && walkAfterRotationCounter == 0){
                         sendToMovement("#stop:after;");
                         sendToComputer("#time:0;");
                         sendToComputer("#info:Goal!;");
@@ -129,22 +135,35 @@ public class Main {
 
                     // Kontrollera om roboten ska köra framåt
                     else if(getSensorValue(2) >= upperBound){
-                        walk();
+                        walk('f');
                     }
 
                     // Kontrollera om roboten ska rotera (i hörn)
                     else if(getSensorValue(2) <= stopBound){
-                        if(getSensorValue(1)>getSensorValue(3)){ //vänster > höger
+                        if(getSensorValue(1) < deadEndWallLimit && getSensorValue(3) < deadEndWallLimit){
+                            //Rotera 180 grader
+                            if(counter < counterLimit){
+                                sendToComputer("#info:Dead End bc. wrong turn;");
+                                rotateCornerAndCorrect(180, "left", "left");
+                            }
+                            else{
+                                sendToComputer("#info:Dead End bc. missed turn;");
+                                backOutOfDeadEnd();
+                            }
+                        }
+
+                        else if(getSensorValue(1)>getSensorValue(3)){ //vänster > höger
                             //Rotera vänster
-                            sendToComputer("#info:Rot.bc. sensor 1>3. "+getSensorValue(1)+">"+getSensorValue(3)+";");
-                            rotateCorner(90, "left", "left");
+                            sendToComputer("#info:Sensor 1>3. "+getSensorValue(1)+">"+getSensorValue(3)+";");
+                            rotateCornerAndCorrect(90, "left", "left");
                         }
                         else{
                             //Rotera höger
-                            sendToComputer("#info:Rot.b,c. sensor 1<=3. "+getSensorValue(1)+"<="+getSensorValue(3)+";");
-                            rotateCorner(90, "right", "right");
+                            sendToComputer("#info:Sensor 1<=3. "+getSensorValue(1)+"<="+getSensorValue(3)+";");
+                            rotateCornerAndCorrect(90, "right", "right");
                         }
-                        walkAfterRotationCounter = walkAfterRotationValue;
+                        walkAfterRotationCounter = walkAfterRotationValue/speed;
+                        counter = 0;
                     }
 
                     // Kontrollera om roboten ska rotera (innan återvändsgränd)
@@ -154,29 +173,31 @@ public class Main {
                         if(getSensorValue(1)>getSensorValue(2)){ //vänster > rakt fram
                             sendToMovement("#stop:after;");
                             //Rotera vänster
-                            sendToComputer("#info:Rot.bc. sensor 1>2. "+getSensorValue(1)+">"+getSensorValue(2)+";");
-                            rotateJunction("left", "left");
+                            sendToComputer("#info:Sensor 1>2. "+getSensorValue(1)+">"+getSensorValue(2)+";");
+                            correctRotationBeforeJunction("left");
                             rotate(90, "left");
-                            walkAfterRotationCounter = walkAfterRotationValue;
+                            walkAfterRotationCounter = walkAfterRotationValue/speed;
+                            counter = 0;
                         }
 
                         else if(getSensorValue(3)>getSensorValue(2)){ //höger > rakt fram
                             sendToMovement("#stop:after;");
                             //Rotera höger
-                            sendToComputer("#info:Rot.bc. sensor 3>2. "+getSensorValue(3)+">"+getSensorValue(2)+";");
-                            rotateJunction("right", "right");
+                            sendToComputer("#info:Sensor 3>2. "+getSensorValue(3)+">"+getSensorValue(2)+";");
+                            correctRotationBeforeJunction("right");
                             rotate(90, "right");
-                            walkAfterRotationCounter = walkAfterRotationValue;
+                            walkAfterRotationCounter = walkAfterRotationValue/speed;
+                            counter = 0;
                         }
 
                         else{ //Om inte bättre väg åt sidan
-                            walk();
+                            walk('f');
                         }
                     }
 
                     // Gå framåt
                     else {
-                        walk();
+                        walk('f');
                     }
 
                 }
@@ -216,27 +237,8 @@ public class Main {
         System.out.println("Disconnected");
     }
 
-   /*public static void walkToDistance(int stopBound){
-        //updateSensors(2);
-        ComputerCommunication.send("#info:walkToDistance "+stopBound+";");
-        //MovementCommunication.send("#walk:f;");
-        while(SensorCommunication.getSensorValue(2)>stopBound){
-            //updateSensors(2);
-            walk();
-            try {
-                Thread.sleep(sensorDelay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        MovementCommunication.send("#stop:after;");
-        ComputerCommunication.send("#info:stop;");
-    }   */
-
-
     // Walk forward
-    private static void walk(){
-
+    private static void walk(char direction){
         int angle;
         boolean inCorridor = getSensorValue(3) < 40 && getSensorValue(4) < 40 && getSensorValue(1) < 40 && getSensorValue(6) < 40;
 
@@ -254,27 +256,86 @@ public class Main {
         // Check distance to wall
         if(getSensorValue(1)< distanceToSideWallLimit){ // Too close to the left wall?
             sendToComputer("#info:Wall strafe right;");
-            sendToMovement("#walk:f:315;");
+            sendToComputer("#info:Sensor 1 = " + getSensorValue(1) +";");
+            if(direction == 'b'){
+                sendToMovement("#walk:f:225;");
+            }
+            else{
+                sendToMovement("#walk:f:315;");
+            }
         }
         else if(getSensorValue(3)< distanceToSideWallLimit){ // Too close to the right wall?
             sendToComputer("#info:Wall strafe left;");
-            sendToMovement("#walk:f:45;");
+            sendToComputer("#info:Sensor 3 = " + getSensorValue(3) +";");
+            if(direction == 'b'){
+                sendToMovement("#walk:f:135;");
+            }
+            else{
+                sendToMovement("#walk:f:45;");
+            }
         }
 
         // Check angle
         else if(abs(angle)>angleLimit){
             if(angle < 0){
                 sendToComputer("#info:Angle rotate left;");
+                sendToComputer("#info:Sensor 1 = " + getSensorValue(1) +";");
+                sendToComputer("#info:Sensor 6 = " + getSensorValue(6) +";");
                 rotate(angleLimit, "left");
             }
             else{
                 sendToComputer("#info:Angle rotate right;");
+                sendToComputer("#info:Sensor 3 = " + getSensorValue(3) +";");
+                sendToComputer("#info:Sensor 4 = " + getSensorValue(4) +";");
                 rotate(angleLimit, "right");
             }
         }
         else{
             sendToComputer("#info:Walk forward;");
-            sendToMovement("#walk:f:0;");
+            if(direction == 'b'){
+                sendToMovement("#walk:f:180;");
+            }
+            else{
+                sendToMovement("#walk:f:0;");
+            }
+        }
+    }
+
+    static void backOutOfDeadEnd(){
+        try {
+            Thread.sleep(sensorDelay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        areSensorsReady.set(false);
+        updateSensors(0);
+        while(areSensorsReady.compareAndSet(false,false));
+
+        if (getSensorValue(2) >= lowerBound && isAutoMode.compareAndSet(true,true)) {
+            sendToComputer("#info:Bättre väg åt sidan?;"); //bättre väg åt sidan?
+
+            if (getSensorValue(1) > getSensorValue(3)) { // vänster > höger
+                sendToMovement("#stop:after;");
+                //Rotera vänster
+                sendToComputer("#info:Sensor 1>3. " + getSensorValue(1) + ">" + getSensorValue(3) + ";");
+                correctRotationBeforeJunction("left");
+                rotate(90, "left");
+                walkAfterRotationCounter = walkAfterRotationValue/speed;
+                counter = 0;
+            }
+            else{
+                sendToMovement("#stop:after;");
+                //Rotera höger
+                sendToComputer("#info:Sensor 1<=3. " + getSensorValue(1) + "<=" + getSensorValue(3) + ";");
+                correctRotationBeforeJunction("right");
+                rotate(90, "right");
+                walkAfterRotationCounter = walkAfterRotationValue/speed;
+                counter = 0;
+            }
+        }
+        else if (isAutoMode.compareAndSet(true,true)){
+            walk('b');
+            backOutOfDeadEnd();
         }
     }
 
@@ -293,13 +354,8 @@ public class Main {
             sendToSensor("#rotate:-" + degrees + ";");
         }
 
-        // Wait for accept          //fel i timeout på compareAndSet
-        //timer.start();
-        //running.compareAndSet(false, true);
-        //while(!running.compareAndSet(false, true) && isRotateAccepted);
-
         isRotateAccepted.set(false);  // Wait for accept
-        while(isRotateAccepted.compareAndSet(false, false));
+        while(isRotateAccepted.compareAndSet(false, false) && isAutoMode.compareAndSet(true,true));
         if (isRotateAccepted.compareAndSet(true, true)) {
             sendToMovement("#rotate:"+direction.substring(0,1)+";");
             isRotating.set(true);
@@ -307,23 +363,19 @@ public class Main {
             sendToMovement("#stop:after;");
 
         }
-        else{    // onödig om vi inte har en timeout
-            sendToComputer("#info:Rotate again");
-            rotate(degrees, direction);
-        }
+        areSensorsReady.set(false);
+        updateSensors(8);
+        while(areSensorsReady.compareAndSet(false,false) && isAutoMode.compareAndSet(true,true));
         sendToComputer("#info:Stopped rotating;");
-
     }
 
     // Rotate corner
-    public static void rotateCorner(int degrees, String direction, String curve){
+    public static void rotateCornerAndCorrect(int degrees, String direction, String curve){
 
         rotate(degrees, direction);
 
         int angle;
-        areSensorsReady.set(false);
-        updateSensors(7);
-        while(areSensorsReady.compareAndSet(false,false));
+
 
         if(curve.equals("left")){
             angle = angle("right");
@@ -341,32 +393,32 @@ public class Main {
         if(abs(angle) > allowedAngleError && isAutoMode.compareAndSet(true,true)){
             sendToComputer("#info:Correcting rotation;");
             if(angle > 0){
-                rotateCorner(angle, "right", curve);
+                rotateCornerAndCorrect(angle, "right", curve);
             }
             else{
-                rotateCorner(abs(angle), "left", curve);
+                rotateCornerAndCorrect(abs(angle), "left", curve);
             }
         }
     }
 
 
-    // Rotate junction
-    public static void rotateJunction(String direction, String curve){
+    // Correct rotation before junction
+    public static void correctRotationBeforeJunction(String curve){
 
         int angle;
         areSensorsReady.set(false);
-        updateSensors(7);
-        while(areSensorsReady.compareAndSet(false,false));
+        updateSensors(8);
+        while(areSensorsReady.compareAndSet(false,false) && isAutoMode.compareAndSet(true,true));
 
         if(curve.equals("left")){
             angle = angle("right");
-            sendToComputer("#info:Sensor 3 "+getSensorValue(3)+";");
-            sendToComputer("#info:Sensor 4 "+getSensorValue(4)+";");
+            sendToComputer("#info:Sensor 3 = "+getSensorValue(3)+";");
+            sendToComputer("#info:Sensor 4 = "+getSensorValue(4)+";");
         }
         else{
             angle = angle("left");
-            sendToComputer("#info:Sensor 1 "+getSensorValue(1)+";");
-            sendToComputer("#info:Sensor 6 "+getSensorValue(6)+";");
+            sendToComputer("#info:Sensor 1 = "+getSensorValue(1)+";");
+            sendToComputer("#info:Sensor 6 = "+getSensorValue(6)+";");
         }
         sendToComputer("#info:Angle "+angle+";");
 
@@ -375,11 +427,11 @@ public class Main {
             sendToComputer("#info:Correcting rotation;");
             if(angle > 0){
                 rotate(angle, "right");
-                rotateJunction("right", curve);
+                correctRotationBeforeJunction(curve);
             }
             else{
                 rotate(abs(angle), "left");
-                rotateJunction("left", curve);
+                correctRotationBeforeJunction(curve);
             }
 
         }
@@ -389,12 +441,9 @@ public class Main {
     public static int angle(String direction){
 
         if(direction.equals("right")){
-            System.out.println(getSensorValue(3) - getSensorValue(4));
-            System.out.println((double)(getSensorValue(3) - getSensorValue(4)) / sideSensorDistance);
             return (int) toDegrees(atan((double)(getSensorValue(3) - getSensorValue(4)) / sideSensorDistance));
         }
         else if(direction.equals("left")){
-
             return (int) toDegrees(atan((double) (getSensorValue(6) - getSensorValue(1)) / sideSensorDistance));
         }
         else{
@@ -448,6 +497,12 @@ public class Main {
     public static void setWalkAfterRotationValue(int value){
         walkAfterRotationValue = value;
     }
+    public static void setCounterLimit(int counterLimit) {
+        counterLimit = counterLimit;
+    }
+    public static void setDeadEndWallLimit(int deadEndWallLimit) {
+        deadEndWallLimit = deadEndWallLimit;
+    }
 
 
 
@@ -473,5 +528,4 @@ public class Main {
     static void sendToMovement(String message){
         MovementCommunication.send(message);
     }
-
 }
