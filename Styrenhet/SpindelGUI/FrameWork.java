@@ -9,7 +9,7 @@ public class FrameWork extends JFrame
     public static final MainComponent mainPanel = new MainComponent();
     public static SensorComponent[] sensors = new SensorComponent[7]; // Sensors
     public static SensorComponent gyro, mode; // Sensors
-    private final ParameterComponent walkAfterRotationValue, allowedAngleError, angleLimit, distanceToSideWallLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, rotateLeft, rotateRight;  // Parameters
+    private final ParameterComponent counterLimit, walkAfterRotationValue, allowedAngleError, angleLimit, distanceToSideWallLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, rotateLeft, rotateRight;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
     private ButtonComponent changeMode, init, angels;
@@ -44,6 +44,7 @@ public class FrameWork extends JFrame
         textPanel = new TextComponent();
 
         // Initialize parameters
+        counterLimit =  new ParameterComponent("counterLimit");
         walkAfterRotationValue = new ParameterComponent("walkAfterRotationValue");
         allowedAngleError = new ParameterComponent("allowedAngleError");
         angleLimit = new ParameterComponent("angleLimit");
@@ -70,6 +71,7 @@ public class FrameWork extends JFrame
         buttonPanel.add(angels);
 
         // Add parameters
+        parameterPanel.add(counterLimit);
         parameterPanel.add(walkAfterRotationValue);
         parameterPanel.add(allowedAngleError);
         parameterPanel.add(angleLimit);

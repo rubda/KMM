@@ -48,10 +48,10 @@ public class ComputerCommunication extends Communication {
                 Main.setSensorDelay(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
             else if(parts[1].equals("rotateLeft")){
-                Main.rotateCorner(Integer.parseInt(parts[2].substring(0, parts[2].length() - 1)), "left", "left");
+                Main.rotate(Integer.parseInt(parts[2].substring(0, parts[2].length() - 1)), "left");
             }
             else if(parts[1].equals("rotateRight")){
-                Main.rotateCorner(Integer.parseInt(parts[2].substring(0, parts[2].length() - 1)), "right", "right");
+                Main.rotate(Integer.parseInt(parts[2].substring(0, parts[2].length() - 1)), "right");
             }
             else if(parts[1].equals("changeMode")){
                 System.out.println(Main.isAutoMode);
@@ -82,6 +82,9 @@ public class ComputerCommunication extends Communication {
             }
             else if(parts[1].equals("walkAfterRotationValue")){
                 Main.setWalkAfterRotationValue(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
+            }
+            else if(parts[1].equals("counterLimit")){
+                Main.setCounterLimit(Integer.parseInt(parts[2].substring(0,parts[2].length()-1)));
             }
         }
         else {

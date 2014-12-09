@@ -21,11 +21,11 @@ public class MovementCommunication extends Communication {
             if (parts[1].equals("change")){
                 if (Main.isAutoMode.compareAndSet(true,true)) {
                     Main.isAutoMode.set(false);
-                    ComputerCommunication.send("#mode:manual");
+                    ComputerCommunication.send("#mode:manual;");
                 }
                 else {
                     Main.isAutoMode.set(true);
-                    ComputerCommunication.send("#mode:auto");
+                    ComputerCommunication.send("#mode:auto;");
                 }
             }
             else {

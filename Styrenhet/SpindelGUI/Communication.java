@@ -90,7 +90,7 @@ public class Communication implements SerialPortEventListener {
             FrameWork.textPanel.add("Styrbeslut: " + parts[1]);
         }
         else if(parts[0].equals("info")){
-            FrameWork.textPanel.add("Info: " + parts[1]);
+            FrameWork.textPanel.add( parts[1]);
         }
         else{
             System.out.println(parts[0]);
