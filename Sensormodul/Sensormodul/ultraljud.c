@@ -67,11 +67,12 @@ void get_distance(struct soundSensor* sensor)
 	_delay_ms(30); 
 			
 	DISTANCE = TIME/40; //Gör om det till ett avstånd uttryckt i cm
+	sensor->Dist = DISTANCE;
 	
 	//Lägger till den nya distansen för en specifik plats i listan
 	sensor->Dists[sensor->nr] = DISTANCE;	
 	sensor->nr = (sensor->nr + 1) % 5;
-	sensor->Dist = DISTANCE;
+	
 
 	//Kopierar arrayen
 	int VALUES[] = {sensor->Dists[0], sensor->Dists[1], sensor->Dists[2], sensor->Dists[3], sensor->Dists[4]};
@@ -132,7 +133,7 @@ void insertion_sort(int *a, const size_t n) {
 	}
 }
 
-
+//Tar ut nya värden för alla sensor, n gånger och sätter mediandistansen
 void median_of_dists(int n)
 {
 	int order[] = {0, 2, 4, 1, 3, 5};
@@ -144,7 +145,10 @@ void median_of_dists(int n)
 			get_distance(get_sensor(order[i]));
 			values[order[i]][j]= get_sensor(order[i])->Dist;
 		}
-		insertion_sort(values[order[i]], n);
-		get_sensor(order[i])->medDist = values[order[i]][n/2];
 	}
+	
+	for(j = 0; j < 6; ++j){
+		insertion_sort(values[j], n);
+		get_sensor(order[j])->medDist = values[order[j]][n/2];
+	}	
 }
