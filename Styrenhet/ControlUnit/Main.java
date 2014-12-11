@@ -26,7 +26,7 @@ public class Main {
     private static int upperBound = 120;
     private static int lowerBound = 90;
     private static int goalBound = 60;
-    private static int stopBound = 40;
+    private static int stopBound = 45;
     private static int sensorDelay = 300;
     private static int speed = 200;
     private static int angleLimit = 12;
@@ -34,6 +34,7 @@ public class Main {
     private static int allowedAngleError = 25;
     private static int deadEndWallLimit = 50;
 
+    private final static int ninetyDegrees = 85;
     private final static double sideSensorDistance = 10.0; //Distance between side sensors.
 
     public static void main(String[] args) {
@@ -42,6 +43,7 @@ public class Main {
             System.exit(1);
         }
 
+        // Connection
         SerialHelper serialHelperComputer = new SerialHelper();
         SerialHelper serialHelperSensors = new SerialHelper();
         SerialHelper serialHelperMovement = new SerialHelper();
@@ -76,13 +78,12 @@ public class Main {
             System.err.println(ex.getMessage());
         }
 
-        //checkDisconnect(serialHelper);
-
         while(true){
 
+            // Init för autonomt läge
             if(isAutoMode.compareAndSet(true,true)){
 
-                sendToComputer("#info:autoStart;");
+                sendToComputer("#info:AutoStart;");
 
                 boolean goal = false;
                 isRobotReady.set(false);
@@ -96,6 +97,7 @@ public class Main {
                 sendToComputer("#info:Robot ready;");
                 sendToComputer("#time:1;");
 
+                // Loop för autonomt läge
                 while (!goal && isAutoMode.compareAndSet(true,true)){
                     try {
                         Thread.sleep(sensorDelay);
@@ -117,10 +119,6 @@ public class Main {
                     areSensorsReady.set(false);
                     updateSensors(0);
                     while(areSensorsReady.compareAndSet(false,false)&& isAutoMode.compareAndSet(true,true));  // wait for sensors to update
-
-                    //timer.start();
-                    //running.compareAndSet(false, true);
-                    //while(!running.compareAndSet(false, true) && areSensorsReady);  //fel i timeout på compareAndSet
 
                     // Kontrollera målgång (om avstånd > goalBound. framåt, vänster, höger)
                     if(getSensorValue(1) > goalBound && getSensorValue(2) > goalBound && getSensorValue(3) > goalBound
@@ -155,12 +153,12 @@ public class Main {
                         else if(getSensorValue(1)>getSensorValue(3)){ //vänster > höger
                             //Rotera vänster
                             sendToComputer("#info:Sensor 1>3. "+getSensorValue(1)+">"+getSensorValue(3)+";");
-                            rotateCornerAndCorrect(90, "left", "left");
+                            rotateCornerAndCorrect(ninetyDegrees, "left", "left");
                         }
                         else{
                             //Rotera höger
                             sendToComputer("#info:Sensor 1<=3. "+getSensorValue(1)+"<="+getSensorValue(3)+";");
-                            rotateCornerAndCorrect(90, "right", "right");
+                            rotateCornerAndCorrect(ninetyDegrees, "right", "right");
                         }
                         walkAfterRotationCounter = walkAfterRotationValue/speed;
                         counter = 0;
@@ -175,7 +173,8 @@ public class Main {
                             //Rotera vänster
                             sendToComputer("#info:Sensor 1>2. "+getSensorValue(1)+">"+getSensorValue(2)+";");
                             correctRotationBeforeJunction("left");
-                            rotate(90, "left");
+                            correctDistance();
+                            rotate(ninetyDegrees, "left");
                             walkAfterRotationCounter = walkAfterRotationValue/speed;
                             counter = 0;
                         }
@@ -185,7 +184,8 @@ public class Main {
                             //Rotera höger
                             sendToComputer("#info:Sensor 3>2. "+getSensorValue(3)+">"+getSensorValue(2)+";");
                             correctRotationBeforeJunction("right");
-                            rotate(90, "right");
+                            correctDistance();
+                            rotate(ninetyDegrees, "right");
                             walkAfterRotationCounter = walkAfterRotationValue/speed;
                             counter = 0;
                         }
@@ -258,20 +258,20 @@ public class Main {
             sendToComputer("#info:Wall strafe right;");
             sendToComputer("#info:Sensor 1 = " + getSensorValue(1) +";");
             if(direction == 'b'){
-                sendToMovement("#walk:f:225;");
+                sendToMovement("#walk:f:200;");
             }
             else{
-                sendToMovement("#walk:f:315;");
+                sendToMovement("#walk:f:340;");
             }
         }
         else if(getSensorValue(3)< distanceToSideWallLimit){ // Too close to the right wall?
             sendToComputer("#info:Wall strafe left;");
-            sendToComputer("#info:Sensor 3 = " + getSensorValue(3) +";");
+            sendToComputer("#info:Sensor 3 = " + getSensorValue(3) + ";");
             if(direction == 'b'){
-                sendToMovement("#walk:f:135;");
+                sendToMovement("#walk:f:160;");
             }
             else{
-                sendToMovement("#walk:f:45;");
+                sendToMovement("#walk:f:20;");
             }
         }
 
@@ -319,7 +319,8 @@ public class Main {
                 //Rotera vänster
                 sendToComputer("#info:Sensor 1>3. " + getSensorValue(1) + ">" + getSensorValue(3) + ";");
                 correctRotationBeforeJunction("left");
-                rotate(90, "left");
+                correctDistance();
+                rotate(ninetyDegrees, "left");
                 walkAfterRotationCounter = walkAfterRotationValue/speed;
                 counter = 0;
             }
@@ -328,7 +329,8 @@ public class Main {
                 //Rotera höger
                 sendToComputer("#info:Sensor 1<=3. " + getSensorValue(1) + "<=" + getSensorValue(3) + ";");
                 correctRotationBeforeJunction("right");
-                rotate(90, "right");
+                correctDistance();
+                rotate(ninetyDegrees, "right");
                 walkAfterRotationCounter = walkAfterRotationValue/speed;
                 counter = 0;
             }
@@ -393,10 +395,10 @@ public class Main {
         if(abs(angle) > allowedAngleError && isAutoMode.compareAndSet(true,true)){
             sendToComputer("#info:Correcting rotation;");
             if(angle > 0){
-                rotateCornerAndCorrect(angle, "right", curve);
+                rotateCornerAndCorrect(allowedAngleError, "right", curve);
             }
             else{
-                rotateCornerAndCorrect(abs(angle), "left", curve);
+                rotateCornerAndCorrect(abs(allowedAngleError), "left", curve);
             }
         }
     }
@@ -426,15 +428,41 @@ public class Main {
         if(abs(angle) > allowedAngleError && isAutoMode.compareAndSet(true,true)){
             sendToComputer("#info:Correcting rotation;");
             if(angle > 0){
-                rotate(angle, "right");
+                rotate(allowedAngleError, "right");
                 correctRotationBeforeJunction(curve);
             }
             else{
-                rotate(abs(angle), "left");
+                rotate(abs(allowedAngleError), "left");
                 correctRotationBeforeJunction(curve);
             }
 
         }
+    }
+
+    //Correct distance
+    private static void correctDistance(){
+
+        areSensorsReady.set(false);
+        updateSensors(8);
+        while(areSensorsReady.compareAndSet(false,false) && isAutoMode.compareAndSet(true,true));
+
+        if(getSensorValue(2) > 112 && isAutoMode.compareAndSet(true,true)){
+            sendToComputer("#info:Correcting distance;");
+            sendToComputer("#info:Sensor2 = "+getSensorValue(2)+";");
+            sendToMovement("#walk:f:0;");
+
+            correctDistance();
+        }
+        else if(getSensorValue(2) < 94 && isAutoMode.compareAndSet(true,true)){
+            sendToComputer("#info:Correcting distance;");
+            sendToComputer("#info:Sensor2 = " + getSensorValue(2) + ";");
+            sendToMovement("#walk:f:180;");
+            correctDistance();
+        }
+        else {
+            sendToMovement("#stop:after;");
+        }
+
     }
 
     // Calculate angle against walls on either side
