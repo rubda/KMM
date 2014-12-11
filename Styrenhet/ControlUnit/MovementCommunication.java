@@ -11,6 +11,8 @@ public class MovementCommunication extends Communication {
         this.outStream = outStream;
     }
 
+
+    // Recieve message and respond accordingly
     @Override
     public void receive(String inputString) {
         System.out.println("ReceiveMovement: "+inputString);

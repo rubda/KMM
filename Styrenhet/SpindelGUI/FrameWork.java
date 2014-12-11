@@ -8,11 +8,11 @@ public class FrameWork extends JFrame
     private final JPanel sensorPanel, parameterPanel, panel3, buttonPanel;
     public static final MainComponent mainPanel = new MainComponent();
     public static SensorComponent[] sensors = new SensorComponent[7]; // Sensors
-    public static SensorComponent gyro, mode; // Sensors
-    private final ParameterComponent counterLimit, walkAfterRotationValue, allowedAngleError, angleLimit, distanceToSideWallLimit, sensorstring, movementstring, speed, upperBound, lowerBound, goalBound, stopBound, sensorDelay, rotateLeft, rotateRight;  // Parameters
+    public static SensorComponent gyro, mode;
+    private final ParameterComponent counterLimit, walkAfterRotationValue, allowedAngleError, angleLimit, distanceToSideWallLimit, sensorstring, movementstring, speed, distanceToWallUpperBound, distanceToWallLowerBound, goalBound, stopBound, sensorDelay;  // Parameters
     public static TextComponent textPanel;  // Decision log
     public static StopWatchRunner watch;  // Timer
-    private ButtonComponent changeMode, init, angels;
+    private ButtonComponent changeMode, init, angels; // Buttons
 
 
     public FrameWork(){
@@ -52,13 +52,11 @@ public class FrameWork extends JFrame
         sensorstring = new ParameterComponent("sensorstring");
         movementstring = new ParameterComponent("movementstring");
         speed = new ParameterComponent("speed");
-        upperBound = new ParameterComponent("upperBound");
-        lowerBound = new ParameterComponent("lowerBound");
+        distanceToWallUpperBound = new ParameterComponent("distanceToWallUpperBound");
+        distanceToWallLowerBound = new ParameterComponent("distanceToWallLowerBound");
         goalBound = new ParameterComponent("goalBound");
         stopBound = new ParameterComponent("stopBound");
         sensorDelay = new ParameterComponent("sensorDelay");
-        rotateLeft = new ParameterComponent("rotateLeft");
-        rotateRight = new ParameterComponent("rotateRight");
 
         // Initialize buttons
         changeMode = new ButtonComponent("changeMode");
@@ -77,15 +75,13 @@ public class FrameWork extends JFrame
         parameterPanel.add(angleLimit);
         parameterPanel.add(distanceToSideWallLimit);
         parameterPanel.add(speed);
-        parameterPanel.add(upperBound);
-        parameterPanel.add(lowerBound);
+        parameterPanel.add(distanceToWallUpperBound);
+        parameterPanel.add(distanceToWallLowerBound);
         parameterPanel.add(goalBound);
         parameterPanel.add(stopBound);
         parameterPanel.add(sensorDelay);
         parameterPanel.add(sensorstring);
         parameterPanel.add(movementstring);
-        parameterPanel.add(rotateLeft);
-        parameterPanel.add(rotateRight);
 
 
         // Add sensors
