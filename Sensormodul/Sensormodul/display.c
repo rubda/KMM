@@ -107,7 +107,7 @@ void set_display(int mode, int instr)
 //Skriver ut BOSSE på displayen
 void BOSSE()
 {
-	write_string("BOSSE", 0x85);	
+	write_string("BOSSE 2.0", 0x84);	
 }
 
 //Skriver ut en sträng på displayen med önskad position
