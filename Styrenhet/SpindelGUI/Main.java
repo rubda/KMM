@@ -5,7 +5,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         FrameWork frameWork = new FrameWork();
-        SerialPortHandler serialPortHandler = new SerialPortHandler();
+        /*SerialPortHandler serialPortHandler = new SerialPortHandler();
 
         while(true){
             try {
@@ -23,7 +23,7 @@ public class Main {
             serialPortHandler.addDataAvailableListener(communication);
         } catch (TooManyListenersException ex) {
             System.err.println(ex.getMessage());
-        }
+        }*/
     }
 }
 

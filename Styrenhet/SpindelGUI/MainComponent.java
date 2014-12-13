@@ -1,5 +1,11 @@
+import net.java.games.input.Component;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
+
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.event.ActionEvent;
+import java.util.*;
 
 public class MainComponent extends JComponent {
 
@@ -12,6 +18,8 @@ public class MainComponent extends JComponent {
         b = false;
         addBindings();
         setFocusable(true);
+
+	setupGamepad();
     }
 
     private void addBindings(){
@@ -160,5 +168,77 @@ public class MainComponent extends JComponent {
         getActionMap().put("stopWalkingBackwards", stopWalkingBackwards);
         getActionMap().put("stopStrafeLeftForward", stopStrafeLeftForward);
         getActionMap().put("stopStrafeRightForward", stopStrafeRightForward);
+    }
+
+
+    java.util.Timer gamepadTimer = new java.util.Timer();
+    Controller ps3 = null;
+
+    void setupGamepad() {
+	System.out.println("Setting up gamepad!");
+	ControllerEnvironment ce = ControllerEnvironment.getDefaultEnvironment();
+	Controller[] cs = ce.getControllers();
+	for (int i = 0; i < cs.length; i++) {
+	    System.out.println(i + ". " + cs[i].getName() + ", " + cs[i].getType());
+	    if (cs[i].getType().toString().contains("Gamepad")) {
+		System.out.println("Found gamepad!");
+		ps3 = cs[i];
+		break;
+	    }
+	}
+	System.out.println("Active controller: " + ps3.getName());
+
+	pollGamepad();
+    }
+
+    void pollGamepad() {
+	if(ps3 != null){
+	    ps3.poll();
+
+	    Component[] comps = ps3.getComponents();
+	    double x = comps[1].getPollData();
+	    double y = comps[0].getPollData();
+	    double rx = comps[3].getPollData();
+	    double ry = comps[2].getPollData();
+
+	    int speed = (int) Math.round(600*Math.abs(x));
+
+	    if(x < -0.2 && Math.abs(x) > Math.abs(y)){
+		System.out.println("#rotate:l;");
+		Communication.sendAction("#rotate:l;");
+	    }else if(x > 0.2 && Math.abs(x) > Math.abs(y)){
+		Communication.sendAction("#rotate:r;");
+	    }else if(Math.abs(rx) > 0.1 || Math.abs(ry) > 0.1){
+		    int angle = (int) Math.round(Math.toDegrees( Math.atan2(rx,-ry)));
+		    double ax = Math.abs(rx);
+		    double ay = Math.abs(ry);
+		    speed =  (int)(ax > ay ? 600*ax : 600*ay);
+		    System.out.println(angle);
+		    System.out.println(speed);
+		//Communication.sendAction("#walk:"+(angle)+";");
+		System.out.println("#walk:"+(angle)+";");
+
+
+	    }else{
+	    	//Communication.sendAction("#stop:0;");
+		speed = 200;
+		System.out.println("#stop:0;");
+	    }
+
+	    gamepadTimer.schedule(new java.util.TimerTask()
+	    {
+		@Override
+		public void run() {
+		    pollGamepad();
+		}
+	    }, 100);
+
+	    try {
+		Thread.sleep(50);
+	    } catch (InterruptedException e) {
+		e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+	    }
+	    Communication.sendAction("#speed:"+speed+";");
+	}
     }
 }
