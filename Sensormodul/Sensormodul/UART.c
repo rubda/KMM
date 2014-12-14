@@ -9,7 +9,6 @@ int uart_read_string(char *s, int size);
 void uart_init(uint16_t settings) // 0x0340
 {
 	// Initialize serial
-	//UBRR0 = ((F_CPU / 16 + baud / 2) / baud - 1);         /* (16 MHz / 16 / 38400) - 1 */
 	UBRR0 = settings;
 	set_bit(UCSR0B, RXEN0);                               /* enable RX */
 	set_bit(UCSR0B, TXEN0);                               /* enable TX */

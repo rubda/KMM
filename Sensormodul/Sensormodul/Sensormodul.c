@@ -45,7 +45,6 @@ int main(void)
 		
 		//Iterera över våra sensor id:n
 		SENSOR_ID = (SENSOR_ID+1) % 6;
-		
 	}
 }	
 	

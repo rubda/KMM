@@ -20,9 +20,7 @@ void start_conversion();
 uint16_t get_angular_rate();
 double adc_to_angular_rate(uint16_t data);
 double rotate_to(int angle);
-int get_is_rotated();
 void deactivate_adc();
-void has_rotated(int bit);
 
 
 #endif /* GYRO_H_ */

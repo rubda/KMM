@@ -73,20 +73,12 @@ void get_distance(struct soundSensor* sensor)
 	sensor->Dists[sensor->nr] = DISTANCE;	
 	sensor->nr = (sensor->nr + 1) % 5;
 	
-
 	//Kopierar arrayen
 	int VALUES[] = {sensor->Dists[0], sensor->Dists[1], sensor->Dists[2], sensor->Dists[3], sensor->Dists[4]};
-	//int weakVALUES[] = {sensor->Dists[0], sensor->Dists[1], sensor->Dists[2]};
 	
 	//Sorterar distanserna och tar ut mittenvärdet 	
 	insertion_sort(VALUES, 5);
-	sensor->medDist = VALUES[2];
-	
-	//Kass "optimering"
-/*	if (sensor->nr == 3){ 
-		insertion_sort(weakVALUES, 3);
-		sensor->weakDist = weakVALUES[1];
-		}*/		
+	sensor->medDist = VALUES[2];	
 }
 
 
@@ -103,22 +95,6 @@ void refresh_sensors()
 	}
 }
 
-//Uppdaterar varje sensor endast tre gånger
-void refresh_less()
-{
-	int order[] = {0, 2, 4, 1, 3, 5};
-	int i, j;
-	
-	for(j = 0; j < 6; ++j){
-		get_sensor(j)->nr = 0;
-	}
-	
-	for(j = 0; j < 3; ++j){
-		for(i = 0; i < 6; ++i){
-			get_distance(get_sensor(order[i]));
-		}
-	}
-}
 
 //Insertion sort
 void insertion_sort(int *a, const size_t n) {

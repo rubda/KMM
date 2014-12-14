@@ -30,12 +30,23 @@ struct uart_message
 };
 typedef struct uart_message uart_message;
 
+
+//	Init UART between modules
 void uart_init(uint16_t settings);
 
+//	Returns true if a message is in the buffer
 uint8_t got_message();
+
+//	Retrieve message from buffer
 void get_message(uart_message *);
+
+//	Send message
 void send_message(char name[], const char *attributes[], uint8_t attr_length);
+
+//	Send string
 void uart_send_string(const char *s);
+
+//	Send char
 void uart_send_char(uint8_t data);
 
 #endif

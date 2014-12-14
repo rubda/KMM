@@ -12,7 +12,6 @@
 #include "UART.h"
 
 #include <util/delay.h>
-int IS_ROTATED = 0; 
 
 void activate_adc()
 {
@@ -94,7 +93,7 @@ double rotate_to(int angle)
 	uint16_t rate;
 	double ACHIEVED_ANGLE = 0;
 	int TIME = 0;
-	int OFFSET = 5;
+	int OFFSET = 0;
 	int LEFT_ANGLE = (angle - OFFSET);
 	int RIGHT_ANGLE = (angle + OFFSET);
 		
@@ -117,14 +116,4 @@ double rotate_to(int angle)
 	}
 	deactivate_adc();
 	return ACHIEVED_ANGLE;
-}
-
-void has_rotated(int bit)
-{
-	IS_ROTATED = bit;
-}
-
-int get_is_rotated()
-{
-	return IS_ROTATED;
 }

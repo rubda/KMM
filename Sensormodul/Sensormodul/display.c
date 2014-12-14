@@ -137,7 +137,7 @@ void write_to_display(uint16_t value, int pos)
 //Skriver ut parametrar på display 
 void write_params()
 {
-	write_string("D1: ", 0xC0); //D1: 000
+	write_string("D1: ", 0xC0); //D1:
 	write_string("D2: ", 0xC9);
 	write_string("D3: ", 0x90);
 	write_string("D4: ", 0x99);

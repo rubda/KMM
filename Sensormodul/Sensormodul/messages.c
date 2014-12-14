@@ -105,11 +105,11 @@ void message_handler(uart_message *message_in){
 				}
 			}else if(c == 8){
 				send_message("accept", distance, 1);
-				refresh_less();
+				median_of_dists(3);
 				char* attr[6];
 				int i; for(i = 0; i < 6; ++i){
 				attr[i] = malloc(4);
-				//snprintf(attr[i], 4, "%u", get_sensor(i)->weakDist);
+				snprintf(attr[i], 4, "%u", get_sensor(i)->medDist);
 				}
 				send_message("distance", attr, 6);
 				for(i = 0; i < 6; ++i){
