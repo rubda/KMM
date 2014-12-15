@@ -186,6 +186,10 @@ public class MainComponent extends JComponent {
                 break;
             }
         }
+        if(ps3 == null){
+            System.out.println("No controller found.");
+            return;
+        }
         System.out.println("Active controller: " + ps3.getName());
 
         pollGamepad();
