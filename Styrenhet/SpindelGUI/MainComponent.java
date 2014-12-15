@@ -209,20 +209,10 @@ public class MainComponent extends JComponent {
                 System.out.println("#rotate:l;");
                 Communication.sendAction("#rotate:l;");
                 stopped = false;
-
-                String[] param = new String[2];
-                param[0] = "speed";
-                param[1] = String.valueOf(speed+10);
-                Communication.sendParameter(param);
             }else if(x > 0.2 && Math.abs(x) > Math.abs(y)){
                 System.out.println("#rotate:r;");
                 Communication.sendAction("#rotate:r;");
                 stopped = false;
-
-                String[] param = new String[2];
-                param[0] = "speed";
-                param[1] = String.valueOf(speed+10);
-                Communication.sendParameter(param);
             }else if(Math.abs(rx) > 0.1 || Math.abs(ry) > 0.1){
                 int angle = (int) Math.round(Math.toDegrees( Math.atan2(rx,-ry)));
                 double ax = Math.abs(rx);
@@ -231,14 +221,9 @@ public class MainComponent extends JComponent {
                 if(angle < 0){
                     angle += 360;
                 }
-                Communication.sendAction("#walk:f:"+(angle)+";");
-                System.out.println("#walk:f:"+(angle)+";");
+                Communication.sendAction("#walk:f:" + (angle) + ";");
+                System.out.println("#walk:f:" + (angle) + ";");
                 stopped = false;
-
-                String[] param = new String[2];
-                param[0] = "speed";
-                param[1] = String.valueOf(speed+10);
-                Communication.sendParameter(param);
             }else if(!stopped){
                 Communication.sendAction("#stop:0;");
                 speed = 200;
@@ -255,6 +240,16 @@ public class MainComponent extends JComponent {
                     pollGamepad();
                 }
             }, 250);
+
+            try {
+                Thread.sleep(100);
+                String[] param = new String[2];
+                param[0] = "speed";
+                param[1] = String.valueOf(speed+10);
+                Communication.sendParameter(param);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
