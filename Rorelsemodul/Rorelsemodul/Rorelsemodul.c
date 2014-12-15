@@ -9,17 +9,13 @@
 
 int direction;
 double step_len = 3;
+int led_mode = 0;
 
 void do_nothing(int d, double a){
 	init_body(direction, step_len);
 	return;
 }
 
-//void do_nothing(uint16_t a, uint16_t b, int d){
-//	return;
-//}
-
-//void (*func)(uint16_t, uint16_t, int) = do_nothing;
 void (*func)(int, double) = do_nothing;
 
 uint8_t is_command(uart_message* mess, char* c){
@@ -71,7 +67,7 @@ void handle_message(uart_message *mess){
 		}
 		func = do_nothing;
 	}else if(is_command(mess, "turn")){
-		func = do_nothing;
+		func = turn_body;
 		direction = get_direction(mess);
 	}else if(is_command(mess, "denied")){
 		func = do_nothing;
@@ -93,21 +89,23 @@ void handle_message(uart_message *mess){
 int main(void)
 {	
 	_delay_ms(500);
-	robot_init(0x00B0);
+	robot_init(0x00C8);
 	_delay_ms(1000);
 	uart_init(0x0067);
 	_delay_ms(1000);
 	
 	body_move_init();
 	
-	EICRA |= (1 << ISC20) | (1 << ISC21);
+	EICRA |= (1 << ISC21);
 	EIMSK |= (1 << INT2);
 	
 	sei();
 	
 	uart_message mess;
+	int i, j;
 	
 	while(1){
+		
 		if(got_message()){
 			get_message(&mess);
 			handle_message(&mess);
@@ -122,7 +120,10 @@ ISR(USART1_TX_vect){
 }
 
 ISR(INT2_vect){
+	cli();
+	suart_command_write_data(BROADCAST_ID, 0x019, (uint8_t[1]){(led_mode++ % 2)}, 1);
 	uart_send_string("#mode:change;");
+	sei();
 }
 
 

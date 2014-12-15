@@ -30,7 +30,7 @@ struct suart_response
 typedef struct suart_response servo_response;
 
 //	Init UART to servos
-void suart_init(long baud);
+void suart_init();
 
 //	Send char to servo
 void suart_send_char(uint8_t data);
