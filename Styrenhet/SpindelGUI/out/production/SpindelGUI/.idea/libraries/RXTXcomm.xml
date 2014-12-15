@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="RXTXcomm">
     <CLASSES>
-      <root url="jar://C:/Program Files/Java/jdk1.7.0_02/jre/lib/ext/RXTXcomm.jar!/" />
-      <root url="jar://C:/Program Files/Java/jdk1.7.0_02/jre/lib/ext/jinput.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../jinput/archive/dist/jinput.jar!/" />
+      <root url="jar://C:/Program Files/Java/jre7/lib/ext/RXTXcomm.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
