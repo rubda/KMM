@@ -1,9 +1,7 @@
 #include "servo_uart.h"
 
-void suart_init(long baud){
+void suart_init(){
 	DDRD = 0x20;
-	//UBRR1H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
-	//UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
 	UBRR1 = 0x0000;
 
 	UCSR1C = (3 << UCSZ10);
@@ -12,7 +10,6 @@ void suart_init(long baud){
 
 char suart_read_char(){
 	while(!(UCSR1A & (1 << RXC1)));
-	//while(!(UCSR1A & (1 << UDRE1)));
 	return UDR1;
 }
 
@@ -55,35 +52,7 @@ servo_response suart_command(uint8_t id, char* command, uint8_t size){
 	char error[16] = "#ERROR:";
 
 	suart_send_string(command, size);
-	/*_delay_us(10);
-	uint8_t bytes_read = suart_read_string(buffer, 16);
 	
-	error[7] = buffer[4];
-	error[8] = ';';
-	
-	uint8_t led[] = {0x01};
-	
-	if(buffer[4] == 0)
-		suart_command_write_data(id, 0x19, led, 1);
-	
-	switch(buffer[4]){
-		case 0:
-			return;
-		default:
-			uart_send_string(error);
-	}
-	
-	response.id = id;
-	response.error = buffer[4];
-	response.parameter_size = buffer[3]-2;
-	
-	uint8_t parameter_list[response.parameter_size];
-	int i;
-	for(i = 0; i < response.parameter_size; ++i){
-		parameter_list[i] = buffer[5+i];
-	}
-	response.parameters = parameter_list;
-	*/
 	return response;
 }
 

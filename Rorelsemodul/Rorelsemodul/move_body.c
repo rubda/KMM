@@ -75,10 +75,7 @@ void move_body(int direction, double length){
 		y_multi = (i % 2 == 0 ? 1 : -1);
 		max = get_max_2(ik(step_multi[a][0]*move_x, y_multi*step_multi[a][1]*move_y, step_multi[a][2]*LIFT_HEIGHT, i), max);
 	}
-	
-	//CALCULATE SPEED
-	//CALCULATE WAIT
-	
+
 	current_step++;
 	if(current_step % 5 == 0) test_leg++;
 	SERVO_ACTION;
@@ -105,9 +102,6 @@ uint8_t init_body(int direction, double length){
 		y_multi = (i % 2 == 0 ? 1 : -1);
 		max = get_max_2(ik(step_multi[a][0]*move_x, y_multi*step_multi[a][1]*move_y, step_multi[a][2]*LIFT_HEIGHT, i), max);
 	}
-	
-	//CALCULATE SPEED
-	//CALCULATE WAIT
 	
 	if(current_step % 10 != 0) current_step++;
 	SERVO_ACTION;
@@ -144,3 +138,14 @@ void rotate_body(int direction, double length){
 	SERVO_ACTION;
 	robot_delay2(max);
 }
+
+void turn_body(int direction, double length){
+	int a = current_step % 10;
+		
+	if(a < 5)
+		move_body(0, length);
+	else
+		rotate_body(direction, length);
+
+}
+

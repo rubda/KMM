@@ -37,7 +37,6 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../atmega-timers.c \
 ../hexapod_control.c \
 ../move_body.c \
 ../Rorelsemodul.c \
@@ -52,7 +51,6 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-atmega-timers.o \
 hexapod_control.o \
 move_body.o \
 Rorelsemodul.o \
@@ -60,7 +58,6 @@ servo_uart.o \
 UART.o
 
 OBJS_AS_ARGS +=  \
-atmega-timers.o \
 hexapod_control.o \
 move_body.o \
 Rorelsemodul.o \
@@ -68,7 +65,6 @@ servo_uart.o \
 UART.o
 
 C_DEPS +=  \
-atmega-timers.d \
 hexapod_control.d \
 move_body.d \
 Rorelsemodul.d \
@@ -76,7 +72,6 @@ servo_uart.d \
 UART.d
 
 C_DEPS_AS_ARGS +=  \
-atmega-timers.d \
 hexapod_control.d \
 move_body.d \
 Rorelsemodul.d \
@@ -97,8 +92,6 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-
-
 
 
 
