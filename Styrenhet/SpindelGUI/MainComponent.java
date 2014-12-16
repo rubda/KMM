@@ -197,6 +197,8 @@ public class MainComponent extends JComponent {
 
     boolean stopped = true;
 
+    static int MIN_SPEED = 20;
+    static int MAX_SPEED = 500;
     void pollGamepad() {
         if(ps3 != null){
             ps3.poll();
@@ -207,7 +209,7 @@ public class MainComponent extends JComponent {
             double rx = -comps[3].getPollData();
             double ry = comps[2].getPollData();
 
-            int speed = (int) Math.round(400*Math.abs(x));
+            int speed = (int) Math.round((MAX_SPEED - MIN_SPEED)*Math.abs(x));
 
             if(x < -0.2 && Math.abs(x) > Math.abs(y)){
                 System.out.println("#rotate:l;");
@@ -221,7 +223,7 @@ public class MainComponent extends JComponent {
                 int angle = (int) Math.round(Math.toDegrees( Math.atan2(rx,-ry)));
                 double ax = Math.abs(rx);
                 double ay = Math.abs(ry);
-                speed =  (int)(ax > ay ? 400*ax : 400*ay);
+                speed =  (MAX_SPEED - MIN_SPEED)*(int)(ax > ay ? ax : ay);
                 if(angle < 0){
                     angle += 360;
                 }
@@ -249,7 +251,7 @@ public class MainComponent extends JComponent {
                 Thread.sleep(100);
                 String[] param = new String[2];
                 param[0] = "speed";
-                param[1] = String.valueOf(speed+10);
+                param[1] = String.valueOf(speed+MIN_SPEED);
                 Communication.sendParameter(param);
             } catch (InterruptedException e) {
                 e.printStackTrace();
